@@ -20,6 +20,12 @@ namespace MedNet.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "test";
+            return View();
+        }
+
+        public IActionResult AddNewPatientRecord()
+        {
             return View();
         }
 
