@@ -1,0 +1,264 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                        </div>
+
+                        <h3 class="profile-username text-center">@Html.ActionLink("Current User", "PatientOverview", "Home")</h3>
+
+                        <p class="text-muted text-center">Patient</p>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- About Me Box -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">About Me</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
+
+                        <p class="text-muted">
+                            8888 University Drive, Burnaby, British Columbia
+                        </p>
+
+                        <hr>
+
+                        <strong><i class="far fa-file-alt mr-1"></i> Age</strong>
+
+                        <p class="text-muted">25</p>
+
+                        <hr>
+
+                        <strong><i class="fas fa-pencil-alt mr-1"></i> Family Doctor</strong>
+
+                        <p class="text-muted">Joshua Shercliffe</p>
+                        <p class="text-muted">Fake Clinic</p>
+                        <p class="text-muted">1234 Hastings Street</p>
+                        <p class="text-muted">778-999-9999</p>
+
+                        <hr>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <h2>Previous Records for Current User</h2>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header p-2">
+                                    <ul class="nav nav-pills">
+                                        <li class="nav-item"><a class="nav-link active" href="#Prescriptions" data-toggle="tab">Prescriptions</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#TestResults" data-toggle="tab">Test Results</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#Appointments" data-toggle="tab">Appointments</a></li>
+                                    </ul>
+                                </div><!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="tab-content">
+                                        <div class="active tab-pane" id="Prescriptions">
+                                            <!-- Post -->
+                                            <div class="post">
+                                                <span class="username">
+                                                    <a href="#">Lisinopril		</a>
+                                                    <a href="#" class="float-right btn-tool">11-9-2019</a>
+                                                </span>
+                                                <div>
+                                                    <span class="description">5mg/Daily</span>
+                                                </div>
+                                                <br />
+                                                <!-- /.user-block -->
+                                                <p>
+                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
+                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
+                                                </p>
+                                            </div>
+                                            <div class="post">
+                                                <span class="username">
+                                                    <a href="#">Simvastatin</a>
+                                                    <a href="#" class="float-right btn-tool">11-7-2019</a>
+                                                </span>
+                                                <div>
+                                                    <span class="description">40mg/Daily</span>
+                                                </div>
+                                                <br />
+                                                <!-- /.user-block -->
+                                                <p>
+                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
+                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
+                                                </p>
+                                            </div>
+                                            <div class="post">
+                                                <span class="username">
+                                                    <a href="#">Levothyroxine</a>
+                                                    <a href="#" class="float-right btn-tool">11-9-2018</a>
+                                                </span>
+                                                <div>
+                                                    <span class="description">0.05mg/Daily</span>
+                                                </div>
+                                                <br />
+                                                <!-- /.user-block -->
+                                                <p>
+                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
+                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
+                                                </p>
+                                            </div>
+                                            <div class="post">
+                                                <span class="username">
+                                                    <a href="#">Lipitor</a>
+                                                    <a href="#" class="float-right btn-tool">11-5-2018</a>
+                                                </span>
+                                                <div>
+                                                    <span class="description">30mg/Daily</span>
+                                                </div>
+                                                <br />
+                                                <!-- /.user-block -->
+                                                <p>
+                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
+                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
+                                                </p>
+                                            </div>
+                                            <!-- /.post -->
+                                        </div>
+                                        <!-- /.tab-pane -->
+                                        <div class="tab-pane" id="TestResults">
+                                            <!-- The timeline -->
+                                            <div class="card card-primary">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Test Results</h3>
+                                                </div>
+                                                <div class="card-body table-responsive p-0">
+                                                    <table class="table table-hover text-nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Type</th>
+                                                                <th>Date</th>
+                                                                <th>Results</th>
+                                                                <th>Associated Doctors Note</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Urine</td>
+                                                                <td>11-5-2019</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Chemistry</td>
+                                                                <td>11-3-2019</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Microbiology</td>
+                                                                <td>10-7-2019</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Lipid</td>
+                                                                <td>10-5-2019</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Thyroid</td>
+                                                                <td>11-7-2018</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other</td>
+                                                                <td>11-7-2017</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Other Chemistry</td>
+                                                                <td>11-7-2016</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Hematology</td>
+                                                                <td>11-7-2015</td>
+                                                                <td><a href="#">Results</a></td>
+                                                                <td><a href="#">Note</a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- /.card-header -->
+                                            </div>
+                                        </div>
+                                        <!-- /.tab-pane -->
+                                        <div class="tab-pane" id="Appointments">
+                                            <div class="callout callout-info">
+                                                <h3><strong><a href="#">03-10-2020</a></strong></h3>
+                                                <strong>Purpose of Visit</strong>
+                                                <p class="text-muted">Cough fever and sore throat</p>
+                                                <strong> Final Diagnosis</strong>
+                                                <p class="text-muted">Possible Coronavirus, test needed</p>
+                                                <strong> Test Result</strong>
+                                                <p class="text-muted">Pending...</p>
+                                            </div>
+                                            <div class="callout callout-info">
+                                                <h3><strong><a href="#">11-5-2019</a></strong></h3>
+                                                <strong>Purpose of Visit</strong>
+                                                <p class="text-muted">Sore Throat</p>
+                                                <strong> Final Diagnosis</strong>
+                                                <p class="text-muted">Cold/Flu</p>
+                                            </div>
+                                            <div class="callout callout-info">
+                                                <h3><strong><a href="#">11-5-2019</a></strong></h3>
+                                                <strong>Purpose of Visit</strong>
+                                                <p class="text-muted">Soreness when urinating</p>
+                                                <strong> Final Diagnosis</strong>
+                                                <p class="text-muted">Urine test needed</p>
+                                                <strong> Test Result</strong>
+                                                <p class="text-muted"><a href="#">Results</a></p>
+                                            </div>
+                                            <div class="callout callout-info">
+                                                <h3><strong><a href="#">11-5-2017</a></strong></h3>
+                                                <strong>Purpose of Visit</strong>
+                                                <p class="text-muted">Cough</p>
+                                                <strong> Final Diagnosis</strong>
+                                                <p class="text-muted">Cold/Flu</p>
+                                                <strong> Prescription</strong>
+                                                <p class="text-muted"><a href="#">Phenergan-Codeine Syrup 50ml/Day</a></p>
+                                            </div>
+                                        </div>
+                                        <!-- /.tab-pane -->
+                                    </div>
+                                    <!-- /.tab-content -->
+                                </div><!-- /.card-body -->
+                            </div>
+                            <!-- /.nav-tabs-custom -->
+                        </div>
+                    </div>
+                    <!-- /.nav-tabs-custom -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+</section>
+<!-- /.content -->

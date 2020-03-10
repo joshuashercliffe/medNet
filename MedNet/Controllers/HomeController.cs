@@ -20,6 +20,11 @@ namespace MedNet.Controllers
             return View();
         }
 
+        public IActionResult PatientOverview()
+        {
+            return View();
+        }
+
         public IActionResult AddNewPatientRecord()
         {
             return View();
