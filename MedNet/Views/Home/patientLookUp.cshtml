@@ -4,46 +4,26 @@
 <style>
     @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-    .topnav {
-        display: none;
-    }
-
-    .green-buttons-top {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #4CAF50;
-        width: 250px;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .green-buttons-top:hover {
-        opacity: 0.8;
-    }
-
     .login-page {
         width: 360px;
         padding: 8% 0 0;
         margin: auto;
     }
+    .topnav a.plu {
+        background-color: #4CAF50;
+        color: white;
+    }
 
     .form {
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 30%;
         transform: translate(-50%, -50%);
         z-index: 1;
         background: #FFFFFF;
-        max-width: 360px;
+        max-width: 380px;
         padding: 10px 40px 40px 40px;
-        text-align: center;
-        border-style: solid;
-        border-width: medium;
-        border-color: gainsboro;
+        text-align: left;
     }
 
     .form input {
@@ -96,6 +76,7 @@
         line-height: 30px;
         height: 30px;
     }
+
     .tooltip {
         position: relative;
         display: inline-block;
@@ -118,39 +99,33 @@
     .tooltip:hover .tooltiptext {
         visibility: visible;
     }
-</style>
 
-<div>
-    <p align="right">
-        <button class="green-buttons-top">Patient Sign-Up</button>
-    </p>
-    <p align="right">
-        <button class="green-buttons-top">Patient Log-In</button>
-    </p>
-</div>
+</style>
 
 <div class="login-page">
     <div class="form">
         <div class="heading">
-            <p>Doctor Login</p>
+            <p>Patient Look-Up</p>
         </div>
-        <p>Enter your details below to continue.</p>
-        <form class="login-form" action="Home/PatientLookUp">
+        <p>Enter your details below retrieve patient information.</p>
+        <form class="login-form" action="/Home/PatientOverview">
             <div class="tooltip">
-                <label>Doctor MINC:</label>
-                <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
+                <label>Patient PHN:</label>
+                <span class="tooltiptext">10 digit Personal Health Number can be found on patient's CareCard/BC Services Card</span>
             </div>
-            <input type="text" id="minc" name="minc" placeholder="CAXX-XXXX-XXXX" title="12 digit Medical Identification Number for Canada" />
+            <input type="text" id="phn" name="phn" placeholder="XXXX-XXX-XXX" title="10 digit Personal Health Number can be found on patient's CareCard/BC Services Card" />
             <div class="tooltip">
-                <label>Doctor Keyword:</label>
-                <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
+                <label>Patient Keyword:</label>
+                <span class="tooltiptext">Patient's identification pass phrase, something easy to remember like place of birth/mother's maiden name that was created during Sign-Up</span>
             </div>
-            <input type="password" id="keyword" name="keyword" placeholder="Keyword" title="Identification pass phrase created during Sign-Up" />
-            <label>Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password" />
-            <button>Login</button>
-            <p class="message">Don't have an account? <a href="Home/DoctorSignUp">Sign up here.</a></p>
-            <p class="message"><a href="Home/DoctorForgotPassword">Forgot your password?</a></p>
+            <input type="password" id="keyword" name="keyword" placeholder="Keyword" title="Patient's identification pass phrase, something easy to remember like place of birth/mother's maiden name that was created during Sign-Up" />
+            <button>Submit</button>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+
+</script>
+
+

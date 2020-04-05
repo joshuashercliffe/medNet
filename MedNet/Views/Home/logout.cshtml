@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+    .topnav {
+        display: none;
+    }
+
+    .login-page {
+        width: 360px;
+        padding: 8% 0 0;
+        margin: auto;
+    }
+
+    .form {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        background: #FFFFFF;
+        max-width: 500px;
+        padding: 10px 40px 40px 40px;
+        text-align: center;
+    }
+
+    .green-buttons-top {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #4CAF50;
+        width: 250px;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .green-buttons-top:hover {
+        opacity: 0.8;
+    }
+
+    div.heading {
+        font-size: 30px;
+        line-height: 30px;
+        height: 30px;
+    }
+</style>
+
+<div>
+    <p align="right">
+        <button class="green-buttons-top" onclick="window.location.href = '/Home';">Back to Home</button>
+    </p>
+</div>
+
+<div class="login-page">
+    <div class="form">
+        <div class="heading">
+            <p>You have successfully logged out.</p>
+        </div>
+    </div>
+</div>

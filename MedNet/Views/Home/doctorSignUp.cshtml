@@ -96,6 +96,7 @@
         line-height: 30px;
         height: 30px;
     }
+
     .tooltip {
         position: relative;
         display: inline-block;
@@ -122,20 +123,21 @@
 
 <div>
     <p align="right">
-        <button class="green-buttons-top">Patient Sign-Up</button>
-    </p>
-    <p align="right">
-        <button class="green-buttons-top">Patient Log-In</button>
+        <button class="green-buttons-top" onclick="window.location.href = '/Home';">Back to Home</button>
     </p>
 </div>
 
 <div class="login-page">
     <div class="form">
         <div class="heading">
-            <p>Doctor Login</p>
+            <p>Sign Up for MedNet</p>
         </div>
-        <p>Enter your details below to continue.</p>
-        <form class="login-form" action="Home/PatientLookUp">
+        <p>Enter your details below to create an account.</p>
+        <form class="login-form" action="/Home">
+            <label>Name:</label>
+            <input type="text" id="full-name" name="full-name" placeholder="First Name, Last Name" />
+            <label>Email:</label>
+            <input type="text" id="email" name="email" placeholder="Email" />
             <div class="tooltip">
                 <label>Doctor MINC:</label>
                 <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
@@ -143,14 +145,25 @@
             <input type="text" id="minc" name="minc" placeholder="CAXX-XXXX-XXXX" title="12 digit Medical Identification Number for Canada" />
             <div class="tooltip">
                 <label>Doctor Keyword:</label>
-                <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
+                <span class="tooltiptext">Identification pass phrase.</span>
             </div>
-            <input type="password" id="keyword" name="keyword" placeholder="Keyword" title="Identification pass phrase created during Sign-Up" />
+            <input type="text" id="keyword" name="keyword" placeholder="Keyword" title="Identification pass phrase." />
             <label>Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password" />
-            <button>Login</button>
-            <p class="message">Don't have an account? <a href="Home/DoctorSignUp">Sign up here.</a></p>
-            <p class="message"><a href="Home/DoctorForgotPassword">Forgot your password?</a></p>
+            <input type="password" id="password" name="password" placeholder="Password" onkeyup='check();' />
+            <label>Confirm Password:</label>
+            <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
+            <span id='message'></span><br /><br />
+            <button>Create Account</button>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">var check = function () {
+    if (document.getElementById('password').value == document.getElementById('retype-password').value) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'Passwords Match.';
+    } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'Passwords do not match, please try again.';
+    }
+}</script>

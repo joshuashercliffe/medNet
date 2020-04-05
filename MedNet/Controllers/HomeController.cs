@@ -30,7 +30,31 @@ namespace MedNet.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult DoctorSignUp()
+        {
+            return View();
+        }
+
+        public IActionResult DoctorForgotPassword()
+        {
+            return View();
+        }
+
+        public IActionResult PatientLookUp()
+        {
+            return View();
+        }
+        public IActionResult RecentPatients()
+        {
+            return View();
+        }
+
+        public IActionResult Feedback()
+        {
+            return View();
+        }
+
+        public IActionResult Logout()
         {
             return View();
         }

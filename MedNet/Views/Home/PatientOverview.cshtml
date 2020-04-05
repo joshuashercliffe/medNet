@@ -1,264 +1,329 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                        </div>
+<style>
+    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-                        <h3 class="profile-username text-center">@Html.ActionLink("Current User", "PatientOverview", "Home")</h3>
+    .login-page {
+        width: 360px;
+        padding: 8% 0 0;
+        margin: auto;
+    }
 
-                        <p class="text-muted text-center">Patient</p>
+    .form1 {
+        position: absolute;
+        left: 5%;
+        top: 50%;
+        transform: translate(-5%, -50%);
+        z-index: 1;
+        background: #FFFFFF;
+        width: 20%;
+        height: 70%;
+        padding: 10px 40px 40px 40px;
+        text-align: center;
+        border-style: solid;
+        border-width: medium;
+        border-color: gainsboro;
+        overflow: scroll;
+    }
 
-                    </div>
-                    <!-- /.card-body -->
+    .form2 {
+        position: absolute;
+        right: 5%;
+        top: 50%;
+        transform: translate(2%, -50%);
+        z-index: 1;
+        background: #FFFFFF;
+        width: 1000px;
+        height: 70%;
+        padding: 10px 40px 40px 40px;
+        text-align: center;
+        border-style: solid;
+        border-width: medium;
+        border-color: gainsboro;
+        overflow: scroll;
+    }
+
+    .form1 button {
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        outline: 0;
+        background: #ff0000;
+        width: 100%;
+        border: 0;
+        padding: 15px;
+        color: #FFFFFF;
+        font-size: 14px;
+        -webkit-transition: all;
+        transition: all;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+
+    .form1 button:hover, .form button:active, .form button:focus {
+        background: #e60000;
+    }
+
+    div.heading2 {
+        font-size: 20px;
+        line-height: 20px;
+        color: #cccccc;
+    }
+
+    div.heading1 {
+        font-size: 25px;
+        line-height: 25px;
+        color: #4CAF50;
+    }
+
+    .column1 {
+        float: left;
+        width: 50%;
+        padding: 0px 5px 0px 0px;
+        text-align: right;
+        color: #cccccc;
+        line-height: 5px;
+    }
+
+    .column2 {
+        float: left;
+        width: 40%;
+        padding: 0px 0px 0px 5px;
+        text-align: left;
+        line-height: 5px;
+    }
+
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .table {
+        padding: 30px 10px 30px 10px;
+    }
+
+    .tab {
+        overflow: hidden;
+        border-color: gainsboro;
+        border-style: solid;
+        border-width: medium;
+        background-color: #4CAF50;
+    }
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+        color: #FFFFFF;
+    }
+
+    .tab button.red {
+        background-color: #ff0000;
+        float: right;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+        color: #FFFFFF;
+    }
+
+    .tab button.red:hover {
+        background-color: #e60000;
+    }
+
+    .tab button:hover {
+        background-color: #3e8e41;
+    }
+
+    .tab button.active {
+        background-color: #367c39;
+    }
+
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border-color: gainsboro;
+        border-style: solid;
+        border-width: medium;
+        border-top: none;
+        height: 540px;
+        overflow: scroll;
+    }
+
+    .record {
+        padding: 10px;
+        border-color: gainsboro;
+        border-style: solid;
+        border-width: medium;
+        height: 150px;
+        margin: 10px;
+    }
+
+</style>
+
+<div class="login-page">
+    <div class="form1">
+        <div class="heading2">
+            <p><strong>Patient Profile</strong></p>
+        </div>
+        <div class="heading1">
+            <p><strong>First Name, Last Name</strong></p>
+        </div>
+        <div class="heading2">
+            <p>PHN: XXXX-XXX-XXX</p>
+            <p>General Information</p>
+        </div>
+
+        <div>
+            <div class="row">
+                <div class="column1">
+                    <p>Age:</p>
                 </div>
-                <!-- /.card -->
-                <!-- About Me Box -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">About Me</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Address</strong>
-
-                        <p class="text-muted">
-                            8888 University Drive, Burnaby, British Columbia
-                        </p>
-
-                        <hr>
-
-                        <strong><i class="far fa-file-alt mr-1"></i> Age</strong>
-
-                        <p class="text-muted">25</p>
-
-                        <hr>
-
-                        <strong><i class="fas fa-pencil-alt mr-1"></i> Family Doctor</strong>
-
-                        <p class="text-muted">Joshua Shercliffe</p>
-                        <p class="text-muted">Fake Clinic</p>
-                        <p class="text-muted">1234 Hastings Street</p>
-                        <p class="text-muted">778-999-9999</p>
-
-                        <hr>
-                    </div>
-                    <!-- /.card-body -->
+                <div class="column2">
+                    <p>32</p>
                 </div>
-                <!-- /.card -->
             </div>
-            <!-- /.col -->
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header p-2">
-                        <h2>Previous Records for Current User</h2>
-                    </div><!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="col-md-9">
-                            <div class="card">
-                                <div class="card-header p-2">
-                                    <ul class="nav nav-pills">
-                                        <li class="nav-item"><a class="nav-link active" href="#Prescriptions" data-toggle="tab">Prescriptions</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#TestResults" data-toggle="tab">Test Results</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="#Appointments" data-toggle="tab">Appointments</a></li>
-                                    </ul>
-                                </div><!-- /.card-header -->
-                                <div class="card-body">
-                                    <div class="tab-content">
-                                        <div class="active tab-pane" id="Prescriptions">
-                                            <!-- Post -->
-                                            <div class="post">
-                                                <span class="username">
-                                                    <a href="#">Lisinopril		</a>
-                                                    <a href="#" class="float-right btn-tool">11-9-2019</a>
-                                                </span>
-                                                <div>
-                                                    <span class="description">5mg/Daily</span>
-                                                </div>
-                                                <br />
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
-                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
-                                                </p>
-                                            </div>
-                                            <div class="post">
-                                                <span class="username">
-                                                    <a href="#">Simvastatin</a>
-                                                    <a href="#" class="float-right btn-tool">11-7-2019</a>
-                                                </span>
-                                                <div>
-                                                    <span class="description">40mg/Daily</span>
-                                                </div>
-                                                <br />
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
-                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
-                                                </p>
-                                            </div>
-                                            <div class="post">
-                                                <span class="username">
-                                                    <a href="#">Levothyroxine</a>
-                                                    <a href="#" class="float-right btn-tool">11-9-2018</a>
-                                                </span>
-                                                <div>
-                                                    <span class="description">0.05mg/Daily</span>
-                                                </div>
-                                                <br />
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
-                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
-                                                </p>
-                                            </div>
-                                            <div class="post">
-                                                <span class="username">
-                                                    <a href="#">Lipitor</a>
-                                                    <a href="#" class="float-right btn-tool">11-5-2018</a>
-                                                </span>
-                                                <div>
-                                                    <span class="description">30mg/Daily</span>
-                                                </div>
-                                                <br />
-                                                <!-- /.user-block -->
-                                                <p>
-                                                    This is a template for where the doctors note will go that was associated with the prescription. Will give notes on when to take the medication
-                                                    (before or after breakfast etc), the start of the prescription, and the end of the prescription.
-                                                </p>
-                                            </div>
-                                            <!-- /.post -->
-                                        </div>
-                                        <!-- /.tab-pane -->
-                                        <div class="tab-pane" id="TestResults">
-                                            <!-- The timeline -->
-                                            <div class="card card-primary">
-                                                <div class="card-header">
-                                                    <h3 class="card-title">Test Results</h3>
-                                                </div>
-                                                <div class="card-body table-responsive p-0">
-                                                    <table class="table table-hover text-nowrap">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Type</th>
-                                                                <th>Date</th>
-                                                                <th>Results</th>
-                                                                <th>Associated Doctors Note</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Urine</td>
-                                                                <td>11-5-2019</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Chemistry</td>
-                                                                <td>11-3-2019</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Microbiology</td>
-                                                                <td>10-7-2019</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Lipid</td>
-                                                                <td>10-5-2019</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Thyroid</td>
-                                                                <td>11-7-2018</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Other</td>
-                                                                <td>11-7-2017</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Other Chemistry</td>
-                                                                <td>11-7-2016</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Hematology</td>
-                                                                <td>11-7-2015</td>
-                                                                <td><a href="#">Results</a></td>
-                                                                <td><a href="#">Note</a></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <!-- /.card-header -->
-                                            </div>
-                                        </div>
-                                        <!-- /.tab-pane -->
-                                        <div class="tab-pane" id="Appointments">
-                                            <div class="callout callout-info">
-                                                <h3><strong><a href="#">03-10-2020</a></strong></h3>
-                                                <strong>Purpose of Visit</strong>
-                                                <p class="text-muted">Cough fever and sore throat</p>
-                                                <strong> Final Diagnosis</strong>
-                                                <p class="text-muted">Possible Coronavirus, test needed</p>
-                                                <strong> Test Result</strong>
-                                                <p class="text-muted">Pending...</p>
-                                            </div>
-                                            <div class="callout callout-info">
-                                                <h3><strong><a href="#">11-5-2019</a></strong></h3>
-                                                <strong>Purpose of Visit</strong>
-                                                <p class="text-muted">Sore Throat</p>
-                                                <strong> Final Diagnosis</strong>
-                                                <p class="text-muted">Cold/Flu</p>
-                                            </div>
-                                            <div class="callout callout-info">
-                                                <h3><strong><a href="#">11-5-2019</a></strong></h3>
-                                                <strong>Purpose of Visit</strong>
-                                                <p class="text-muted">Soreness when urinating</p>
-                                                <strong> Final Diagnosis</strong>
-                                                <p class="text-muted">Urine test needed</p>
-                                                <strong> Test Result</strong>
-                                                <p class="text-muted"><a href="#">Results</a></p>
-                                            </div>
-                                            <div class="callout callout-info">
-                                                <h3><strong><a href="#">11-5-2017</a></strong></h3>
-                                                <strong>Purpose of Visit</strong>
-                                                <p class="text-muted">Cough</p>
-                                                <strong> Final Diagnosis</strong>
-                                                <p class="text-muted">Cold/Flu</p>
-                                                <strong> Prescription</strong>
-                                                <p class="text-muted"><a href="#">Phenergan-Codeine Syrup 50ml/Day</a></p>
-                                            </div>
-                                        </div>
-                                        <!-- /.tab-pane -->
-                                    </div>
-                                    <!-- /.tab-content -->
-                                </div><!-- /.card-body -->
-                            </div>
-                            <!-- /.nav-tabs-custom -->
-                        </div>
-                    </div>
-                    <!-- /.nav-tabs-custom -->
+            <div class="row">
+                <div class="column1">
+                    <p>Date of Birth:</p>
                 </div>
-                <!-- /.col -->
+                <div class="column2">
+                    <p>09/27/1987</p>
+                </div>
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+            <div class="row">
+                <div class="column1">
+                    <p>Blood Type:</p>
+                </div>
+                <div class="column2">
+                    <p>O+</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <p>Allergies:</p>
+                </div>
+                <div class="column2">
+                    <p>Bees</p>
+                    <p>Peanuts</p>
+                    <p>Aspirin</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <p>Current Medication(s):</p>
+                </div>
+                <div class="column2">
+                    <p>Levothyroxine</p>
+                    <p>Insulin</p>
+                    <p>Zoloft</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <p>Smoker:</p>
+                </div>
+                <div class="column2">
+                    <p>Yes</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <p>Drink Alcohol:</p>
+                </div>
+                <div class="column2">
+                    <p>Yes</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="column1">
+                    <p>Known Medical History:</p>
+                </div>
+                <div class="column2">
+                    <p>Thyroid</p>
+                    <p>Diabetes</p>
+                </div>
+            </div>
+        </div>
+        <button onclick="window.location.href = '/Home/AddNewPatientRecord';">Add Record</button><br />
     </div>
-</section>
-<!-- /.content -->
+
+    <div class="form2">
+        <div class="table">
+            <div class="tab">
+                <button class="tablinks" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
+                <button class="tablinks" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
+                <button class="tablinks" onclick="openTab(event, 'test_results')">Test Results</button>
+                <button class="tablinks, red" onclick="window.location.href = '/Home/AddNewPatientRecord';">+</button>
+            </div>
+
+            <div id="doc_notes" class="tabcontent">
+                <div class="record" align="left">
+                    <div class="heading1">
+                        Date: 02/20/2020
+                    </div>
+                    <p>
+                        Purpose of Visit: XXXXXXXXXXX <br />
+                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
+                    </p>
+                </div>
+                <div class="record" align="left">
+                    <div class="heading1">
+                        Date: 02/27/2020
+                    </div>
+                    <p>
+                        Purpose of Visit: XXXXXXXXXXX <br />
+                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
+                    </p>
+                </div>
+                <div class="record" align="left">
+                    <div class="heading1">
+                        Date: 03/07/2020
+                    </div>
+                    <p>
+                        Purpose of Visit: XXXXXXXXXXX <br />
+                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
+                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
+                    </p>
+                </div>
+            </div>
+
+            <div id="prescriptions" class="tabcontent">
+                
+            </div>
+
+            <div id="test_results" class="tabcontent">
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">document.getElementById("defaultOpen").click();
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }</script>
