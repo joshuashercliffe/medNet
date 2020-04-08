@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model doctorSignUpViewModel
+
+@{
+    ViewData["Title"] = "";
+
 }
 <style>
     @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -133,27 +136,28 @@
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form class="login-form" action="/Home">
-            <label>Name:</label>
-            <input type="text" id="full-name" name="full-name" placeholder="First Name, Last Name" />
+        <form asp-controller="Home" asp-action="DoctorSignUp" method="post">
+            <label>First Name:</label>
+            @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name" })
+            <label>Last Name:</label>
+            @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name" })
             <label>Email:</label>
-            <input type="text" id="email" name="email" placeholder="Email" />
-            <div class="tooltip">
-                <label>Doctor MINC:</label>
+            @Html.TextBoxFor(n => n.Email, new { placeholder = "Email" })
+            <div class="tooltip allign">
                 <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
             </div>
-            <input type="text" id="minc" name="minc" placeholder="CAXX-XXXX-XXXX" title="12 digit Medical Identification Number for Canada" />
+            @Html.TextBoxFor(n => n.DoctorMINC, new { placeholder = "CAXX-XXXX-XXXX", title = "12 digit Medical Identification Number for Canada" })
             <div class="tooltip">
                 <label>Doctor Keyword:</label>
                 <span class="tooltiptext">Identification pass phrase.</span>
             </div>
-            <input type="text" id="keyword" name="keyword" placeholder="Keyword" title="Identification pass phrase." />
+            @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
             <label>Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password" onkeyup='check();' />
+            @Html.TextBoxFor(n => n.Password, new { placeholder = "Password" })
             <label>Confirm Password:</label>
             <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
             <span id='message'></span><br /><br />
-            <button>Create Account</button>
+            <button type="submit">Register</button>
         </form>
     </div>
 </div>

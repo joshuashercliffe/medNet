@@ -29,10 +29,17 @@ namespace MedNet.Controllers
         {
             return View();
         }
-
+        
         public IActionResult DoctorSignUp()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult DoctorSignUp(doctorSignUpViewModel doctorSignUpViewModel)
+        {
+            var asd = doctorSignUpViewModel;
+            return View("Index");
         }
 
         public IActionResult DoctorForgotPassword()
