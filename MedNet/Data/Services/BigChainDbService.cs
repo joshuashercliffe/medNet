@@ -13,13 +13,14 @@ using MongoDB.Bson;
 using Nito.AsyncEx;
 using NSec.Cryptography;
 using MedNet.Data.Models;
+using MedNet.Data.Models.Models;
 using BigchainDB.Objects;
 
 namespace MedNet.Data.Services
 {
     public class BigChainDbService
     {
-        private IMongoDatabase bigchainDatabase;
+        private static IMongoDatabase bigchainDatabase;
 
         public void GetUserList(string publicKey, string privateKey)
         {
@@ -102,33 +103,31 @@ namespace MedNet.Data.Services
         }
 
         // This function is similar to 
-        public void SendTransactionToDataBase(Asset asset, MetaDataSaved metaData, string publicKey, string privateKey)
-        {
-            var algorithm = SignatureAlgorithm.Ed25519;
-            var privateKeySigned = Key.Import(algorithm, Utils.StringToByteArray(privateKey), KeyBlobFormat.PkixPrivateKey);
-            var publicKeySigned = PublicKey.Import(algorithm, Utils.StringToByteArray(publicKey), KeyBlobFormat.PkixPublicKey);
 
-            var transaction = BigchainDbTransactionBuilder<Asset, MetaDataSaved>
+        public void SendTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string publicKey)
+        {
+            var signPrivateKey = EncryptionService.getSignKeyFromPrivate(publicKey);
+
+            var transaction = BigchainDbTransactionBuilder<AssetSaved<A>, MetaDataSaved<M>>
                 .init()
                 .addAssets(asset)
                 .addMetaData(metaData)
                 .operation(Operations.CREATE)
-                .buildAndSignOnly(publicKeySigned, privateKeySigned);
+                .buildAndSignOnly(signPrivateKey.PublicKey, signPrivateKey);
 
-            var createTransaction = TransactionsApi<Asset, MetaDataSaved>.sendTransactionAsync(transaction);
-            var test = createTransaction.Result;
+            var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
         }
 
         public List<string> GetAllDoctorNotesFromPublicKey(string publicKey)
         {
             var doctorNotes = new List<string>();
-            var assets = bigchainDatabase.GetCollection<Models.Assets>("assets");
+            var assets = bigchainDatabase.GetCollection<Models.Assets<string>>("assets");
             var docNotesAssets = assets.AsQueryable().Where(x => x.data.Type == AssetType.DoctorNote);
-            var metadata = bigchainDatabase.GetCollection<Metadatas>("metadata");
+            var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string,string>>>("metadata");
             var r = from t1 in docNotesAssets
                     join t2 in metadata.AsQueryable() on t1.id equals t2.id
-                    where t2.metadata.metadata.AccessList.ContainsKey(publicKey)
-                    select new AssetsMetadatas()
+                    where t2.metadata.metadata.data.ContainsKey(publicKey)
+                    select new AssetsMetadatas<string,Dictionary<string,string>>()
                     {
                         id = t1.id,
                         data = t1.data,
@@ -145,13 +144,13 @@ namespace MedNet.Data.Services
         public List<string> GetAlPrescriptionsFromPublicKey(string publicKey)
         {
             var prescriptions = new List<string>();
-            var assets = bigchainDatabase.GetCollection<Models.Assets>("assets");
+            var assets = bigchainDatabase.GetCollection<Models.Assets<string>>("assets");
             var prescriptionAssets = assets.AsQueryable().Where(x => x.data.Type == AssetType.Prescription);
-            var metadata = bigchainDatabase.GetCollection<Metadatas>("metadata");
+            var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string,string>>>("metadata");
             var r = from t1 in prescriptionAssets
                     join t2 in metadata.AsQueryable() on t1.id equals t2.id
-                    where t2.metadata.metadata.AccessList.ContainsKey(publicKey)
-                    select new AssetsMetadatas()
+                    where t2.metadata.metadata.data.ContainsKey(publicKey)
+                    select new AssetsMetadatas<string,Dictionary<string,string>>()
                     {
                         id = t1.id,
                         data = t1.data,
@@ -200,6 +199,19 @@ namespace MedNet.Data.Services
             }
 
             return assetData;
+        }
+
+        public Models.Assets<UserCredAssetData> GetUserAssetFromTypeID(AssetType assetType, string id)
+        {
+            var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets");
+            var asset = from a in assets.AsQueryable() where a.data.Type == assetType && a.data.Data.ID == id select a;
+            return asset.FirstOrDefault();
+        }
+
+        public M GetMetadataFromAssetPublicKey<M>(string assetID, string signPublicKey)
+        {
+            M result = default(M);
+            return result;
         }
 
         public void SendTransactionToDataBase(UserListAsset asset, UserListMetadata metaData, string publicKey, string privateKey)

@@ -74,6 +74,10 @@
         cursor: pointer;
     }
 
+    .form button:disabled {
+        background: grey;
+    }
+
     form.login-form {
         text-align: left;
     }
@@ -136,7 +140,7 @@
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-controller="Home" asp-action="DoctorSignUp" method="post">
+        <form asp-controller="Home" asp-action="DoctorSignUp" method="post" class="login-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name" })
             <label>Last Name:</label>
@@ -144,6 +148,7 @@
             <label>Email:</label>
             @Html.TextBoxFor(n => n.Email, new { placeholder = "Email" })
             <div class="tooltip allign">
+                <label>Doctor MINC:</label>
                 <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
             </div>
             @Html.TextBoxFor(n => n.DoctorMINC, new { placeholder = "CAXX-XXXX-XXXX", title = "12 digit Medical Identification Number for Canada" })
@@ -153,11 +158,11 @@
             </div>
             @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
             <label>Password:</label>
-            @Html.TextBoxFor(n => n.Password, new { placeholder = "Password" })
+            @Html.TextBoxFor(n => n.Password, new { type = "password", id="password", placeholder = "Password", onkeyup="check()" })
             <label>Confirm Password:</label>
             <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
             <span id='message'></span><br /><br />
-            <button type="submit">Register</button>
+            <button type="submit" id="submitButton">Register</button>
         </form>
     </div>
 </div>
@@ -166,8 +171,10 @@
     if (document.getElementById('password').value == document.getElementById('retype-password').value) {
         document.getElementById('message').style.color = 'green';
         document.getElementById('message').innerHTML = 'Passwords Match.';
+        document.getElementById('submitButton').disabled = false;
     } else {
         document.getElementById('message').style.color = 'red';
         document.getElementById('message').innerHTML = 'Passwords do not match, please try again.';
+        // document.getElementById('submitButton').disabled = true;
     }
 }</script>

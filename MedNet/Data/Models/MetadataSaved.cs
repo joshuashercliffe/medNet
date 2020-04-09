@@ -2,13 +2,8 @@
 
 namespace MedNet.Data.Models
 {
-    public class MetaDataSaved
+    public class MetaDataSaved<T>
     {
-        public Dictionary<string, string> AccessList { get; set; }
-
-        public MetaDataSaved()
-        {
-            AccessList = new Dictionary<string, string>();
-        }
+        public T data { get; set; }
     }
 }

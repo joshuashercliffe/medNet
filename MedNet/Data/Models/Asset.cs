@@ -1,10 +1,10 @@
 ﻿namespace MedNet.Data.Models
 {
-    public class Asset
+    public class AssetSaved<T>
     {
         public AssetType Type { get; set; }
 
-        public string Data { get; set; }
+        public T Data { get; set; }
 
         public int RandomId { get; set; }
     }

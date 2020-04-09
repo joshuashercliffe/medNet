@@ -9,6 +9,12 @@ using MedNet.Data.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Text;
+using Omnibasis.BigchainCSharp.Model;
+using Omnibasis.BigchainCSharp.Util;
+using System.Security.Cryptography;
+using NSec.Cryptography;
+using Omnibasis.CryptoConditionsCSharp.Utils;
 
 namespace MedNet.Controllers
 {
@@ -28,8 +34,30 @@ namespace MedNet.Controllers
 
         public IActionResult Index()
         {
+            var publicKey64 = EncryptionService.getSignPublicKeyStringFromPrivate("3mRC3iAAQAA1i7dmedOs/e4EI03A+y+oPr1ukKhMh/GxYNQmlxy3gA==");
+            var pubKey = EncryptionService.getSignPublicKeyFromString(publicKey64);
+            var pkik = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.PkixPublicKey));
+            var pkiktxt = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.PkixPublicKeyText));
+            var raw = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.RawPublicKey));
+            var acc = new BlockchainAccount();
+            acc.PublicKey = pubKey;
+            var accKey = Convert.ToBase64String(acc.ExportPublic());
             ViewBag.Title = "test";
+            
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(IndexViewModel indexViewModel)
+        {
+            string signPrivateKey = null, agreePrivateKey = null;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Doctor, indexViewModel.DoctorMINC);
+            var hashedKeys = userAsset.data.Data.PrivateKeys;
+            EncryptionService.getPrivateKeyFromIDKeyword(indexViewModel.DoctorMINC, indexViewModel.DoctorKeyword, hashedKeys, out signPrivateKey, out agreePrivateKey);
+            _bigChainDbService.GetMetadataFromAssetPublicKey<UserCredMetadata>(userAsset.id, EncryptionService.getSignPublicKeyStringFromPrivate(signPrivateKey));
+            var password = indexViewModel.password;
+            //if (EncryptionService.verifyPassword(password,);
+            return View("PatientOverview");
         }
 
         public IActionResult PatientOverview()
@@ -42,7 +70,7 @@ namespace MedNet.Controllers
             {
                 doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(doctorNote));
             }
-            foreach(var prescription in prescriptionsJson)
+            foreach (var prescription in prescriptionsJson)
             {
                 prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(prescription));
             }
@@ -63,8 +91,8 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult AddNewPatientRecord(AddNewPatientRecordViewModel addNewPatientRecordViewModel)
         {
-            
-             if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.DoctorsNote.PurposeOfVisit))
+
+            if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.DoctorsNote.PurposeOfVisit))
             {
                 var noteViewModel = addNewPatientRecordViewModel.DoctorsNote;
                 var doctorNote = new DoctorNote
@@ -76,17 +104,18 @@ namespace MedNet.Controllers
                     DateOfRecord = DateTime.Now
                 };
 
-                var asset = new Asset
+                var asset = new AssetSaved<string>
                 {
                     Data = JsonConvert.SerializeObject(doctorNote),
                     RandomId = _random.Next(0, 100000),
                     Type = AssetType.DoctorNote
                 };
 
-                var metadata = new MetaDataSaved();
-               metadata.AccessList[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
+                var metadata = new MetaDataSaved<Dictionary<string,string>>();
+                metadata.data = new Dictionary<string, string>();
+                metadata.data[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
 
-                _bigChainDbService.SendTransactionToDataBase(asset, metadata, _publicKeyString, _privateKeyString);
+                _bigChainDbService.SendTransactionToDataBase<string,Dictionary<string,string>>(asset, metadata, _publicKeyString);
 
                 return View();
             }
@@ -104,17 +133,18 @@ namespace MedNet.Controllers
                     DirectionForUse = prescriptionViewModel.DirectionForUse
                 };
 
-                var asset = new Asset
+                var asset = new AssetSaved<string>
                 {
                     Data = JsonConvert.SerializeObject(prescription),
                     RandomId = _random.Next(0, 100000),
                     Type = AssetType.Prescription
                 };
 
-                var metadata = new MetaDataSaved();
-                metadata.AccessList[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
+                var metadata = new MetaDataSaved<Dictionary<string,string>>();
+                metadata.data = new Dictionary<string, string>();
+                metadata.data[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
 
-                _bigChainDbService.SendTransactionToDataBase(asset, metadata, _publicKeyString, _privateKeyString);
+                _bigChainDbService.SendTransactionToDataBase<string,Dictionary<string,string>>(asset, metadata, _publicKeyString);
 
                 return View();
             }
@@ -130,7 +160,35 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult DoctorSignUp(doctorSignUpViewModel doctorSignUpViewModel)
         {
-            var asd = doctorSignUpViewModel;
+            string signPrivateKey = null, agreePrivateKey = null;
+            var passphrase = doctorSignUpViewModel.DoctorKeyWord;
+            var password = doctorSignUpViewModel.Password;
+            EncryptionService.getNewBlockchainUser(out signPrivateKey, out _, out agreePrivateKey, out _);
+            var userAssetData = new UserCredAssetData
+            {
+                FirstName = doctorSignUpViewModel.FirstName,
+                LastName = doctorSignUpViewModel.LastName,
+                ID = doctorSignUpViewModel.DoctorMINC,
+                Email = doctorSignUpViewModel.Email,
+                PrivateKeys = EncryptionService.encryptPrivateKeys(doctorSignUpViewModel.DoctorMINC, passphrase, signPrivateKey, agreePrivateKey),
+                DateOfRecord = DateTime.Now
+            };
+            var userMetadata = new UserCredMetadata
+            {
+                hashedPassword = EncryptionService.hashPassword(password)
+            };
+            var asset = new AssetSaved<UserCredAssetData>
+            {
+                Type = AssetType.Doctor,
+                Data = userAssetData,
+                RandomId = _random.Next(0, 100000)
+            };
+            var metadata = new MetaDataSaved<UserCredMetadata>
+            {
+                data = userMetadata
+            };
+
+            _bigChainDbService.SendTransactionToDataBase(asset, metadata, signPrivateKey);
             return View("Index");
         }
 

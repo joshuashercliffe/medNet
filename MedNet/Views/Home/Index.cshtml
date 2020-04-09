@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IndexViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -135,22 +137,22 @@
             <p>Doctor Login</p>
         </div>
         <p>Enter your details below to continue.</p>
-        <form class="login-form" action="Home/PatientLookUp">
+        <form asp-controller="Home" asp-action="Index" method="post" class="login-form">
             <div class="tooltip">
                 <label>Doctor MINC:</label>
                 <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
             </div>
-            <input type="text" id="minc" name="minc" placeholder="CAXX-XXXX-XXXX" title="12 digit Medical Identification Number for Canada" />
+            @Html.TextBoxFor(n => n.DoctorMINC, new { placeholder = "CAXX-XXXX-XXXX", title = "12 digit Medical Identification Number for Canada" })
             <div class="tooltip">
                 <label>Doctor Keyword:</label>
                 <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
             </div>
-            <input type="password" id="keyword" name="keyword" placeholder="Keyword" title="Identification pass phrase created during Sign-Up" />
+            @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
             <label>Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password" />
-            <button>Login</button>
+            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+            <button type="submit">Login</button>
             <p class="message">Don't have an account? <a href="Home/DoctorSignUp">Sign up here.</a></p>
             <p class="message"><a href="Home/DoctorForgotPassword">Forgot your password?</a></p>
         </form>
-    </div>
+</div>
 </div>

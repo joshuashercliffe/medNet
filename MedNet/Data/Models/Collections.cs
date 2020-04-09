@@ -3,37 +3,37 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace MedNet.Data.Models
 {
-    public class Assets
+    public class Assets<T>
     {
         [BsonId]
         public ObjectId _id { get; set; }
         [BsonElement]
         public string id { get; set; }
         [BsonElement]
-        public Asset data { get; set; }
+        public AssetSaved<T> data { get; set; }
     }
-    public class Metadatas
+    public class Metadatas<T>
     {
         [BsonId]
         public ObjectId _id { get; set; }
         [BsonElement]
         public string id { get; set; }
         [BsonElement]
-        public Metadata metadata { get; set; }
+        public Metadata<T> metadata { get; set; }
     }
-    public class Metadata
+    public class Metadata<T>
     {
         [BsonElement]
-        public MetaDataSaved metadata { get; set; }
+        public MetaDataSaved<T> metadata { get; set; }
     }
-    public class AssetsMetadatas
+    public class AssetsMetadatas<A,M>
     {
         [BsonElement]
         public string id { get; set; }
         [BsonElement]
-        public Asset data { get; set; }
+        public AssetSaved<A> data { get; set; }
         [BsonElement]
-        public MetaDataSaved metadata { get; set; }
+        public MetaDataSaved<M> metadata { get; set; }
     }
 
     public class ULAsset
