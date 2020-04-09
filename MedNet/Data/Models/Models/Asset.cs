@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MedNet.Data.Models.Models
+﻿namespace MedNet.Data.Models.Models
 {
     public class Asset
     {
