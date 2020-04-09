@@ -4,6 +4,7 @@
     {
         Doctor = 0,
         Patient = 1,
-        DoctorNote = 2
+        DoctorNote = 2,
+        Prescription = 3
     };
 }

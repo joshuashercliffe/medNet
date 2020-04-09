@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AddNewPatientRecordViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -39,21 +40,21 @@
         text-align: center;
         border-style: solid;
         border-width: medium;
-        border-color: #ff0000;
+        border-color: gainsboro;
         overflow: scroll;
     }
 
-    .form input {
-        font-family: "Roboto", sans-serif;
-        outline: 0;
-        background: #f2f2f2;
-        width: 100%;
-        border: 0;
-        margin: 0 0 15px;
-        padding: 15px;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
+        .form input {
+            font-family: "Roboto", sans-serif;
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
 
     .form textarea {
         font-family: "Roboto", sans-serif;
@@ -80,18 +81,18 @@
         height: 46px;
     }
 
-    .form button {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #ff0000;
-        width: 100%;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
-    }
+        .form button {
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            outline: 0;
+            background: #4CAF50;
+            width: 100%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            cursor: pointer;
+        }
 
     form.login-form {
         text-align: left;
@@ -145,53 +146,60 @@
             <p>Add New Patient Record</p>
         </div>
         <br />
-        <form class="login-form" action="/Home/PatientOverview">
+        <form asp-controller="Home" asp-action="AddNewPatientRecord" method="post">
             <div>
                 <label for="selectRecordType">New Record Type</label>
                 <select id="selectRecordType">
                     <option value="" disabled selected hidden>Select Record Type</option>
                     <option value="doctorsNote">Add New Doctor's Note</option>
                     <option value="prescription">Add New Prescription</option>
-                    <option value="testResult">Add New Test Results</option>
+                    <!--<option value="testResult">Add New Test Results</option>-->
                 </select>
             </div>
 
             <div id="doctorsNote1">
                 <label>Purpose of Visit</label>
-                <input type="text" placeholder="Main concern addressed">
+                @Html.TextBoxFor(n => n.DoctorsNote.PurposeOfVisit, new { placeholder = "Main concern addressed" })
             </div>
 
             <div id="doctorsNote2">
                 <label>Description</label>
-                <textarea rows="3" placeholder="Enter appointment notes"></textarea>
+                @Html.TextBoxFor(n => n.DoctorsNote.Description, new { placeholder = "Enter appointment notes" })
             </div>
 
             <div id="doctorsNote3">
-                <label>Final Diagnosis</label>
-                <input type="text" placeholder="Identification of concern raised">
+                <label>Final Diagnoses</label>
+                @Html.TextBoxFor(n => n.DoctorsNote.FinalDiagnosis, new { placeholder = "Identification of concern raised" })
             </div>
 
             <div id="doctorsNote4">
                 <label>Further Instructions and General Precautions</label>
-                <textarea rows="3" placeholder="Physical/dietary precautions, restrictions and recommendations"></textarea>
+                @Html.TextBoxFor(n => n.DoctorsNote.FurtherInstructions, new { placeholder = "Physical/dietary precautions, restrictions and recommendations" })
             </div>
 
             <div id="prescription1">
                 <label>Prescribing Date</label>
-                <input type="text" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask id="todaysDate">
-
+                @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new
+                {
+                    placeholder = "Physical/dietary precautions, restrictions and recommendations",
+                    type = "date"
+                })
             </div>
 
             <div id="prescription2">
                 <label>Drug Name and Strength</label>
-                <input type="text" placeholder="Drug name, strength">
+                @Html.TextBoxFor(n => n.Prescription.DrugNameStrength, new { placeholder = "Drug name, strength" })
             </div>
 
             <div id="prescription3">
-                <label>Dosage and Frequency (mg/dose)</label>
-                <input type="text" class="form-control" placeholder="00.00" onkeypress="return isNumber(event)">
+                <label>Dosage</label>
+                @Html.TextBoxFor(n => n.Prescription.Dosage, new
+                {
+                    placeholder = "00.00",
+                    onkeypress = "return isNumber(event)",
+                    @class = "form-control"
+                })
             </div>
-
 
             <div id="prescription4">
                 <div class="row">
@@ -204,19 +212,26 @@
                 </div>
                 <div class="row">
                     <div class="column">
-                        <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask id="datemask2">
+                        @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new
+                            {
+                                type = "date"
+                            })
                     </div>
                     <div class="column">
-                        <input type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask id="datemask3">
+                        @Html.TextBoxFor(n => n.Prescription.EndDate, new
+                                {
+                                    type = "date"
+                                })
                     </div>
                 </div>
             </div>
 
             <div id="prescription5">
                 <label>Direction for Use or Special Instructions</label>
-                <textarea rows="3" placeholder="Restrictions and Recommendations"></textarea>
+                @Html.TextBoxFor(n => n.Prescription.DirectionForUse, new { placeholder = "Restrictions and Recommendations" })
             </div>
 
+            <!--
             <div id="test1">
                 <label for="selectTestType">Test Type</label>
                 <select id="selectRecordType">
@@ -242,8 +257,8 @@
                 <input type="file">
                 <label>Choose file</label>
             </div>
-
-            <button>Add Record</button>
+            -->
+            <button type="submit" id="buttonSubmit">Submit</button>
         </form>
     </div>
 </div>
@@ -304,12 +319,13 @@
     $('#submit').hide();
 
     $("#selectRecordType").change(function () {
+        $('#buttonSubmit').hide();
         if ($(this).val() == "doctorsNote") {
             $('#doctorsNote1').show();
             $('#doctorsNote2').show();
             $('#doctorsNote3').show();
             $('#doctorsNote4').show();
-            $('#submit').show();
+            $('#buttonSubmit').show();
         } else {
             $('#doctorsNote1').hide();
             $('#doctorsNote2').hide();
@@ -323,7 +339,7 @@
             $('#prescription3').show();
             $('#prescription4').show();
             $('#prescription5').show();
-            $('#submit').show();
+            $('#buttonSubmit').show();
         } else {
             $('#prescription1').hide();
             $('#prescription2').hide();
@@ -332,7 +348,7 @@
             $('#prescription5').hide();
         }
 
-        if ($(this).val() == "testResult") {
+/*        if ($(this).val() == "testResult") {
             $('#test1').show();
             $('#test2').show();
             $('#test3').show();
@@ -341,6 +357,6 @@
             $('#test1').hide();
             $('#test2').hide();
             $('#test3').hide();
-        }
+        }*/
     });
     $("#selectRecordType").trigger("change");</script>

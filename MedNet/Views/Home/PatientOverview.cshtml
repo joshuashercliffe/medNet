@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PatientOverviewViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -261,53 +262,48 @@
             <div class="tab">
                 <button class="tablinks" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
                 <button class="tablinks" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
-                <button class="tablinks" onclick="openTab(event, 'test_results')">Test Results</button>
+                <!--<button class="tablinks" onclick="openTab(event, 'test_results')">Test Results</button>-->
                 <button class="tablinks, red" onclick="window.location.href = '/Home/AddNewPatientRecord';">+</button>
             </div>
 
             <div id="doc_notes" class="tabcontent">
-                <div class="record" align="left">
-                    <div class="heading1">
-                        Date: 02/20/2020
+                @foreach (var doctorNote in Model.DoctorNotes)
+                {
+                    <div class="record" align="left">
+                        <div class="heading1">
+                            Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                        </div>
+                        <p>
+                            Purpose of Visit: @doctorNote.PurposeOfVisit <br />
+                            Description: @doctorNote.Description <br />
+                            Final Diagnosis: @doctorNote.FinalDiagnosis <br />
+                            Further Instructions and General Precautions: @doctorNote.FurtherInstructions
+                        </p>
                     </div>
-                    <p>
-                        Purpose of Visit: XXXXXXXXXXX <br />
-                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
-                    </p>
-                </div>
-                <div class="record" align="left">
-                    <div class="heading1">
-                        Date: 02/27/2020
-                    </div>
-                    <p>
-                        Purpose of Visit: XXXXXXXXXXX <br />
-                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
-                    </p>
-                </div>
-                <div class="record" align="left">
-                    <div class="heading1">
-                        Date: 03/07/2020
-                    </div>
-                    <p>
-                        Purpose of Visit: XXXXXXXXXXX <br />
-                        Description: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Final Diagnosis: XXXXXXXXXXX XXXXXXXXXXX <br />
-                        Further Instructions and General Precautions: XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXX
-                    </p>
-                </div>
+                }
             </div>
 
             <div id="prescriptions" class="tabcontent">
-                
+                @foreach (var prescription in Model.Prescriptions)
+                {
+                    <div class="record" align="left">
+                        <div class="heading1">
+                            Date: @prescription.PrescribingDate.ToString("MMMM dd, yyyy")
+                        </div>
+                        <p>
+                            Prescription: @prescription.DrugNameStrength <br />
+                            Dosage: @prescription.Dosage <br />
+                            Prescription Length: @prescription.StartDate.ToString("MMMM dd, yyyy") to @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                        </p>
+                    </div>
+                }
+
             </div>
 
-            <div id="test_results" class="tabcontent">
-               
-            </div>
+            <!--<div id="test_results" class="tabcontent">
+
+            </div>-->
+
         </div>
     </div>
 </div>
