@@ -19,6 +19,7 @@
     <PackageReference Include="NSec.Cryptography" Version="20.2.0" />
     <PackageReference Include="Omnibasis.BigchainCSharp" Version="1.0.2" />
     <PackageReference Include="Omnibasis.CryptoConditionsCSharp" Version="1.0.2" />
+    <PackageReference Include="SimpleBase" Version="3.0.1" />
   </ItemGroup>
 
 

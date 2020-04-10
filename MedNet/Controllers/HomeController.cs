@@ -9,12 +9,6 @@ using MedNet.Data.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
-using System.Text;
-using Omnibasis.BigchainCSharp.Model;
-using Omnibasis.BigchainCSharp.Util;
-using System.Security.Cryptography;
-using NSec.Cryptography;
-using Omnibasis.CryptoConditionsCSharp.Utils;
 
 namespace MedNet.Controllers
 {
@@ -34,14 +28,6 @@ namespace MedNet.Controllers
 
         public IActionResult Index()
         {
-            var publicKey64 = EncryptionService.getSignPublicKeyStringFromPrivate("3mRC3iAAQAA1i7dmedOs/e4EI03A+y+oPr1ukKhMh/GxYNQmlxy3gA==");
-            var pubKey = EncryptionService.getSignPublicKeyFromString(publicKey64);
-            var pkik = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.PkixPublicKey));
-            var pkiktxt = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.PkixPublicKeyText));
-            var raw = Convert.ToBase64String(pubKey.Export(KeyBlobFormat.RawPublicKey));
-            var acc = new BlockchainAccount();
-            acc.PublicKey = pubKey;
-            var accKey = Convert.ToBase64String(acc.ExportPublic());
             ViewBag.Title = "test";
             
             return View();
@@ -50,14 +36,38 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult Index(IndexViewModel indexViewModel)
         {
+            if (!ModelState.IsValid)
+                return View(indexViewModel);
             string signPrivateKey = null, agreePrivateKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Doctor, indexViewModel.DoctorMINC);
+            if (userAsset == null)
+            {
+                ModelState.AddModelError("", "We could not find a matching user");
+                return View(indexViewModel);
+            }
             var hashedKeys = userAsset.data.Data.PrivateKeys;
-            EncryptionService.getPrivateKeyFromIDKeyword(indexViewModel.DoctorMINC, indexViewModel.DoctorKeyword, hashedKeys, out signPrivateKey, out agreePrivateKey);
-            _bigChainDbService.GetMetadataFromAssetPublicKey<UserCredMetadata>(userAsset.id, EncryptionService.getSignPublicKeyStringFromPrivate(signPrivateKey));
+            try
+            {
+                EncryptionService.getPrivateKeyFromIDKeyword(indexViewModel.DoctorMINC, indexViewModel.DoctorKeyword, hashedKeys, out signPrivateKey, out agreePrivateKey);
+            }
+            catch 
+            {
+                ModelState.AddModelError("", "Keyword may be inccorrect");
+                return View(indexViewModel);
+            }
+            UserCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<UserCredMetadata>(userAsset.id, EncryptionService.getSignPublicKeyStringFromPrivate(signPrivateKey));
             var password = indexViewModel.password;
-            //if (EncryptionService.verifyPassword(password,);
-            return View("PatientOverview");
+            if (EncryptionService.verifyPassword(password, userMetadata.hashedPassword))
+            {
+                ViewBag.currentDoctorSignPrivateKey = signPrivateKey;
+                ViewBag.currentDoctorAgreePrivateKey = agreePrivateKey;
+                return View("patientLookUp");
+            }
+            else
+            {
+                ModelState.AddModelError("","Password or Keyword incorrect.");
+                return View(indexViewModel);
+            }
         }
 
         public IActionResult PatientOverview()
@@ -189,7 +199,7 @@ namespace MedNet.Controllers
             };
 
             _bigChainDbService.SendTransactionToDataBase(asset, metadata, signPrivateKey);
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public IActionResult DoctorForgotPassword()

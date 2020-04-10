@@ -14,6 +14,7 @@ using Nito.AsyncEx;
 using NSec.Cryptography;
 using MedNet.Data.Models;
 using MedNet.Data.Models.Models;
+using Newtonsoft.Json;
 using BigchainDB.Objects;
 
 namespace MedNet.Data.Services
@@ -205,13 +206,23 @@ namespace MedNet.Data.Services
         {
             var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets");
             var asset = from a in assets.AsQueryable() where a.data.Type == assetType && a.data.Data.ID == id select a;
-            return asset.FirstOrDefault();
+            if (asset.Any())
+                return asset.FirstOrDefault();
+            else
+                return null;
         }
 
         public M GetMetadataFromAssetPublicKey<M>(string assetID, string signPublicKey)
         {
-            M result = default(M);
-            return result;
+            var rawPublicKey = EncryptionService.getRawBase58PublicKey(signPublicKey);
+            var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
+            var assetTransactions = TransactionsApi<object, object>.getTransactionsByAssetIdAsync(assetID).GetAwaiter().GetResult();
+            var neededTransaction = from a in unspentOutsList.AsQueryable()
+                                     join b in assetTransactions.AsQueryable()
+                                     on a.TransactionId equals b.Id
+                                     select b.MetaData.Metadata;
+            MetaDataSaved<M> result = JsonConvert.DeserializeObject<MetaDataSaved<M>>(neededTransaction.FirstOrDefault().ToString());
+            return result.data;
         }
 
         public void SendTransactionToDataBase(UserListAsset asset, UserListMetadata metaData, string publicKey, string privateKey)

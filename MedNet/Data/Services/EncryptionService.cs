@@ -1,12 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using NSec.Cryptography;
 using System.Security.Cryptography;
-using Omnibasis.BigchainCSharp.Util;
-using System.Text;
 
 namespace MedNet.Data.Services
 {
@@ -151,6 +146,13 @@ namespace MedNet.Data.Services
                 result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV);
             }
             return result;
+        }
+
+        public static string getRawBase58PublicKey(string signPublicKey)
+        {
+            var signAlgorithm = SignatureAlgorithm.Ed25519;
+            var pubKey = PublicKey.Import(signAlgorithm, Convert.FromBase64String(signPublicKey), KeyBlobFormat.NSecPublicKey);
+            return SimpleBase.Base58.Bitcoin.Encode(pubKey.Export(KeyBlobFormat.RawPublicKey));
         }
 
         public static void getPrivateKeyFromIDKeyword(string id, string passphrase, string hashedKeys,out string signPrivateKey, out string agreePrivateKey)
