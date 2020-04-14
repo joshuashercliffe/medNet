@@ -171,6 +171,12 @@ namespace MedNet.Controllers
         public IActionResult DoctorSignUp(doctorSignUpViewModel doctorSignUpViewModel)
         {
             string signPrivateKey = null, agreePrivateKey = null;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Doctor, doctorSignUpViewModel.DoctorMINC);
+            if (userAsset != null)
+            {
+                ModelState.AddModelError("", "A Doctor profile with that MINC already exists");
+                return View(doctorSignUpViewModel);
+            }
             var passphrase = doctorSignUpViewModel.DoctorKeyWord;
             var password = doctorSignUpViewModel.Password;
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out _, out agreePrivateKey, out _);
@@ -209,8 +215,39 @@ namespace MedNet.Controllers
 
         public IActionResult PatientLookUp()
         {
-            return View();
+            if (ViewBag.currentDoctorSignPrivateKey == null || ViewBag.currentDoctorAgreePrivateKey == null)
+                return RedirectToAction("Index");
+            else
+                return View();
         }
+
+        [HttpPost]
+        public IActionResult PatientLookUp(PatientLookupViewModel patientLookupViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(patientLookupViewModel);
+            string signPrivateKey = null, agreePrivateKey = null;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
+            if (userAsset == null)
+            {
+                ModelState.AddModelError("", "We could not find a matching user");
+                return View(patientLookupViewModel);
+            }
+            var hashedKeys = userAsset.data.Data.PrivateKeys;
+            try
+            {
+                EncryptionService.getPrivateKeyFromIDKeyword(patientLookupViewModel.PHN, patientLookupViewModel.Keyword, hashedKeys, out signPrivateKey, out agreePrivateKey);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Keyword may be inccorrect");
+                return View(patientLookupViewModel);
+            }
+            ViewBag.currentPatientSignPrivateKey = signPrivateKey;
+            ViewBag.currentPatientAgreePrivateKey = agreePrivateKey;
+            return View("PatientOverview");
+        }
+
         public IActionResult RecentPatients()
         {
             return View();
@@ -223,7 +260,55 @@ namespace MedNet.Controllers
 
         public IActionResult Logout()
         {
+            ViewBag.currentDoctorSignPrivateKey = null;
+            ViewBag.currentDoctorAgreePrivateKey = null;
             return View();
+        }
+
+        public IActionResult PatientSignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
+        {
+            string signPrivateKey = null, agreePrivateKey = null;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
+            if (userAsset != null)
+            {
+                ModelState.AddModelError("", "A Patient profile with that MINC already exists");
+                return View(patientSignUpViewModel);
+            }
+            var passphrase = patientSignUpViewModel.KeyWord;
+            var password = patientSignUpViewModel.Password;
+            EncryptionService.getNewBlockchainUser(out signPrivateKey, out _, out agreePrivateKey, out _);
+            var userAssetData = new UserCredAssetData
+            {
+                FirstName = patientSignUpViewModel.FirstName,
+                LastName = patientSignUpViewModel.LastName,
+                ID = patientSignUpViewModel.PHN,
+                Email = patientSignUpViewModel.Email,
+                PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
+                DateOfRecord = DateTime.Now
+            };
+            var userMetadata = new UserCredMetadata
+            {
+                hashedPassword = EncryptionService.hashPassword(password)
+            };
+            var asset = new AssetSaved<UserCredAssetData>
+            {
+                Type = AssetType.Patient,
+                Data = userAssetData,
+                RandomId = _random.Next(0, 100000)
+            };
+            var metadata = new MetaDataSaved<UserCredMetadata>
+            {
+                data = userMetadata
+            };
+
+            _bigChainDbService.SendTransactionToDataBase(asset, metadata, signPrivateKey);
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -6,6 +6,11 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\theme\" />
+	<Foler Include="Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Styles\style.css" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,132 +1,8 @@
 ﻿@model doctorSignUpViewModel
 
 @{
-    ViewData["Title"] = "";
-
+    ViewData["Title"] = "Doctor Sign-Up";
 }
-<style>
-    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
-
-    .topnav {
-        display: none;
-    }
-
-    .green-buttons-top {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #4CAF50;
-        width: 250px;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .green-buttons-top:hover {
-        opacity: 0.8;
-    }
-
-    .login-page {
-        width: 360px;
-        padding: 8% 0 0;
-        margin: auto;
-    }
-
-    .form {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        background: #FFFFFF;
-        max-width: 360px;
-        padding: 10px 40px 40px 40px;
-        text-align: center;
-        border-style: solid;
-        border-width: medium;
-        border-color: gainsboro;
-    }
-
-    .form input {
-        font-family: "Roboto", sans-serif;
-        outline: 0;
-        background: #f2f2f2;
-        width: 100%;
-        border: 0;
-        margin: 0 0 15px;
-        padding: 15px;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
-
-    .form button {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #4CAF50;
-        width: 100%;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
-    }
-
-    .form button:disabled {
-        background: grey;
-    }
-
-    form.login-form {
-        text-align: left;
-    }
-
-    .form button:hover, .form button:active, .form button:focus {
-        background: #43A047;
-    }
-
-    .form .message {
-        margin: 15px 0 0;
-        color: #b3b3b3;
-        font-size: 12px;
-        text-align: center;
-    }
-
-    .form .message a {
-        color: #4CAF50;
-        text-decoration: none;
-    }
-
-    div.heading {
-        font-size: 25px;
-        line-height: 30px;
-        height: 30px;
-    }
-
-    .tooltip {
-        position: relative;
-        display: inline-block;
-    }
-
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 400px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        position: absolute;
-        z-index: 1;
-        top: -5px;
-        left: 105%;
-    }
-
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-    }
-</style>
 
 <div>
     <p align="right">
@@ -175,6 +51,6 @@
     } else {
         document.getElementById('message').style.color = 'red';
         document.getElementById('message').innerHTML = 'Passwords do not match, please try again.';
-        // document.getElementById('submitButton').disabled = true;
+        document.getElementById('submitButton').disabled = true;
     }
 }</script>
