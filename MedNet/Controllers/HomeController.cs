@@ -9,6 +9,7 @@ using MedNet.Data.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace MedNet.Controllers
 {
@@ -61,7 +62,7 @@ namespace MedNet.Controllers
             {
                 HttpContext.Session.SetString(currentDSPK, signPrivateKey);
                 HttpContext.Session.SetString(currentDAPK, agreePrivateKey);
-                return View("patientLookUp");
+                return RedirectToAction("patientLookUp");
             }
             else
             {
@@ -78,22 +79,36 @@ namespace MedNet.Controllers
                 return RedirectToAction("patientLookUp");
             else
             {
-                /*            var doctorNotesJson = _bigChainDbService.GetAllDoctorNotesFromPublicKey(_publicKeyString);
-                            var prescriptionsJson = _bigChainDbService.GetAlPrescriptionsFromPublicKey(_publicKeyString);
-                            var doctorNotes = new List<DoctorNote>();
-                            var prescriptions = new List<Prescription>();
-                            foreach (var doctorNote in doctorNotesJson)
-                            {
-                                doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(doctorNote));
-                            }
-                            foreach (var prescription in prescriptionsJson)
-                            {
-                                prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(prescription));
-                            }*/
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
+                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
+                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
+
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.DoctorNote,doctorSignPublicKey,patientSignPublicKey);
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
+                var doctorNotes = new List<DoctorNote>();
+                var prescriptions = new List<Prescription>();
+                foreach (var doctorNote in doctorNotesList)
+                {
+                    var hashedKey = doctorNote.metadata.data[doctorSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data,dataDecryptionKey);
+                    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
+                }
+                foreach (var prescription in prescriptionsList)
+                {
+                    var hashedKey = prescription.metadata.data[doctorSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
+                    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
+                }
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
-                    /*                DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()*/
+                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
@@ -285,7 +300,7 @@ namespace MedNet.Controllers
             }
             HttpContext.Session.SetString(currentPSPK, signPrivateKey);
             HttpContext.Session.SetString(currentPAPK, agreePrivateKey);
-            return View("PatientOverview");
+            return RedirectToAction("PatientOverview");
         }
 
         public IActionResult RecentPatients()

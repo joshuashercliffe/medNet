@@ -1,6 +1,6 @@
 ﻿@model PatientOverviewViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Patient Overview";
 }
 <style>
     @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
@@ -267,7 +267,7 @@
             </div>
 
             <div id="doc_notes" class="tabcontent">
-                @if (Model != null && Model.DoctorNotes != null)
+                @if (Model != null && Model.DoctorNotes != null && Model.DoctorNotes.Any())
                 {
                     @foreach (var doctorNote in Model.DoctorNotes)
                     {
@@ -291,14 +291,14 @@
                             No records shared.
                         </div>
                         <p>
-                            Request access to medical records from patient.
+                            No medical records to show.
                         </p>
                     </div>
                 }
             </div>
 
             <div id="prescriptions" class="tabcontent">
-                @if (Model != null && Model.Prescriptions != null)
+                @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
                 {
                     @foreach (var prescription in Model.Prescriptions)
                     {
@@ -321,7 +321,7 @@
                             No records shared.
                         </div>
                         <p>
-                            Request access to medical records from patient.
+                            No medical records to show.
                         </p>
                     </div>
                 }

@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Omnibasis.BigchainCSharp.Model;
+using System.Collections.Generic;
 
 namespace MedNet.Data.Models
 {
@@ -36,36 +38,22 @@ namespace MedNet.Data.Models
         public MetaDataSaved<M> metadata { get; set; }
     }
 
-    public class ULAsset
+    public class Transactions<A>
     {
         [BsonId]
         public ObjectId _id { get; set; }
         [BsonElement]
-        public string id { get; set; }
-        [BsonElement]
-        public UserListAsset data { get; set; }
-    }
-    public class ULMetadata
-    {
-        [BsonId]
-        public ObjectId _id { get; set; }
+        public Assets<A> assets { get; set; }
         [BsonElement]
         public string id { get; set; }
+/*        [BsonElement]
+        public IList<Input> inputs { get; set; }
         [BsonElement]
-        public _ULMetadata metadata { get; set; }
+        public string operation { get; set; }
+        [BsonElement]
+        public IList<Output> outputs { get; set; }
+        [BsonElement]
+        public string version { get; set; }*/
     }
-    public class _ULMetadata
-    {
-        [BsonElement]
-        public UserListMetadata metadata { get; set; }
-    }
-    public class ULAssetMetadata
-    {
-        [BsonElement]
-        public string id { get; set; }
-        [BsonElement]
-        public UserListAsset data { get; set; }
-        [BsonElement]
-        public UserListMetadata metadata { get; set; }
-    }
+
 }
