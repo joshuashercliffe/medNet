@@ -105,9 +105,9 @@ namespace MedNet.Data.Services
 
         // This function is similar to 
 
-        public void SendTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string publicKey)
+        public void SendCreateTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
         {
-            var signPrivateKey = EncryptionService.getSignKeyFromPrivate(publicKey);
+            var signPrivateKey = EncryptionService.getSignKeyFromPrivate(privateSignKey);
 
             var transaction = BigchainDbTransactionBuilder<AssetSaved<A>, MetaDataSaved<M>>
                 .init()
@@ -115,6 +115,22 @@ namespace MedNet.Data.Services
                 .addMetaData(metaData)
                 .operation(Operations.CREATE)
                 .buildAndSignOnly(signPrivateKey.PublicKey, signPrivateKey);
+
+            var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
+        }
+
+        public void SendCreateTransferTransactionToDataBase<A, M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string senderPrivateSignKey, string recieverPublicSignKey)
+        {
+            var senderSignPrivateKey = EncryptionService.getSignKeyFromPrivate(senderPrivateSignKey);
+            var recieverSignPublicKey = EncryptionService.getSignPublicKeyFromString(recieverPublicSignKey);
+
+            var transaction = BigchainDbTransactionBuilder<AssetSaved<A>, MetaDataSaved<M>>
+                .init()
+                .addAssets(asset)
+                .addMetaData(metaData)
+                .operation(Operations.CREATE)
+                .addOutput("1", recieverSignPublicKey)
+                .buildAndSignOnly(senderSignPrivateKey.PublicKey, senderSignPrivateKey);
 
             var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
         }

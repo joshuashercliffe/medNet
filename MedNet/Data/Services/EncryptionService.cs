@@ -5,16 +5,6 @@ using System.Security.Cryptography;
 
 namespace MedNet.Data.Services
 {
-    static class MedNetNonce 
-    {
-        public static Nonce getNewNonce()
-        {
-            var ByteArray = new byte[12];
-            RandomNumberGenerator.Create().GetBytes(ByteArray);
-            var newNonce = new Nonce(ByteArray, 0);
-            return newNonce;
-        }
-    }
     public class EncryptionService
     {
         public static void getNewBlockchainUser(out string signPrivateKey, out string signPublicKey,
@@ -57,7 +47,7 @@ namespace MedNet.Data.Services
         public static PublicKey getAgreePublicKeyFromString(string agreePublicKey)
         {
             var signAlgorithm = KeyAgreementAlgorithm.X25519; ;
-            return PublicKey.Import(signAlgorithm, Convert.FromBase64String(agreePublicKey), KeyBlobFormat.NSecPrivateKey);
+            return PublicKey.Import(signAlgorithm, Convert.FromBase64String(agreePublicKey), KeyBlobFormat.NSecPublicKey);
         }
 
         public static string getSignPublicKeyStringFromPrivate(string signPrivateKey)
@@ -185,6 +175,96 @@ namespace MedNet.Data.Services
             var keyParts = joinedKeys.Split('|');
             signPrivateKey = keyParts[0];
             agreePrivateKey = keyParts[1];
+        }
+
+        public static string getEncryptedAssetData(string data, out string encryptionKey)
+        {
+            string result = null;
+            byte[] encrypted;
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.GenerateKey();
+                encryptionKey = Convert.ToBase64String(aes.Key);
+                aes.GenerateIV();
+                var enc = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (var msEncrypt = new MemoryStream())
+                {
+                    using (var cryptoStream = new CryptoStream(msEncrypt, enc, CryptoStreamMode.Write))
+                    {
+                        using (var swEncrypt = new StreamWriter(cryptoStream))
+                        {
+                            swEncrypt.Write(data);
+                        }
+                    }
+                    encrypted = msEncrypt.ToArray();
+                }
+                result = Convert.ToBase64String(encrypted);
+                result = result + "|"  + Convert.ToBase64String(aes.IV);
+            }
+            return result;
+        }
+
+        public static string getDecryptedAssetData(string hashedData, string encryptionKey)
+        {
+            var origHashedParts = hashedData.Split('|');
+            var data = Convert.FromBase64String(origHashedParts[0]);
+            var iv = Convert.FromBase64String(origHashedParts[1]);
+            string result = null;
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.Key = Convert.FromBase64String(encryptionKey);
+                aes.IV = iv;
+                var dec = aes.CreateDecryptor(aes.Key, aes.IV);
+                using (var msDecrypt = new MemoryStream(data))
+                {
+                    using (var cryptoStream = new CryptoStream(msDecrypt, dec, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(cryptoStream))
+                        {
+                            result = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static string getEncryptedEncryptionKey(string encryptionKey, string senderAgreePrivateKey, string recieverAgreePublicKey)
+        {
+            var algorithm = KeyAgreementAlgorithm.X25519;
+            var parameters = new KeyCreationParameters();
+            var byteData = Convert.FromBase64String(encryptionKey);
+            parameters.ExportPolicy = KeyExportPolicies.AllowPlaintextExport;
+            Key senderKey = getAgreeKeyFromPrivate(senderAgreePrivateKey);
+            PublicKey recieverKey = getAgreePublicKeyFromString(recieverAgreePublicKey);
+            var secret = algorithm.Agree(senderKey,recieverKey);
+            var derivedKey = KeyDerivationAlgorithm.HkdfSha256.DeriveKey(secret, null, null, AeadAlgorithm.Aes256Gcm, parameters);
+            var nonce = new Nonce(0, 12);
+            var encryptedByteData = AeadAlgorithm.Aes256Gcm.Encrypt(derivedKey,nonce,null,byteData);
+            var encryptedData = Convert.ToBase64String(encryptedByteData);
+            return encryptedData + "|" + getAgreePublicKeyStringFromPrivate(senderAgreePrivateKey);
+        }
+
+        public static string getDecryptedEncryptionKey(string hashedData, string recieverAgreePrivateKey)
+        {
+            var origHashedParts = hashedData.Split('|');
+            var encryptedByteData = Convert.FromBase64String(origHashedParts[0]);
+            var senderPublicKey = origHashedParts[1];
+
+            var algorithm = KeyAgreementAlgorithm.X25519;
+            var parameters = new KeyCreationParameters();
+            parameters.ExportPolicy = KeyExportPolicies.AllowPlaintextExport;
+            Key recieverKey = getAgreeKeyFromPrivate(recieverAgreePrivateKey);
+            PublicKey senderKey = getAgreePublicKeyFromString(senderPublicKey);
+            var secret = algorithm.Agree(recieverKey, senderKey);
+            var derivedKey = KeyDerivationAlgorithm.HkdfSha256.DeriveKey(secret, null, null, AeadAlgorithm.Aes256Gcm, parameters);
+            var nonce = new Nonce(0, 12);
+            byte[] decryptedByteData = new byte[encryptedByteData.Length - AeadAlgorithm.Aes256Gcm.TagSize];
+            AeadAlgorithm.Aes256Gcm.Decrypt(derivedKey, nonce, null, encryptedByteData, decryptedByteData);
+            var decryptedData = Convert.ToBase64String(decryptedByteData);
+            return decryptedData;
         }
     }
 }

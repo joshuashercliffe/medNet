@@ -267,37 +267,64 @@
             </div>
 
             <div id="doc_notes" class="tabcontent">
-                @foreach (var doctorNote in Model.DoctorNotes)
+                @if (Model != null && Model.DoctorNotes != null)
+                {
+                    @foreach (var doctorNote in Model.DoctorNotes)
+                    {
+                        <div class="record" align="left">
+                            <div class="heading1">
+                                Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                            </div>
+                            <p>
+                                Purpose of Visit: @doctorNote.PurposeOfVisit <br />
+                                Description: @doctorNote.Description <br />
+                                Final Diagnosis: @doctorNote.FinalDiagnosis <br />
+                                Further Instructions and General Precautions: @doctorNote.FurtherInstructions
+                            </p>
+                        </div>
+                    }
+                }
+                else
                 {
                     <div class="record" align="left">
                         <div class="heading1">
-                            Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                            No records shared.
                         </div>
                         <p>
-                            Purpose of Visit: @doctorNote.PurposeOfVisit <br />
-                            Description: @doctorNote.Description <br />
-                            Final Diagnosis: @doctorNote.FinalDiagnosis <br />
-                            Further Instructions and General Precautions: @doctorNote.FurtherInstructions
+                            Request access to medical records from patient.
                         </p>
                     </div>
                 }
             </div>
 
             <div id="prescriptions" class="tabcontent">
-                @foreach (var prescription in Model.Prescriptions)
+                @if (Model != null && Model.Prescriptions != null)
+                {
+                    @foreach (var prescription in Model.Prescriptions)
+                    {
+                        <div class="record" align="left">
+                            <div class="heading1">
+                                Date: @prescription.PrescribingDate.ToString("MMMM dd, yyyy")
+                            </div>
+                            <p>
+                                Prescription: @prescription.DrugNameStrength <br />
+                                Dosage: @prescription.Dosage <br />
+                                Prescription Length: @prescription.StartDate.ToString("MMMM dd, yyyy") to @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                            </p>
+                        </div>
+                    }
+                }
+                else
                 {
                     <div class="record" align="left">
                         <div class="heading1">
-                            Date: @prescription.PrescribingDate.ToString("MMMM dd, yyyy")
+                            No records shared.
                         </div>
                         <p>
-                            Prescription: @prescription.DrugNameStrength <br />
-                            Dosage: @prescription.Dosage <br />
-                            Prescription Length: @prescription.StartDate.ToString("MMMM dd, yyyy") to @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                            Request access to medical records from patient.
                         </p>
                     </div>
                 }
-
             </div>
 
             <!--<div id="test_results" class="tabcontent">
@@ -308,7 +335,9 @@
     </div>
 </div>
 
-<script language="javascript" type="text/javascript">document.getElementById("defaultOpen").click();
+<script>
+
+    document.getElementById("defaultOpen").click();
 
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
@@ -322,4 +351,6 @@
         }
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
-    }</script>
+    }
+
+</script>

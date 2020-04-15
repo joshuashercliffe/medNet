@@ -8,14 +8,16 @@ using MedNet.Data.Services;
 using MedNet.Data.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace MedNet.Controllers
 {
     public class HomeController : Controller
     {
-        private static string _publicKeyString = "302a300506032b657003210033c43dc2180936a2a9138a05f06c892d2fb1cfda4562cbc35373bf13cd8ed373";
-        private static string _privateKeyString = "302e020100300506032b6570042204206f6b0cd095f1e83fc5f08bffb79c7c8a30e77a3ab65f4bc659026b76394fcea8";
+        private const string currentDSPK = "currentDoctorSignPrivateKey";
+        private const string currentDAPK = "currentDoctorAgreePrivateKey";
+        private const string currentPSPK = "currentPatientSignPrivateKey";
+        private const string currentPAPK = "currentPatientAgreePrivateKey";
         private readonly ILogger<HomeController> _logger;
         private BigChainDbService _bigChainDbService;
         private Random _random;
@@ -28,8 +30,6 @@ namespace MedNet.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Title = "test";
-            
             return View();
         }
 
@@ -59,8 +59,8 @@ namespace MedNet.Controllers
             var password = indexViewModel.password;
             if (EncryptionService.verifyPassword(password, userMetadata.hashedPassword))
             {
-                ViewBag.currentDoctorSignPrivateKey = signPrivateKey;
-                ViewBag.currentDoctorAgreePrivateKey = agreePrivateKey;
+                HttpContext.Session.SetString(currentDSPK, signPrivateKey);
+                HttpContext.Session.SetString(currentDAPK, agreePrivateKey);
                 return View("patientLookUp");
             }
             else
@@ -72,30 +72,42 @@ namespace MedNet.Controllers
 
         public IActionResult PatientOverview()
         {
-            var doctorNotesJson = _bigChainDbService.GetAllDoctorNotesFromPublicKey(_publicKeyString);
-            var prescriptionsJson = _bigChainDbService.GetAlPrescriptionsFromPublicKey(_publicKeyString);
-            var doctorNotes = new List<DoctorNote>();
-            var prescriptions = new List<Prescription>();
-            foreach (var doctorNote in doctorNotesJson)
+            if (HttpContext.Session.GetString(currentDSPK) == null || HttpContext.Session.GetString(currentDAPK) == null)
+                return RedirectToAction("Index");
+            else if (HttpContext.Session.GetString(currentPSPK) == null || HttpContext.Session.GetString(currentPAPK) == null)
+                return RedirectToAction("patientLookUp");
+            else
             {
-                doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(doctorNote));
-            }
-            foreach (var prescription in prescriptionsJson)
-            {
-                prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(prescription));
-            }
-            var patientOverviewViewModel = new PatientOverviewViewModel
-            {
-                DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
-            };
+                /*            var doctorNotesJson = _bigChainDbService.GetAllDoctorNotesFromPublicKey(_publicKeyString);
+                            var prescriptionsJson = _bigChainDbService.GetAlPrescriptionsFromPublicKey(_publicKeyString);
+                            var doctorNotes = new List<DoctorNote>();
+                            var prescriptions = new List<Prescription>();
+                            foreach (var doctorNote in doctorNotesJson)
+                            {
+                                doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(doctorNote));
+                            }
+                            foreach (var prescription in prescriptionsJson)
+                            {
+                                prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(prescription));
+                            }*/
+                var patientOverviewViewModel = new PatientOverviewViewModel
+                {
+                    /*                DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()*/
+                };
 
-            return View(patientOverviewViewModel);
+                return View(patientOverviewViewModel);
+            }
         }
 
         public IActionResult AddNewPatientRecord()
         {
-            return View();
+            if (HttpContext.Session.GetString(currentDSPK) == null || HttpContext.Session.GetString(currentDAPK) == null)
+                return RedirectToAction("Index");
+            else if (HttpContext.Session.GetString(currentPSPK) == null || HttpContext.Session.GetString(currentPAPK) == null)
+                return RedirectToAction("patientLookUp");
+            else
+                return View();
         }
 
         [HttpPost]
@@ -113,21 +125,34 @@ namespace MedNet.Controllers
                     FurtherInstructions = noteViewModel.FurtherInstructions,
                     DateOfRecord = DateTime.Now
                 };
+                string encryptionKey;
+                var encryptedData = EncryptionService.getEncryptedAssetData(JsonConvert.SerializeObject(doctorNote), out encryptionKey);
 
                 var asset = new AssetSaved<string>
                 {
-                    Data = JsonConvert.SerializeObject(doctorNote),
+                    Data = encryptedData,
                     RandomId = _random.Next(0, 100000),
                     Type = AssetType.DoctorNote
                 };
 
                 var metadata = new MetaDataSaved<Dictionary<string,string>>();
                 metadata.data = new Dictionary<string, string>();
-                metadata.data[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
 
-                _bigChainDbService.SendTransactionToDataBase<string,Dictionary<string,string>>(asset, metadata, _publicKeyString);
-
-                return View();
+                //store the data encryption key in metadata encrypted with sender and reciever agree key
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
+                var patientAgreePrivateKey = HttpContext.Session.GetString(currentPAPK);
+                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
+                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
+                var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
+                var patientAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(patientAgreePrivateKey);
+                metadata.data[doctorSignPublicKey] = 
+                    EncryptionService.getEncryptedEncryptionKey(encryptionKey,doctorAgreePrivateKey,doctorAgreePublicKey);
+                metadata.data[patientSignPublicKey] =
+                    EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
+                
+                _bigChainDbService.SendCreateTransferTransactionToDataBase<string,Dictionary<string,string>>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
             if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.Prescription.DrugNameStrength))
@@ -143,23 +168,37 @@ namespace MedNet.Controllers
                     DirectionForUse = prescriptionViewModel.DirectionForUse
                 };
 
+                string encryptionKey;
+                var encryptedData = EncryptionService.getEncryptedAssetData(JsonConvert.SerializeObject(prescription), out encryptionKey);
+
                 var asset = new AssetSaved<string>
                 {
-                    Data = JsonConvert.SerializeObject(prescription),
+                    Data = encryptedData,
                     RandomId = _random.Next(0, 100000),
                     Type = AssetType.Prescription
                 };
 
-                var metadata = new MetaDataSaved<Dictionary<string,string>>();
+                var metadata = new MetaDataSaved<Dictionary<string, string>>();
                 metadata.data = new Dictionary<string, string>();
-                metadata.data[_publicKeyString] = "AES symmetric Key for encrypted data stored encrypted by asymmetric public key of user";
 
-                _bigChainDbService.SendTransactionToDataBase<string,Dictionary<string,string>>(asset, metadata, _publicKeyString);
+                //store the data encryption key in metadata encrypted with sender and reciever agree key
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
+                var patientAgreePrivateKey = HttpContext.Session.GetString(currentPAPK);
+                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
+                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
+                var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
+                var patientAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(patientAgreePrivateKey);
+                metadata.data[doctorSignPublicKey] =
+                    EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, doctorAgreePublicKey);
+                metadata.data[patientSignPublicKey] =
+                    EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
 
-                return View();
+                _bigChainDbService.SendCreateTransferTransactionToDataBase<string, Dictionary<string, string>>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
-            return View();
+            return RedirectToAction("PatientOverview");
         }
 
         public IActionResult DoctorSignUp()
@@ -204,7 +243,7 @@ namespace MedNet.Controllers
                 data = userMetadata
             };
 
-            _bigChainDbService.SendTransactionToDataBase(asset, metadata, signPrivateKey);
+            _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
             return RedirectToAction("Index");
         }
 
@@ -215,7 +254,8 @@ namespace MedNet.Controllers
 
         public IActionResult PatientLookUp()
         {
-            if (ViewBag.currentDoctorSignPrivateKey == null || ViewBag.currentDoctorAgreePrivateKey == null)
+            if (HttpContext.Session.GetString(currentDSPK) == null 
+                || HttpContext.Session.GetString(currentDAPK) == null)
                 return RedirectToAction("Index");
             else
                 return View();
@@ -243,8 +283,8 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "Keyword may be inccorrect");
                 return View(patientLookupViewModel);
             }
-            ViewBag.currentPatientSignPrivateKey = signPrivateKey;
-            ViewBag.currentPatientAgreePrivateKey = agreePrivateKey;
+            HttpContext.Session.SetString(currentPSPK, signPrivateKey);
+            HttpContext.Session.SetString(currentPAPK, agreePrivateKey);
             return View("PatientOverview");
         }
 
@@ -260,8 +300,7 @@ namespace MedNet.Controllers
 
         public IActionResult Logout()
         {
-            ViewBag.currentDoctorSignPrivateKey = null;
-            ViewBag.currentDoctorAgreePrivateKey = null;
+            HttpContext.Session.Clear();
             return View();
         }
 
@@ -307,7 +346,7 @@ namespace MedNet.Controllers
                 data = userMetadata
             };
 
-            _bigChainDbService.SendTransactionToDataBase(asset, metadata, signPrivateKey);
+            _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
             return RedirectToAction("Index");
         }
 

@@ -198,7 +198,6 @@ div.heading {
     visibility: visible;
 }
 
-
 .topnav a.plu {
     background-color: #4CAF50;
     color: white;
@@ -208,4 +207,16 @@ div.heading {
     font-size: 25px;
     line-height: 30px;
     height: 30px;
+}
+
+.column {
+    float: left;
+    width: 48%;
+    padding: 2px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
 }
