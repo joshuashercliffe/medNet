@@ -3,20 +3,40 @@
 @{
     ViewData["Title"] = "Doctor Sign-Up";
 }
+<style>
 
-<div>
-    <p align="right">
-        <button class="green-buttons-top" onclick="window.location.href = '/Home';">Back to Home</button>
-    </p>
-</div>
+    .topnav .topnav-plu {
+        display: none;
+    }
 
-<div class="login-page">
+    .topnav .topnav-rp {
+        display: none;
+    }
+
+    .topnav .topnav-pp {
+        display: none;
+    }
+
+    .topnav .topnav-pli {
+        display: none;
+    }
+
+    .topnav .topnav-psu {
+        display: none;
+    }
+
+    .topnav .topnav-logout {
+        display: none;
+    }
+</style>
+
+<div class="doctor-sign-up">
     <div class="form">
         <div class="heading">
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-controller="Home" asp-action="DoctorSignUp" method="post" class="login-form">
+        <form asp-controller="Home" asp-action="DoctorSignUp" method="post" class="text-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name" })
             <label>Last Name:</label>
@@ -37,7 +57,7 @@
             @Html.TextBoxFor(n => n.Password, new { type = "password", id="password", placeholder = "Password", onkeyup="check()" })
             <label>Confirm Password:</label>
             <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-            <span id='message'></span><br /><br />
+            <span id='message'></span><br />
             <button type="submit" id="submitButton">Register</button>
         </form>
     </div>

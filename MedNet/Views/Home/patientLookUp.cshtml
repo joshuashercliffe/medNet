@@ -2,15 +2,38 @@
 @{
     ViewData["Title"] = "Patient Look Up";
 }
+<style>
+    .topnav .topnav-plu {
+        background-color: #4CAF50;
+        color: white;
+    }
 
-<div class="login-page">
+    .topnav .topnav-home {
+        display: none;
+    }
+
+    .topnav .topnav-pp {
+        display: none;
+    }
+
+    .topnav .topnav-pli {
+        display: none;
+    }
+
+    .topnav .topnav-psu {
+        display: none;
+    }
+
+</style>
+
+<div class="patient-lookup-page">
     <div class="form">
         <div class="heading">
             <p>Patient Look-Up</p>
         </div>
         <p>Enter your details below retrieve patient information.</p>
         @Html.ValidationSummary(true)
-    <form class="login-form" asp-controller="Home" asp-action="PatientLookUp" method="post">
+    <form class="text-form" asp-controller="Home" asp-action="PatientLookUp" method="post">
         <div class="tooltip">
             <label>Patient PHN:</label>
             <span class="tooltiptext">10 digit Personal Health Number can be found on patient's CareCard/BC Services Card</span>

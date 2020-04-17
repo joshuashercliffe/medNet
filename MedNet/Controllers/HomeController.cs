@@ -25,7 +25,7 @@ namespace MedNet.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _bigChainDbService = new BigChainDbService("https://anode.lifeblocks.site");
+            _bigChainDbService = new BigChainDbService("https://cnode.lifeblocks.site");
             _random = new Random();
         }
 

@@ -2,44 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 <style>
-    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-    .login-page {
-        width: 450px;
-        padding: 8% 0 0;
-        margin: auto;
-    }
-
-    .topnav a.rp {
+    .topnav .topnav-rp {
         background-color: #4CAF50;
         color: white;
     }
 
-    .form {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        background: #FFFFFF;
-        max-width: 450px;
-        padding: 10px 40px 40px 40px;
-        text-align: left;
+    .topnav .topnav-home {
+        display: none;
     }
 
-    form.login-form {
-        text-align: left;
+    .topnav .topnav-pp {
+        display: none;
     }
 
-    div.heading {
-        font-size: 25px;
-        line-height: 30px;
-        height: 30px;
+    .topnav .topnav-pli {
+        display: none;
     }
 
+    .topnav .topnav-psu {
+        display: none;
+    }
 </style>
 
-<div class="login-page">
+<div class="recent-patients">
     <div class="form">
         <div class="heading">
             <p>Your 10 most recent patients:</p>

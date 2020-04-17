@@ -2,134 +2,33 @@
     ViewData["Title"] = "Feedback";
 }
 <style>
-    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
-    .topnav {
+
+    .topnav .topnav-plu {
         display: none;
     }
 
-    .green-buttons-top {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #4CAF50;
-        width: 250px;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
+    .topnav .topnav-rp {
+        display: none;
     }
 
-    .green-buttons-top:hover {
-        opacity: 0.8;
+    .topnav .topnav-pp {
+        display: none;
     }
 
-    .form {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 1;
-        background: #FFFFFF;
-        max-width: 380px;
-        padding: 10px 40px 40px 40px;
-        text-align: left;
+    .topnav .topnav-pli {
+        display: none;
     }
 
-    .form input {
-        font-family: "Roboto", sans-serif;
-        outline: 0;
-        background: #f2f2f2;
-        width: 100%;
-        border: 0;
-        margin: 0 0 15px;
-        padding: 15px;
-        box-sizing: border-box;
-        font-size: 14px;
+    .topnav .topnav-psu {
+        display: none;
     }
 
-    .form button {
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        outline: 0;
-        background: #4CAF50;
-        width: 100%;
-        border: 0;
-        padding: 15px;
-        color: #FFFFFF;
-        font-size: 14px;
-        cursor: pointer;
+    .topnav .topnav-logout {
+        display: none;
     }
+    </style>
 
-    form.login-form {
-        text-align: left;
-    }
-
-    .form button:hover, .form button:active, .form button:focus {
-        background: #43A047;
-    }
-
-    .form .message {
-        margin: 15px 0 0;
-        color: #b3b3b3;
-        font-size: 12px;
-        text-align: center;
-    }
-
-    .form .message a {
-        color: #4CAF50;
-        text-decoration: none;
-    }
-
-    div.heading {
-        font-size: 25px;
-        line-height: 30px;
-        height: 30px;
-    }
-
-    .tooltip {
-        position: relative;
-        display: inline-block;
-    }
-
-    .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 400px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px 0;
-        position: absolute;
-        z-index: 1;
-        top: -5px;
-        left: 105%;
-    }
-
-    .form textarea {
-        font-family: "Roboto", sans-serif;
-        outline: 0;
-        background: #f2f2f2;
-        width: 100%;
-        border: 0;
-        margin: 0 0 15px;
-        padding: 15px;
-        box-sizing: border-box;
-        font-size: 14px;
-    }
-
-    .tooltip:hover .tooltiptext {
-        visibility: visible;
-    }
-</style>
-
-<div>
-    <p align="right">
-        <button class="green-buttons-top" onclick="window.location.href = '/Home';">Back to Home</button>
-    </p>
-</div>
-
-<div class="login-page">
+<div class="feedback-page">
     <div class="form">
         <div class="heading">
             <p>Submit Feedback on MedNet</p>
@@ -138,7 +37,7 @@
             MedNet strives to bring the best centralized medical record browsing experience to healthcare professionals and patients around the world through its innovative blockchain implementation using BigChainDB. MedNet welcomes your feedback on its experience and services.
             <br> <br>Please tell us how we can improve!
         </p>
-        <form class="login-form" action="/Home">
+        <form class="text-form" action="/Home">
             <label>Name</label>
             <input type="text" placeholder="First Name, Last Name">
             <label>Email</label>

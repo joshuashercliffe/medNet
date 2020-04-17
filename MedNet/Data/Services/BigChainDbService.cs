@@ -59,7 +59,7 @@ namespace MedNet.Data.Services
 
             // Use MongoDB for READ-ONLY access
             //connect directly to MongoDB service running on the node to enable better query options
-            var client = new MongoClient("mongodb://dbreader:dbreaderpassword@anode.lifeblocks.site:27017/?authSource=bigchain");
+            var client = new MongoClient("mongodb://dbreader:dbreaderpassword@cnode.lifeblocks.site:27017/?authSource=bigchain");
             bigchainDatabase = client.GetDatabase("bigchain");
         }
 

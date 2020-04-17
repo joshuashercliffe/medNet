@@ -2,14 +2,34 @@
 @{
     ViewData["Title"] = "Add New Record";
 }
+<style>
+    .topnav .topnav-plu {
+        display: none;
+    }
 
-<div>
-    <p align="right">
-        <button class="green-buttons-top" onclick="window.location.href = '/Home/PatientOverview';">Return to Patient Profile</button>
-    </p>
-</div>
+    .topnav .topnav-rp {
+        display: none;
+    }
 
-<div class="login-page">
+    .topnav .topnav-pli {
+        display: none;
+    }
+
+    .topnav .topnav-psu {
+        display: none;
+    }
+
+    .topnav .topnav-logout {
+        display: none;
+    }
+
+    .topnav .topnav-home {
+        display: none;
+    }
+
+</style>
+
+<div class="add-record">
     <div class="form">
         <div class="heading">
             <p>Add New Patient Record</p>
@@ -33,7 +53,7 @@
 
             <div id="doctorsNote2">
                 <label>Description</label>
-                @Html.TextBoxFor(n => n.DoctorsNote.Description, new { placeholder = "Enter appointment notes" })
+                @Html.TextAreaFor(n => n.DoctorsNote.Description, new { @rows = 3, placeholder = "Enter appointment notes" })
             </div>
 
             <div id="doctorsNote3">
@@ -43,7 +63,7 @@
 
             <div id="doctorsNote4">
                 <label>Further Instructions and General Precautions</label>
-                @Html.TextBoxFor(n => n.DoctorsNote.FurtherInstructions, new { placeholder = "Physical/dietary precautions, restrictions and recommendations" })
+                @Html.TextAreaFor(n => n.DoctorsNote.FurtherInstructions, new { @rows = 3, placeholder = "Physical/dietary precautions, restrictions and recommendations" })
             </div>
 
             <div id="prescription1">
@@ -82,22 +102,22 @@
                 <div class="row">
                     <div class="column">
                         @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new
-                            {
-                                type = "date"
-                            })
+                        {
+                            type = "date"
+                        })
                     </div>
                     <div class="column">
                         @Html.TextBoxFor(n => n.Prescription.EndDate, new
-                                {
-                                    type = "date"
-                                })
+                        {
+                            type = "date"
+                        })
                     </div>
                 </div>
             </div>
 
             <div id="prescription5">
                 <label>Direction for Use or Special Instructions</label>
-                @Html.TextBoxFor(n => n.Prescription.DirectionForUse, new { placeholder = "Restrictions and Recommendations" })
+                @Html.TextAreaFor(n => n.Prescription.DirectionForUse, new { @rows = 3, placeholder = "Restrictions and Recommendations" })
             </div>
 
             <!--
@@ -217,15 +237,15 @@
             $('#prescription5').hide();
         }
 
-/*        if ($(this).val() == "testResult") {
-            $('#test1').show();
-            $('#test2').show();
-            $('#test3').show();
-            $('#submit').show();
-        } else {
-            $('#test1').hide();
-            $('#test2').hide();
-            $('#test3').hide();
-        }*/
+        /*        if ($(this).val() == "testResult") {
+                    $('#test1').show();
+                    $('#test2').show();
+                    $('#test3').show();
+                    $('#submit').show();
+                } else {
+                    $('#test1').hide();
+                    $('#test2').hide();
+                    $('#test3').hide();
+                }*/
     });
     $("#selectRecordType").trigger("change");</script>
