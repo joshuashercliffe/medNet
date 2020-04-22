@@ -53,7 +53,7 @@ namespace MedNet.Controllers
             }
             catch 
             {
-                ModelState.AddModelError("", "Keyword may be inccorrect");
+                ModelState.AddModelError("", "Keyword may be incorrect");
                 return View(indexViewModel);
             }
             UserCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<UserCredMetadata>(userAsset.id, EncryptionService.getSignPublicKeyStringFromPrivate(signPrivateKey));
@@ -295,7 +295,7 @@ namespace MedNet.Controllers
             }
             catch
             {
-                ModelState.AddModelError("", "Keyword may be inccorrect");
+                ModelState.AddModelError("", "Keyword may be incorrect");
                 return View(patientLookupViewModel);
             }
             HttpContext.Session.SetString(currentPSPK, signPrivateKey);
@@ -322,6 +322,29 @@ namespace MedNet.Controllers
         public IActionResult PatientSignUp()
         {
             return View();
+        }
+
+        public IActionResult TestFingerprintButton(TestFingerprintButton model)
+        {
+            return View(model);
+        }
+
+        public IActionResult TriggerFingerprint()
+        {
+            // This is how to get IP address of the client. This is the public IP address. Create the TCPClient class here?
+            // and send the request to windows service to start getting fingerprint data.
+            var ip = HttpContext.Connection.RemoteIpAddress;
+            string ipAddress = ip.ToString();
+
+            // Do fingerprint fetch from windows service here
+
+            // This is a test message for testing purposes, you can put whatever string here and it will show up in the browser view
+            // for you to verify that your code worked. 
+            var model = new TestFingerprintButton()
+            {
+                message = "The IP address of the client is: "+ ipAddress
+            };
+            return RedirectToAction("TestFingerprintButton",model);
         }
 
         [HttpPost]

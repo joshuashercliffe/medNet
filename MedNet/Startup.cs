@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ namespace MedNet
             services.AddControllersWithViews();
             services.AddSession(options =>
             {
-                options.Cookie.Name = ".AdventureWorks.Session";
+                options.Cookie.Name = ".MedNet.Session";
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;

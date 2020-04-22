@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "TestFingerprintButton";
+}
+
+<h1>TestFingerprintButton</h1>
+
+<button id="TestFingerprint" onclick="window.location.href='/Home/TriggerFingerprint'">Test</button>
+@if (Model != null && Model.message != null )
+{
+    <p>@Model.message</p>
+}
