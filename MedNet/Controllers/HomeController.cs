@@ -336,7 +336,9 @@ namespace MedNet.Controllers
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();
 
-            // Do fingerprint fetch from windows service here
+            // Do fingerprint fetch from windows service here 
+            // Jacob
+            var fpImg = SocketService.tcpConnect(ipAddress, "MEDNETFP:START");
 
             // This is a test message for testing purposes, you can put whatever string here and it will show up in the browser view
             // for you to verify that your code worked. 
@@ -344,7 +346,7 @@ namespace MedNet.Controllers
             {
                 message = "The IP address of the client is: "+ ipAddress
             };
-            return RedirectToAction("TestFingerprintButton",model);
+            return RedirectToAction("TestFingerprintButton", model);
         }
 
         [HttpPost]
