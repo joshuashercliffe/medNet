@@ -5,9 +5,9 @@ using System.IO;
 
 namespace MedNet.Data.Services
 {
-    public class FingerprintService
+    public static class FingerprintService
     {
-        public bool CompareFingerprints(byte[] inputFingerprint, byte[] databaseFingerprint )
+        public static bool CompareFingerprints(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             var incomingImage1 = Image.FromStream(new MemoryStream(inputFingerprint));
             var bitmap1 = new Bitmap(incomingImage1);
