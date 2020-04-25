@@ -1,0 +1,53 @@
+﻿@model RequestAccessViewModel
+@{
+    ViewData["Title"] = "Request Access";
+}
+
+<style>
+    .topnav .topnav-plu {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .topnav .topnav-home {
+        display: none;
+    }
+
+    .topnav .topnav-pp {
+        display: none;
+    }
+
+    .topnav .topnav-pli {
+        display: none;
+    }
+
+    .topnav .topnav-psu {
+        display: none;
+    }
+</style>
+
+<div class="patient-lookup-page">
+    <div class="form">
+        <div class="heading">
+            <p>Request Access</p>
+        </div>
+        <p>Enter your details below retrieve patient information.</p>
+        @Html.ValidationSummary(true)
+        <form class="text-form" asp-controller="Home" asp-action="RequestAccess" method="post">
+            <div class="tooltip">
+                <label>Patient Keyword:</label>
+                <span class="tooltiptext">Patient's identification pass phrase.</span>
+            </div>
+            @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
+            @Html.ValidationMessageFor(n => n.keyword)
+            <button type="submit">Authorize with Fingerprint</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+
+
+

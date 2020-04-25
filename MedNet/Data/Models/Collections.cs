@@ -36,6 +36,8 @@ namespace MedNet.Data.Models
         public AssetSaved<A> data { get; set; }
         [BsonElement]
         public MetaDataSaved<M> metadata { get; set; }
+        [BsonElement]
+        public string transID { get; set; }
     }
 
     public class Transactions<A>
@@ -43,17 +45,9 @@ namespace MedNet.Data.Models
         [BsonId]
         public ObjectId _id { get; set; }
         [BsonElement]
-        public Assets<A> assets { get; set; }
+        public Assets<A> asset { get; set; }
         [BsonElement]
         public string id { get; set; }
-/*        [BsonElement]
-        public IList<Input> inputs { get; set; }
-        [BsonElement]
-        public string operation { get; set; }
-        [BsonElement]
-        public IList<Output> outputs { get; set; }
-        [BsonElement]
-        public string version { get; set; }*/
     }
 
 }

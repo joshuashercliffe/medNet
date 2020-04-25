@@ -15,10 +15,13 @@ namespace MedNet.Controllers
 {
     public class HomeController : Controller
     {
-        private const string currentDSPK = "currentDoctorSignPrivateKey";
-        private const string currentDAPK = "currentDoctorAgreePrivateKey";
-        private const string currentPSPK = "currentPatientSignPrivateKey";
-        private const string currentPAPK = "currentPatientAgreePrivateKey";
+        private const string currentDSPriK = "currentDoctorSignPrivateKey";
+        private const string currentDAPriK = "currentDoctorAgreePrivateKey";
+        private const string currentPSPriK = "currentPatientSignPrivateKey";
+        private const string currentPAPriK = "currentPatientAgreePrivateKey";
+        private const string currentPSPubK = "currentPatientSignPrivateKey";
+        private const string currentPAPubK = "currentPatientAgreePrivateKey";
+        private const string currentPPHN = "currentPatientPHN";
         private readonly ILogger<HomeController> _logger;
         private BigChainDbService _bigChainDbService;
         private Random _random;
@@ -60,8 +63,8 @@ namespace MedNet.Controllers
             var password = indexViewModel.password;
             if (EncryptionService.verifyPassword(password, userMetadata.hashedPassword))
             {
-                HttpContext.Session.SetString(currentDSPK, signPrivateKey);
-                HttpContext.Session.SetString(currentDAPK, agreePrivateKey);
+                HttpContext.Session.SetString(currentDSPriK, signPrivateKey);
+                HttpContext.Session.SetString(currentDAPriK, agreePrivateKey);
                 return RedirectToAction("patientLookUp");
             }
             else
@@ -73,17 +76,16 @@ namespace MedNet.Controllers
 
         public IActionResult PatientOverview()
         {
-            if (HttpContext.Session.GetString(currentDSPK) == null || HttpContext.Session.GetString(currentDAPK) == null)
+            if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
-            else if (HttpContext.Session.GetString(currentPSPK) == null || HttpContext.Session.GetString(currentPAPK) == null)
+            else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
                 return RedirectToAction("patientLookUp");
             else
             {
-                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
-                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPriK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPriK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
-                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
-                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
+                var patientSignPublicKey = HttpContext.Session.GetString(currentPSPubK);
 
                 var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
                     (AssetType.DoctorNote,doctorSignPublicKey,patientSignPublicKey);
@@ -117,9 +119,9 @@ namespace MedNet.Controllers
 
         public IActionResult AddNewPatientRecord()
         {
-            if (HttpContext.Session.GetString(currentDSPK) == null || HttpContext.Session.GetString(currentDAPK) == null)
+            if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
-            else if (HttpContext.Session.GetString(currentPSPK) == null || HttpContext.Session.GetString(currentPAPK) == null)
+            else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
                 return RedirectToAction("patientLookUp");
             else
                 return View();
@@ -154,14 +156,12 @@ namespace MedNet.Controllers
                 metadata.data = new Dictionary<string, string>();
 
                 //store the data encryption key in metadata encrypted with sender and reciever agree key
-                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
-                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
-                var patientAgreePrivateKey = HttpContext.Session.GetString(currentPAPK);
-                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPriK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPriK);
+                var patientAgreePublicKey = HttpContext.Session.GetString(currentPAPubK);
+                var patientSignPublicKey = HttpContext.Session.GetString(currentPSPubK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
-                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
                 var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
-                var patientAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(patientAgreePrivateKey);
                 metadata.data[doctorSignPublicKey] = 
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey,doctorAgreePrivateKey,doctorAgreePublicKey);
                 metadata.data[patientSignPublicKey] =
@@ -197,14 +197,12 @@ namespace MedNet.Controllers
                 metadata.data = new Dictionary<string, string>();
 
                 //store the data encryption key in metadata encrypted with sender and reciever agree key
-                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPK);
-                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPK);
-                var patientAgreePrivateKey = HttpContext.Session.GetString(currentPAPK);
-                var patientSignPrivateKey = HttpContext.Session.GetString(currentPSPK);
+                var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPriK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPriK);
+                var patientAgreePublicKey = HttpContext.Session.GetString(currentPAPubK);
+                var patientSignPublicKey = HttpContext.Session.GetString(currentPSPubK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
-                var patientSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(patientSignPrivateKey);
                 var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
-                var patientAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(patientAgreePrivateKey);
                 metadata.data[doctorSignPublicKey] =
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, doctorAgreePublicKey);
                 metadata.data[patientSignPublicKey] =
@@ -224,7 +222,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult DoctorSignUp(doctorSignUpViewModel doctorSignUpViewModel)
         {
-            string signPrivateKey = null, agreePrivateKey = null;
+            string signPrivateKey = null, agreePrivateKey = null, signPublicKey =null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Doctor, doctorSignUpViewModel.DoctorMINC);
             if (userAsset != null)
             {
@@ -233,7 +231,7 @@ namespace MedNet.Controllers
             }
             var passphrase = doctorSignUpViewModel.DoctorKeyWord;
             var password = doctorSignUpViewModel.Password;
-            EncryptionService.getNewBlockchainUser(out signPrivateKey, out _, out agreePrivateKey, out _);
+            EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
             var userAssetData = new UserCredAssetData
             {
                 FirstName = doctorSignUpViewModel.FirstName,
@@ -241,7 +239,10 @@ namespace MedNet.Controllers
                 ID = doctorSignUpViewModel.DoctorMINC,
                 Email = doctorSignUpViewModel.Email,
                 PrivateKeys = EncryptionService.encryptPrivateKeys(doctorSignUpViewModel.DoctorMINC, passphrase, signPrivateKey, agreePrivateKey),
-                DateOfRecord = DateTime.Now
+                DateOfRecord = DateTime.Now,
+                SignPublicKey = signPublicKey,
+                AgreePublicKey = agreePublicKey,
+                FingerPrintData = ""
             };
             var userMetadata = new UserCredMetadata
             {
@@ -269,8 +270,8 @@ namespace MedNet.Controllers
 
         public IActionResult PatientLookUp()
         {
-            if (HttpContext.Session.GetString(currentDSPK) == null 
-                || HttpContext.Session.GetString(currentDAPK) == null)
+            if (HttpContext.Session.GetString(currentDSPriK) == null 
+                || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
             else
                 return View();
@@ -281,25 +282,15 @@ namespace MedNet.Controllers
         {
             if (!ModelState.IsValid)
                 return View(patientLookupViewModel);
-            string signPrivateKey = null, agreePrivateKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
             if (userAsset == null)
             {
                 ModelState.AddModelError("", "We could not find a matching user");
                 return View(patientLookupViewModel);
             }
-            var hashedKeys = userAsset.data.Data.PrivateKeys;
-            try
-            {
-                EncryptionService.getPrivateKeyFromIDKeyword(patientLookupViewModel.PHN, patientLookupViewModel.Keyword, hashedKeys, out signPrivateKey, out agreePrivateKey);
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Keyword may be incorrect");
-                return View(patientLookupViewModel);
-            }
-            HttpContext.Session.SetString(currentPSPK, signPrivateKey);
-            HttpContext.Session.SetString(currentPAPK, agreePrivateKey);
+            HttpContext.Session.SetString(currentPSPubK, userAsset.data.Data.SignPublicKey);
+            HttpContext.Session.SetString(currentPAPubK, userAsset.data.Data.AgreePublicKey);
+            HttpContext.Session.SetString(currentPPHN, userAsset.data.Data.ID);
             return RedirectToAction("PatientOverview");
         }
 
@@ -324,6 +315,77 @@ namespace MedNet.Controllers
             return View();
         }
 
+        public IActionResult RequestAccess()
+        {
+            if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
+                return RedirectToAction("Index");
+            else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
+                return RedirectToAction("patientLookUp");
+            else
+                return View();
+        }
+
+        [HttpPost]
+        public IActionResult RequestAccess(RequestAccessViewModel requestAccessViewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(requestAccessViewModel);
+            string PHN = HttpContext.Session.GetString(currentPPHN);
+            string patientSignPublicKey = HttpContext.Session.GetString(currentPSPubK);
+            string doctorSignPrivatekey = HttpContext.Session.GetString(currentDSPriK);
+            string doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivatekey);
+            string doctorAgreePrivatekey = HttpContext.Session.GetString(currentDAPriK);
+            string doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivatekey);
+            string keyword = requestAccessViewModel.keyword;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, PHN);
+            if (userAsset == null)
+            {
+                ModelState.AddModelError("", "Could not find a patient profile with PHN: "+PHN);
+                return View(requestAccessViewModel);
+            }
+            var currentFPData = SocketService.tcpConnect(HttpContext.Connection.RemoteIpAddress.ToString(), "MEDNETFP:START", out int bytesRead);
+            if (bytesRead < 59707)
+            {
+                ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
+                return View(requestAccessViewModel);
+            }
+            byte[] dbFPData;
+            string patientSignPrivateKey, patientAgreePrivateKey;
+            try
+            {
+                EncryptionService.decryptFingerprintData(PHN, keyword, userAsset.data.Data.FingerPrintData, out dbFPData);
+                EncryptionService.getPrivateKeyFromIDKeyword(PHN,keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Keyword may be incorrect");
+                return View(requestAccessViewModel);
+            }
+            if (!FingerprintService.CompareFingerprints(currentFPData, dbFPData))
+            {
+                ModelState.AddModelError("", "The fingerprint did not match, try again.");
+                return View(requestAccessViewModel);
+            }
+            // choose the types of records we want to get
+            AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription };
+            var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                (typeList, patientSignPublicKey);
+            foreach(var record in recordList)
+            {
+                MetaDataSaved<Dictionary<string, string>> metadata = record.metadata;
+                if (!metadata.data.Keys.Contains(doctorSignPublicKey))
+                {
+                    var hashedKey = metadata.data[patientSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                    var newHash = EncryptionService.getEncryptedEncryptionKey(dataDecryptionKey, patientAgreePrivateKey, doctorAgreePublicKey);
+                    metadata.data[doctorSignPublicKey] = newHash;
+                    _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata, 
+                        patientSignPrivateKey, patientSignPublicKey, record.transID);
+                }
+            }
+            return RedirectToAction("PatientOverview");
+        }
+
         public IActionResult TestFingerprintButton(TestFingerprintButton model)
         {
             return View(model);
@@ -338,13 +400,13 @@ namespace MedNet.Controllers
 
             // Do fingerprint fetch from windows service here 
             // Jacob
-            var fpImg = SocketService.tcpConnect(ipAddress, "MEDNETFP:START");
+            var fpImg = SocketService.tcpConnect(ipAddress, "MEDNETFP:START", out _);
 
             // This is a test message for testing purposes, you can put whatever string here and it will show up in the browser view
             // for you to verify that your code worked. 
             var model = new TestFingerprintButton()
             {
-                message = "The IP address of the client is: "+ ipAddress
+                message = "The IP address of the client is: " + ipAddress
             };
             return RedirectToAction("TestFingerprintButton", model);
         }
@@ -352,16 +414,22 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
-            string signPrivateKey = null, agreePrivateKey = null;
+            string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
             if (userAsset != null)
             {
-                ModelState.AddModelError("", "A Patient profile with that MINC already exists");
+                ModelState.AddModelError("", "A Patient profile with that PHN already exists");
+                return View(patientSignUpViewModel);
+            }
+            var fpData = SocketService.tcpConnect(HttpContext.Connection.RemoteIpAddress.ToString(), "MEDNETFP:START", out int bytesRead);
+            if (bytesRead < 59707)
+            {
+                ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
             }
             var passphrase = patientSignUpViewModel.KeyWord;
             var password = patientSignUpViewModel.Password;
-            EncryptionService.getNewBlockchainUser(out signPrivateKey, out _, out agreePrivateKey, out _);
+            EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
             var userAssetData = new UserCredAssetData
             {
                 FirstName = patientSignUpViewModel.FirstName,
@@ -369,7 +437,10 @@ namespace MedNet.Controllers
                 ID = patientSignUpViewModel.PHN,
                 Email = patientSignUpViewModel.Email,
                 PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
-                DateOfRecord = DateTime.Now
+                DateOfRecord = DateTime.Now,
+                SignPublicKey = signPublicKey,
+                AgreePublicKey = agreePublicKey,
+                FingerPrintData = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fpData)
             };
             var userMetadata = new UserCredMetadata
             {

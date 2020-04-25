@@ -17,9 +17,9 @@ namespace MedNet.Data.Services
             var signKey = Key.Create(signAlgorithm, parameters);
             var agreeKey = Key.Create(agreeAlgorithm, parameters);
             signPrivateKey = Convert.ToBase64String(signKey.Export(KeyBlobFormat.NSecPrivateKey));
-            signPublicKey = Convert.ToBase64String(signKey.Export(KeyBlobFormat.NSecPublicKey));
+            signPublicKey = Convert.ToBase64String(signKey.PublicKey.Export(KeyBlobFormat.NSecPublicKey));
             agreePrivateKey = Convert.ToBase64String(agreeKey.Export(KeyBlobFormat.NSecPrivateKey));
-            agreePublicKey = Convert.ToBase64String(agreeKey.Export(KeyBlobFormat.NSecPublicKey));
+            agreePublicKey = Convert.ToBase64String(agreeKey.PublicKey.Export(KeyBlobFormat.NSecPublicKey));
         }
 
         public static Key getSignKeyFromPrivate(string signPrivateKey)
@@ -265,6 +265,68 @@ namespace MedNet.Data.Services
             AeadAlgorithm.Aes256Gcm.Decrypt(derivedKey, nonce, null, encryptedByteData, decryptedByteData);
             var decryptedData = Convert.ToBase64String(decryptedByteData);
             return decryptedData;
+        }
+
+        public static string encryptFingerprintData(string id, string passphrase, byte[] fingerprintData)
+        {
+            string result = null;
+            byte[] encrypted;
+            string fpData = Convert.ToBase64String(fingerprintData);
+            var salt = new byte[24];
+            new RNGCryptoServiceProvider().GetBytes(salt);
+            string phrase = id + passphrase;
+            var rfc = new Rfc2898DeriveBytes(phrase, salt, 1000);
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.Key = rfc.GetBytes(aes.KeySize / 8);
+                aes.GenerateIV();
+                var enc = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (var msEncrypt = new MemoryStream())
+                {
+                    using (var cryptoStream = new CryptoStream(msEncrypt, enc, CryptoStreamMode.Write))
+                    {
+                        using (var swEncrypt = new StreamWriter(cryptoStream))
+                        {
+                            swEncrypt.Write(fpData);
+                        }
+                    }
+                    encrypted = msEncrypt.ToArray();
+                }
+                result = Convert.ToBase64String(encrypted);
+                result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV);
+            }
+            return result;
+        }
+
+        public static void decryptFingerprintData(string id, string passphrase, string hashedData, out byte[] fingerprintData)
+        {
+            var origHashedParts = hashedData.Split('|');
+            var fpHash = Convert.FromBase64String(origHashedParts[0]);
+            var salt = Convert.FromBase64String(origHashedParts[1]);
+            var iv = Convert.FromBase64String(origHashedParts[2]);
+            string fpData = null;
+            string phrase = id + passphrase;
+            var rfc = new Rfc2898DeriveBytes(phrase, salt, 1000);
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.Key = rfc.GetBytes(aes.KeySize / 8);
+                aes.IV = iv;
+                var dec = aes.CreateDecryptor(aes.Key, aes.IV);
+                using (var msDecrypt = new MemoryStream(fpHash))
+                {
+                    using (var cryptoStream = new CryptoStream(msDecrypt, dec, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(cryptoStream))
+                        {
+                            fpData = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+
+            fingerprintData = Convert.FromBase64String(fpData);
         }
     }
 }

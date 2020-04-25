@@ -23,25 +23,6 @@ namespace MedNet.Data.Services
     {
         private static IMongoDatabase bigchainDatabase;
 
-/*        public void GetUserList(string publicKey, string privateKey)
-        {
-            UserListAsset userListAsset = new UserListAsset();
-
-            UserListMetadata userListMetadata = new UserListMetadata();
-
-            // Checks if Asset is already created 
-            var userList = GetUserListAsset(publicKey);
-
-            if (userList.Count == 0)
-            {
-                // create a new asset
-                SendTransactionToDataBase(userListAsset, userListMetadata, publicKey, privateKey);
-            }
-            var test = GetUserListAsset(publicKey);
-
-            return;
-        }*/
-
         public BigChainDbService(string url)
         {
             Console.Write("Connecting to NodeURL: ");
@@ -135,6 +116,33 @@ namespace MedNet.Data.Services
             var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
         }
 
+        public void SendTransferTransactionToDataBase<M>(string assetID, MetaDataSaved<M> metaData, 
+            string senderPrivateSignKey, string recieverPublicSignKey, string inputTransID)
+        {
+            var senderSignPrivateKey = EncryptionService.getSignKeyFromPrivate(senderPrivateSignKey);
+            var recieverSignPublicKey = EncryptionService.getSignPublicKeyFromString(recieverPublicSignKey);
+
+            // Using TRANSFER: START
+            // add input
+            var input = new Omnibasis.BigchainCSharp.Model.FulFill();
+            input.TransactionId = inputTransID;
+            input.OutputIndex = 0;
+            Details details = null;
+
+            // transfer transaction
+            // assetId is the transactionId to the asset we want to change
+            var transaction = BigchainDbTransactionBuilder<Asset<string>, MetaDataSaved<M>>
+                .init()
+                .addAssets(assetID)
+                .addMetaData(metaData)
+                .addInput(details, input, senderSignPrivateKey.PublicKey)
+                .addOutput("1", recieverSignPublicKey)
+                .operation(Operations.TRANSFER)
+                .buildAndSignOnly(senderSignPrivateKey.PublicKey, senderSignPrivateKey);
+
+            var createTransaction = TransactionsApi<Asset<string>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
+        }
+
         public List<AssetsMetadatas<A,Dictionary<string,string>>> GetAllTypeRecordsFromDPublicPPublicKey<A>
             (AssetType type, string doctorSignPublicKey, string patientSignPublicKey)
         {
@@ -150,9 +158,7 @@ namespace MedNet.Data.Services
             var TypeAssets = assets.Where(x => x.data.Type == type);
             // reduce to get only metadata where both public keys are present and is in the unspent list
             var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string, string>>>("metadata").AsQueryable();
-            var metadataReduced = metadata.Where(x => transactionIDs.Contains(x.id));/*
-            metadataReduced = metadataReduced.Where(x => x.metadata.metadata.data.Keys.ToList().Contains(doctorSignPublicKey) && 
-            x.metadata.metadata.data.Keys.ToList().Contains(patientSignPublicKey));*/
+            var metadataReduced = metadata.Where(x => transactionIDs.Contains(x.id));
             List<Metadatas<Dictionary<string, string>>> metadataList = new List<Metadatas<Dictionary<string, string>>>();
             foreach (var a in metadataReduced)
             {
@@ -165,79 +171,20 @@ namespace MedNet.Data.Services
 
             var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
             var transactionsReduced = transaction.AsQueryable().Where(x => transactionIDs.Contains(x.id));
-            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, assets = r.assets, _id = r._id});
+            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id});
             var r = from t1 in metadataList
                     join t2 in transactionsReduced on t1.id equals t2.id
                     join t3 in TypeAssets on 1 equals 1
-                    where (t2.id == t3.id || (t2.assets != null && t2.assets.id == t3.id))
+                    where (t2.id == t3.id || (t2.asset != null && t2.asset.id == t3.id))
                     select new AssetsMetadatas<A,Dictionary<string,string>>()
                     {
                         id = t3.id,
                         data = t3.data,
-                        metadata = t1.metadata.metadata
+                        metadata = t1.metadata.metadata,
+                        transID = t2.id
                     };
             return r.ToList();
         }
-
-        public List<string> GetAlPrescriptionsFromPublicKey(string publicKey)
-        {
-            var prescriptions = new List<string>();
-            var assets = bigchainDatabase.GetCollection<Models.Assets<string>>("assets");
-            var prescriptionAssets = assets.AsQueryable().Where(x => x.data.Type == AssetType.Prescription);
-            var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string,string>>>("metadata");
-            var r = from t1 in prescriptionAssets
-                    join t2 in metadata.AsQueryable() on t1.id equals t2.id
-                    where t2.metadata.metadata.data.ContainsKey(publicKey)
-                    select new AssetsMetadatas<string,Dictionary<string,string>>()
-                    {
-                        id = t1.id,
-                        data = t1.data,
-                        metadata = t2.metadata.metadata
-                    };
-            foreach (var a in r)
-            {
-                prescriptions.Add(a.data.Data);
-                Console.WriteLine(a.id);
-            }
-            return prescriptions;
-        }
-
-        // Gets the list of users
-/*        public List<string> GetUserListAsset(string publicKey, string assetType = "User List")
-        {
-            //Console.WriteLine("Looking for assets of type: \"" + assetType + "\"");
-            var assetData = new List<string>();
-            var assetCollection = bigchainDatabase.GetCollection<ULAsset>("assets");
-            var filter = Builders<ULAsset>.Filter.Empty;
-            var docCount = assetCollection.EstimatedDocumentCount();
-
-            //Console.WriteLine("Document count: " + docCount);
-
-            //Console.WriteLine("Filter: " + filter);
-            var result = assetCollection.Find(filter);
-            //Console.WriteLine("Result: " + result);
-
-            var assetFound = assetCollection.AsQueryable().Where(x => x.data.type == assetType);
-            //var metadataFound = bigchainDatabase.GetCollection<ULMetadata>("metadata"); 
-
-
-            var assetInst = from currAsset in assetFound
-                                //join currMetadata in metadataFound.AsQueryable() on currAsset.id equals currMetadata.id
-                                //where currMetadata.metadata.metadata.accessList.ContainsKey(publicKey)
-                            select new ULAssetMetadata()
-                            {
-                                id = currAsset.id,
-                                data = currAsset.data,
-                                //metadata = currMetadata.metadata.metadata,
-                            };
-            foreach (var inst in assetInst)
-            {
-                assetData.Add(inst.id);
-                //Console.WriteLine(inst.id);
-            }
-
-            return assetData;
-        }*/
 
         public Models.Assets<UserCredAssetData> GetUserAssetFromTypeID(AssetType assetType, string id)
         {
@@ -262,20 +209,46 @@ namespace MedNet.Data.Services
             return result.data;
         }
 
-        public void SendTransactionToDataBase(UserListAsset asset, UserListMetadata metaData, string publicKey, string privateKey)
+        public List<AssetsMetadatas<A, Dictionary<string, string>>> GetAllTypeRecordsFromPPublicKey<A>
+            (AssetType[] recordTypes, string patientSignPublicKey)
         {
-            var algorithm = SignatureAlgorithm.Ed25519;
-            var privateKeySigned = Key.Import(algorithm, Utils.StringToByteArray(privateKey), KeyBlobFormat.PkixPrivateKey);
-            var publicKeySigned = PublicKey.Import(algorithm, Utils.StringToByteArray(publicKey), KeyBlobFormat.PkixPublicKey);
+            // get unspent outputs of the patient, this means get all outputs that he owns
+            var rawPublicKey = EncryptionService.getRawBase58PublicKey(patientSignPublicKey);
+            var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
+            List<string> transactionIDs = new List<string>();
+            foreach (var unspentOutput in unspentOutsList)
+            {
+                transactionIDs.Add(unspentOutput.TransactionId);
+            }
+            var assets = bigchainDatabase.GetCollection<Assets<A>>("assets").AsQueryable();
+            var TypeAssets = assets.Where(x => recordTypes.Contains(x.data.Type));
+            // reduce to get only metadata where both public keys are present and is in the unspent list
+            var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string, string>>>("metadata").AsQueryable();
+            var metadataReduced = metadata.Where(x => transactionIDs.Contains(x.id));
+            List<Metadatas<Dictionary<string, string>>> metadataList = new List<Metadatas<Dictionary<string, string>>>();
+            foreach (var a in metadataReduced)
+            {
+                if (a.metadata.metadata.data.Keys.ToList().Contains(patientSignPublicKey))
+                {
+                    metadataList.Add(a);
+                }
+            }
 
-            var transaction = BigchainDbTransactionBuilder<UserListAsset, UserListMetadata>
-                .init()
-                .addAssets(asset)
-                .addMetaData(metaData)
-                .operation(Operations.CREATE)
-                .buildAndSignOnly(publicKeySigned, privateKeySigned);
-
-            var createTransaction = TransactionsApi<UserListAsset, UserListMetadata>.sendTransactionAsync(transaction);
+            var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
+            var transactionsReduced = transaction.AsQueryable().Where(x => transactionIDs.Contains(x.id));
+            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id });
+            var r = from t1 in metadataList
+                    join t2 in transactionsReduced on t1.id equals t2.id
+                    join t3 in TypeAssets on 1 equals 1
+                    where (t2.id == t3.id || (t2.asset != null && t2.asset.id == t3.id))
+                    select new AssetsMetadatas<A, Dictionary<string, string>>()
+                    {
+                        id = t3.id,
+                        data = t3.data,
+                        metadata = t1.metadata.metadata,
+                        transID = t2.id
+                    };
+            return r.ToList();
         }
     }
 }

@@ -40,12 +40,6 @@
         </div>
         @Html.TextBoxFor(n => n.PHN, new { placeholder = "XXXX-XXX-XXXX", title = "10 digit Personal Health Record Number." })
         @Html.ValidationMessageFor(n => n.PHN)
-        <div class="tooltip">
-            <label>Patient Keyword:</label>
-            <span class="tooltiptext">Patient's identification pass phrase, something easy to remember like place of birth/mother's maiden name that was created during Sign-Up</span>
-        </div>
-        @Html.TextBoxFor(n => n.Keyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
-        @Html.ValidationMessageFor(n => n.Keyword)
         <button type="submit">Submit</button>
     </form>
     </div>

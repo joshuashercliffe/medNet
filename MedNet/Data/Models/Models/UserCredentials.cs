@@ -17,7 +17,13 @@ namespace MedNet.Data.Models.Models
 
         public string PrivateKeys { get; set; }
 
+        public string SignPublicKey { get; set; }
+
+        public string AgreePublicKey { get; set; }
+
         public DateTime DateOfRecord { get; set; }
+
+        public string FingerPrintData { get; set; }
     }
 
     public class UserCredMetadata

@@ -14,12 +14,13 @@ namespace MedNet.Data.Services
             return;
         }
 
-        public static Bitmap tcpConnect(String server, String message)
+        public static byte[] tcpConnect(String server, String message, out int numBytesRead)
         {
             Int32 port = 15326;
             // link: https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netframework-4.8
             Byte[] tcpData = new byte[1024];
-            Bitmap bmp = null;
+            byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
+            numBytesRead = 0;
             try
             {
                 // Connect to the TCP Client 
@@ -45,7 +46,6 @@ namespace MedNet.Data.Services
 
                 // Read the bytes from the buffer 
                 byte[] rdBuf = new byte[65000];
-                int numBytesRead = 0;
                 byte[] incBytes = new byte[0];
                 if (tcpStream.CanRead)
                 {
@@ -53,7 +53,7 @@ namespace MedNet.Data.Services
                     do
                     {
                         // Read bytes from buffer
-                        numBytesRead = tcpStream.Read(rdBuf, 0, rdBuf.Length);
+                        numBytesRead += tcpStream.Read(rdBuf, 0, rdBuf.Length);
 
                         // Concat the bytes into a bytearray 
                         incBytes = incBytes.Concat(rdBuf).ToArray();
@@ -70,7 +70,6 @@ namespace MedNet.Data.Services
                 int idx = Array.IndexOf(incBytes, delim[0]);                
 
                 byte[] ip = new byte[idx];
-                byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
                 Array.Copy(incBytes, ip, idx);
                 Array.Copy(incBytes, ip.Length + 1, fpByte, 0, fpByte.Length - 1);
 
@@ -78,9 +77,6 @@ namespace MedNet.Data.Services
                 var debugFp = Encoding.Default.GetString(fpByte);
 
                 // DEBUG: should check if ip is the same as server (input)
-
-                var img = Image.FromStream(new MemoryStream(fpByte));
-                bmp = new Bitmap(img);
 
                 tcpStream.Close();
                 client.Close();
@@ -93,7 +89,7 @@ namespace MedNet.Data.Services
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
-            return bmp;
+            return fpByte;
         }
     }
 }
