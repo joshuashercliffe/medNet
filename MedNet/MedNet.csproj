@@ -29,9 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Core\FR.Core.csproj" />
-    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Medina2012\FR.Medina2012.csproj" />
-    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Ratha1995\FR.Ratha1995.csproj" />
+    <ProjectReference Include="..\FingerprintRecognition_v2.2\FR.Core\FR.Core.csproj" />
+    <ProjectReference Include="..\FingerprintRecognition_v2.2\FR.Medina2012\FR.Medina2012.csproj" />
+    <ProjectReference Include="..\FingerprintRecognition_v2.2\FR.Ratha1995\FR.Ratha1995.csproj" />
+    <ProjectReference Include="..\FingerprintRecognition_v2.2\ImageProcessingTools\ImageProcessingTools.csproj" />
+    <ProjectReference Include="..\FingerprintRecognition_v2.2\SHullDelaunayTriangulation\SHullDelaunayTriangulation.csproj" />
   </ItemGroup>
 
 
