@@ -343,8 +343,8 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "Could not find a patient profile with PHN: "+PHN);
                 return View(requestAccessViewModel);
             }
-            var currentFPData = SocketService.tcpConnect(HttpContext.Connection.RemoteIpAddress.ToString(), "MEDNETFP:START", out int bytesRead);
-            if (bytesRead < 59707)
+            var currentFPData = SocketService.tcpConnect("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+            if (bytesRead < 5000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(requestAccessViewModel);
@@ -421,8 +421,8 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "A Patient profile with that PHN already exists");
                 return View(patientSignUpViewModel);
             }
-            var fpData = SocketService.tcpConnect(HttpContext.Connection.RemoteIpAddress.ToString(), "MEDNETFP:START", out int bytesRead);
-            if (bytesRead < 59707)
+            var fpData = SocketService.tcpConnect("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+            if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
