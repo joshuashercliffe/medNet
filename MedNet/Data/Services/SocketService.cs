@@ -13,6 +13,7 @@ namespace MedNet.Data.Services
         {
             return;
         }
+
         public static Bitmap tcpConnect(String server, String message)
         {
             Int32 port = 15326;

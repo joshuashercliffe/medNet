@@ -28,6 +28,12 @@
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Core\FR.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Medina2012\FR.Medina2012.csproj" />
+    <ProjectReference Include="..\..\..\..\Desktop\Fingerprint stuff\FR.Ratha1995\FR.Ratha1995.csproj" />
+  </ItemGroup>
+
 
 
 </Project>
