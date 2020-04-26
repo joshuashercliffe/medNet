@@ -43,6 +43,7 @@
             @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name" })
             <label>Email:</label>
             @Html.TextBoxFor(n => n.Email, new { placeholder = "Email" })
+            @Html.ValidationMessageFor(n => n.Email)
             <div class="tooltip allign">
                 <label>Doctor MINC:</label>
                 <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
@@ -54,7 +55,7 @@
             </div>
             @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
             <label>Password:</label>
-            @Html.TextBoxFor(n => n.Password, new { type = "password", id="password", placeholder = "Password", onkeyup="check()" })
+            @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()" })
             <label>Confirm Password:</label>
             <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
             <span id='message'></span><br />

@@ -27,10 +27,10 @@
             <p><strong>Patient Profile</strong></p>
         </div>
         <div class="heading1">
-            <p><strong>First Name, Last Name</strong></p>
+            <p><strong>@Model.PatientName</strong></p>
         </div>
         <div class="heading2">
-            <p>PHN: XXXX-XXX-XXX</p>
+            <p>PHN: <strong>@Model.PatientPHN</strong></p>
             <p>General Information</p>
         </div>
 
@@ -40,7 +40,7 @@
                     <p>Age:</p>
                 </div>
                 <div class="column2">
-                    <p>32</p>
+                    <p>@Model.PatientAge</p>
                 </div>
             </div>
             <div class="row">
@@ -48,7 +48,7 @@
                     <p>Date of Birth:</p>
                 </div>
                 <div class="column2">
-                    <p>09/27/1987</p>
+                    <p>@Model.PatientDOB.ToShortDateString()</p>
                 </div>
             </div>
             <div class="row">
@@ -130,7 +130,8 @@
                                 Purpose of Visit: @doctorNote.PurposeOfVisit <br />
                                 Description: @doctorNote.Description <br />
                                 Final Diagnosis: @doctorNote.FinalDiagnosis <br />
-                                Further Instructions and General Precautions: @doctorNote.FurtherInstructions
+                                Further Instructions and General Precautions: @doctorNote.FurtherInstructions   <br />
+                                Doctor Visited: @doctorNote.DoctorName
                             </p>
                         </div>
                     }
@@ -161,6 +162,7 @@
                                 Prescription: @prescription.DrugNameStrength <br />
                                 Dosage: @prescription.Dosage <br />
                                 Prescription Length: @prescription.StartDate.ToString("MMMM dd, yyyy") to @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                                Prescribing Doctor: @prescription.DoctorName
                             </p>
                         </div>
                     }

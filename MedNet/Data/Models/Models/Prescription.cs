@@ -15,5 +15,9 @@ namespace MedNet.Data.Models.Models
         public DateTime EndDate { get; set; }
 
         public string DirectionForUse { get; set; }
+
+        public string DoctorName { get; set; }
+
+        public string DoctorMinsc { get; set; }
     }
 }

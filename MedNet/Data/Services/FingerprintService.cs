@@ -27,7 +27,7 @@ namespace MedNet.Data.Services
             var matcher = new M3gl();
             var similarity = matcher.Match(features1, features2);
 
-            if(similarity >= 0.50)
+            if(similarity >= 0.40)
             {
                 return true;
             }

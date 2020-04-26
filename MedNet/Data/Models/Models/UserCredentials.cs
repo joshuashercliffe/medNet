@@ -13,6 +13,8 @@ namespace MedNet.Data.Models.Models
 
         public string Email { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         public string ID { get; set; }
 
         public string PrivateKeys { get; set; }

@@ -22,6 +22,8 @@ namespace MedNet.Controllers
         private const string currentPSPubK = "currentPatientSignPrivateKey";
         private const string currentPAPubK = "currentPatientAgreePrivateKey";
         private const string currentPPHN = "currentPatientPHN";
+        private const string currentDoctorName = "currentDoctorName";
+        private const string currentDoctorMinc = "currentDoctorMinsc";
         private readonly ILogger<HomeController> _logger;
         private BigChainDbService _bigChainDbService;
         private Random _random;
@@ -65,6 +67,8 @@ namespace MedNet.Controllers
             {
                 HttpContext.Session.SetString(currentDSPriK, signPrivateKey);
                 HttpContext.Session.SetString(currentDAPriK, agreePrivateKey);
+                HttpContext.Session.SetString(currentDoctorName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
+                HttpContext.Session.SetString(currentDoctorMinc, userAsset.data.Data.ID);
                 return RedirectToAction("patientLookUp");
             }
             else
@@ -82,6 +86,8 @@ namespace MedNet.Controllers
                 return RedirectToAction("patientLookUp");
             else
             {
+                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(currentPPHN));
+
                 var doctorSignPrivateKey = HttpContext.Session.GetString(currentDSPriK);
                 var doctorAgreePrivateKey = HttpContext.Session.GetString(currentDAPriK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
@@ -107,8 +113,14 @@ namespace MedNet.Controllers
                     var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
                     prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
                 }
+                var patientInfo = userAsset.data.Data;
+                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
+                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
+                    PatientPHN = patientInfo.ID,
+                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
                 };
@@ -140,6 +152,8 @@ namespace MedNet.Controllers
                     Description = noteViewModel.Description,
                     FinalDiagnosis = noteViewModel.FinalDiagnosis,
                     FurtherInstructions = noteViewModel.FurtherInstructions,
+                    DoctorName = HttpContext.Session.GetString(currentDoctorName),
+                    DoctorMinsc = HttpContext.Session.GetString(currentDoctorMinc),
                     DateOfRecord = DateTime.Now
                 };
                 string encryptionKey;
@@ -180,6 +194,8 @@ namespace MedNet.Controllers
                     Dosage = prescriptionViewModel.Dosage,
                     StartDate = prescriptionViewModel.StartDate,
                     EndDate = prescriptionViewModel.EndDate,
+                    DoctorName = HttpContext.Session.GetString(currentDoctorName),
+                    DoctorMinsc = HttpContext.Session.GetString(currentDoctorMinc),
                     DirectionForUse = prescriptionViewModel.DirectionForUse
                 };
 
@@ -436,6 +452,7 @@ namespace MedNet.Controllers
                 LastName = patientSignUpViewModel.LastName,
                 ID = patientSignUpViewModel.PHN,
                 Email = patientSignUpViewModel.Email,
+                DateOfBirth = patientSignUpViewModel.DateOfBirth,
                 PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
                 DateOfRecord = DateTime.Now,
                 SignPublicKey = signPublicKey,

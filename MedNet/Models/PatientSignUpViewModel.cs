@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedNet.Models
 {
@@ -16,6 +17,9 @@ namespace MedNet.Models
 
         [Required]
         public string PHN { get; set; }
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
 
         [Required]
         public string KeyWord { get; set; }

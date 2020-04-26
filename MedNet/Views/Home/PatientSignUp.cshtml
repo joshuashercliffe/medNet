@@ -53,6 +53,16 @@
                 <span class="tooltiptext">Identification pass phrase.</span>
             </div>
             @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
+            <div class="tooltip">
+                <label>Date of Birth:</label>
+                <span class="tooltiptext">Date of Birth.</span>
+            </div>
+            <div class="column">
+                @Html.TextBoxFor(n => n.DateOfBirth, new
+                {
+                    type = "date"
+                })
+            </div>
             <label>Password:</label>
             @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()" })
             <label>Confirm Password:</label>
