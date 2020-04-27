@@ -310,11 +310,6 @@ namespace MedNet.Controllers
             return RedirectToAction("PatientOverview");
         }
 
-        public IActionResult RecentPatients()
-        {
-            return View();
-        }
-
         public IActionResult Feedback()
         {
             return View();

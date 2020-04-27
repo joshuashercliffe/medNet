@@ -557,34 +557,6 @@ div.heading {
 }
 /* end Patient Look up */
 
-
-/* Recent Patients */
-.recent-patients {
-    width: 450px;
-    padding: 8% 0 0;
-    margin: auto;
-}
-
-.recent-patients .form {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    background: #FFFFFF;
-    max-width: 450px;
-    padding: 10px 40px 40px 40px;
-    text-align: left;
-}
-
-.recent-patients div.heading {
-    font-size: 25px;
-    line-height: 30px;
-    height: 30px;
-}
-
-/* end recent patients */
-
 /* doctor forget password */
 
 .doc-forget-password-page {
