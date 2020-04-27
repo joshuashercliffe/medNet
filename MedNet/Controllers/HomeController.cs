@@ -42,6 +42,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult Index(IndexViewModel indexViewModel)
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (!ModelState.IsValid)
                 return View(indexViewModel);
             string signPrivateKey = null, agreePrivateKey = null;
@@ -80,6 +81,7 @@ namespace MedNet.Controllers
 
         public IActionResult PatientOverview()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
             else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
@@ -131,6 +133,7 @@ namespace MedNet.Controllers
 
         public IActionResult AddNewPatientRecord()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
             else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
@@ -142,7 +145,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult AddNewPatientRecord(AddNewPatientRecordViewModel addNewPatientRecordViewModel)
         {
-
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.DoctorsNote.PurposeOfVisit))
             {
                 var noteViewModel = addNewPatientRecordViewModel.DoctorsNote;
@@ -286,6 +289,7 @@ namespace MedNet.Controllers
 
         public IActionResult PatientLookUp()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (HttpContext.Session.GetString(currentDSPriK) == null 
                 || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
@@ -296,6 +300,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult PatientLookUp(PatientLookupViewModel patientLookupViewModel)
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (!ModelState.IsValid)
                 return View(patientLookupViewModel);
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
@@ -312,6 +317,7 @@ namespace MedNet.Controllers
 
         public IActionResult Feedback()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             return View();
         }
 
@@ -328,6 +334,7 @@ namespace MedNet.Controllers
 
         public IActionResult RequestAccess()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (HttpContext.Session.GetString(currentDSPriK) == null || HttpContext.Session.GetString(currentDAPriK) == null)
                 return RedirectToAction("Index");
             else if (HttpContext.Session.GetString(currentPSPubK) == null || HttpContext.Session.GetString(currentPAPubK) == null)
@@ -339,6 +346,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult RequestAccess(RequestAccessViewModel requestAccessViewModel)
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (!ModelState.IsValid)
                 return View(requestAccessViewModel);
             string PHN = HttpContext.Session.GetString(currentPPHN);
@@ -399,11 +407,13 @@ namespace MedNet.Controllers
 
         public IActionResult TestFingerprintButton(TestFingerprintButton model)
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             return View(model);
         }
 
         public IActionResult TriggerFingerprint()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             // This is how to get IP address of the client. This is the public IP address. Create the TCPClient class here?
             // and send the request to windows service to start getting fingerprint data.
             var ip = HttpContext.Connection.RemoteIpAddress;
