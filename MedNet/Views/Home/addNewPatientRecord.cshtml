@@ -26,7 +26,6 @@
     .topnav .topnav-home {
         display: none;
     }
-
 </style>
 
 <div class="add-record">
@@ -70,8 +69,8 @@
                 <label>Prescribing Date</label>
                 @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new
                 {
-                    placeholder = "Physical/dietary precautions, restrictions and recommendations",
-                    type = "date"
+                    type = "text",
+                    id = "todaysDate"
                 })
             </div>
 
@@ -85,8 +84,9 @@
                 @Html.TextBoxFor(n => n.Prescription.Dosage, new
                 {
                     placeholder = "00.00",
-                    onkeypress = "return isNumber(event)",
-                    @class = "form-control"
+                    onkeypress = "return isFloat(event)",
+                    @class = "form-control",
+
                 })
             </div>
 
@@ -103,13 +103,17 @@
                     <div class="column">
                         @Html.TextBoxFor(n => n.Prescription.StartDate, new
                         {
-                            type = "date"
+                            type = "date",
+                            min = "2020-04-01",
+                            max = "2050-04-01"
                         })
                     </div>
                     <div class="column">
                         @Html.TextBoxFor(n => n.Prescription.EndDate, new
                         {
-                            type = "date"
+                            type = "date",
+                            min = "2020-04-01",
+                            max = "2050-04-01"
                         })
                     </div>
                 </div>
@@ -170,8 +174,7 @@
 <!-- jQuery -->
 <script src="~/theme/plugins/jquery/jquery.min.js"></script>
 <!-- InputMask -->
-<script src="~/theme/plugins/moment/moment.min.js"></script>
-<script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="~/theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- bs-custom-file-input -->
@@ -187,25 +190,33 @@
         var today = new Date();
         var month = (today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1)
         var day = (today.getDate() + 1 < 10 ? '0' + (today.getDate() + 1) : today.getDate() + 1)
-        var date = (month + '/' + day + '/' + today.getFullYear());
+        var date = (today.getFullYear() + '-' + month + '-' + day);
         $('#todaysDate').val(date);
 
     });
+    function isFloat(evt) {
 
-    function isNumber(evt) {
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        var charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+            //alert('Please enter only no or float value');
             return false;
         }
-        return true;
+        else {
+            //if dot sign entered more than once then don't allow to enter dot sign again. 46 is the code for dot sign
+            var parts = evt.srcElement.value.split('.');
+            if (parts.length > 1 && charCode == 46) {
+                return false;
+            }
+
+            return true;
+
+        }
     }
 
     //Datemask mm/dd/yyyy
-    $('#todaysDate').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-    $('#datemask3').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-    $('#submit').hide();
+    $('#todaysDate').mask('00/00/0000', { 'placeholder': 'mm/dd/yyyy' })
+    $('#datemask2').mask('00/00/0000', { 'placeholder': 'mm/dd/yyyy' })
+    $('#datemask3').mask('00/00/0000', { 'placeholder': 'mm/dd/yyyy' })
 
     $("#selectRecordType").change(function () {
         $('#buttonSubmit').hide();
