@@ -17,19 +17,23 @@ namespace MedNet.Data.Services
 
         public static byte[] tcpConnect(String server, String message, out int numBytesRead)
         {
+            // Inputs: 
+            // - server: CLIENT_IP we want to connect to 
+            // - message: MEDNET_KEYWORD to start fingerprint process. eg. MEDNETFP:START
+
             // link: https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netframework-4.8
-            // Connect to Specified ClientIP (server), and send message to start FP Service 
+            
+            // Connect to Specified CLIENT_IP (server), and send MEDNETFP:START (message) to start FP Service 
             Int32 port = 15326; // Use a specific port
-            Byte[] tcpData = new byte[1024];
             byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
             numBytesRead = 0;
             try
             {
-                // Connect to the TCP Client 
+                // Connect to the TCP Client. ClientIP on specific port
                 TcpClient client = new TcpClient(server, port);
 
                 // Convert the message to a bytearray using UTF-8 
-                String tcpMsg = server + "|" + message;
+                String tcpMsg = server + "|" + message; // CLIENT_IP | MEDNETFP:START
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client stream for reading and writing.
@@ -37,7 +41,7 @@ namespace MedNet.Data.Services
 
                 // Send the message to the connected TcpServer. 
                 tcpStream.Write(wrBuf, 0, wrBuf.Length);
-                Console.WriteLine("Sent: {0}", tcpMsg);
+                Console.WriteLine("Sent: {0}", tcpMsg); // Write to console the tcpMsg
 
                 // Read the bytes from the buffer 
                 byte[] rdBuf = new byte[65000];
