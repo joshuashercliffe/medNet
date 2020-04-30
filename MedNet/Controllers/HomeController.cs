@@ -366,6 +366,7 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "Could not find a patient profile with PHN: "+PHN);
                 return View(requestAccessViewModel);
             }
+            // Redirect all requests to Jacob's computers
             var currentFPData = SocketService.tcpConnect("24.84.225.22", "MEDNETFP:START", out int bytesRead);
             if (bytesRead < 5000)
             {

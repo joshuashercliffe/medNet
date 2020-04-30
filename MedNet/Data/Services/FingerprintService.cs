@@ -9,6 +9,7 @@ namespace MedNet.Data.Services
     {
         public static bool CompareFingerprints(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
+            // Convert fingerprint byte arrays into Bitmap image objects
             var incomingImage1 = Image.FromStream(new MemoryStream(inputFingerprint));
             var bitmap1 = new Bitmap(incomingImage1);
 
@@ -27,6 +28,7 @@ namespace MedNet.Data.Services
             var matcher = new M3gl();
             var similarity = matcher.Match(features1, features2);
 
+            // Check if similarity is greater than 0.40
             if(similarity >= 0.40)
             {
                 return true;
