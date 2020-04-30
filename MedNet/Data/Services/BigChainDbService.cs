@@ -44,23 +44,23 @@ namespace MedNet.Data.Services
             bigchainDatabase = client.GetDatabase("bigchain");
         }
 
-        public void MultiNodeSetup(List<string> urls)
+        public BigChainDbService(string[] urls)
         {
             // Create a list of connections
             List<BlockchainConnection> connections = new List<BlockchainConnection>();
             Console.WriteLine("NodeURLs: ");
-            foreach (var url in urls)
+            Random rnd = new Random();
+            string[] MyRandomArray = urls.OrderBy(x => rnd.Next()).ToArray();
+            foreach (var url in MyRandomArray)
             {
                 // print urls that we're connecting to
                 Console.WriteLine(url);
 
                 var conn_conf = new Dictionary<string, object>();
-                conn_conf.Add("baseUrl", url);
-
+                conn_conf.Add("baseUrl", "https://"+url);
                 BlockchainConnection bc_conn = new BlockchainConnection(conn_conf);
                 connections.Add(bc_conn);
             }
-
             var builder = BigchainDbConfigBuilder
                 .addConnections(connections)
                 .setTimeout(60000);
@@ -69,7 +69,10 @@ namespace MedNet.Data.Services
             {
                 Console.WriteLine("Failed Multi-Node Setup");
             }
+            var baseURL = builder.BaseUrl.Split("/")[2];;
             Console.WriteLine("Finished connecting to multiple nodes");
+            var client = new MongoClient($"mongodb://dbreader:dbreaderpassword@{baseURL}:27017/?authSource=bigchain");
+            bigchainDatabase = client.GetDatabase("bigchain");
             return;
         }
 

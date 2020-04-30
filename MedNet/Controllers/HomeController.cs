@@ -32,7 +32,9 @@ namespace MedNet.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _bigChainDbService = new BigChainDbService("https://cnode.lifeblocks.site");
+            string[] nodes = { "anode.lifeblocks.site", "bnode.lifeblocks.site", 
+                "cnode.lifeblocks.site", "dnode.lifeblocks.site", "enode.lifeblocks.site" };
+            _bigChainDbService = new BigChainDbService(nodes);
             _random = new Random();
         }
 
