@@ -24,9 +24,11 @@ namespace MedNet.Controllers
         private const string currentPPHN = "currentPatientPHN";
         private const string currentDoctorName = "currentDoctorName";
         private const string currentDoctorMinc = "currentDoctorMinsc";
+
         private readonly ILogger<HomeController> _logger;
         private BigChainDbService _bigChainDbService;
         private Random _random;
+
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
