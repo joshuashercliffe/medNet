@@ -372,8 +372,8 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            var currentFPData = SocketService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead); // DEBUG: Jacob's Computer 
-            // var currentFPData = SocketService.tcpScanFP(, "MEDNETFP:START", out int bytesRead); // General Computer 
+            var currentFPData = FingerprintService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead); // DEBUG: Jacob's Computer 
+            // var currentFPData = FingerprintService.tcpScanFP(, "MEDNETFP:START", out int bytesRead); // General Computer 
 
             // Check if fingerprint data is valid
             if (bytesRead < 5000)
@@ -439,7 +439,7 @@ namespace MedNet.Controllers
             string ipAddress = ip.ToString();
 
             // Do fingerprint fetch from windows service here 
-            var fpImg = SocketService.tcpScanFP(ipAddress, "MEDNETFP:START", out _);
+            var fpImg = FingerprintService.tcpScanFP(ipAddress, "MEDNETFP:START", out _);
 
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
@@ -464,7 +464,7 @@ namespace MedNet.Controllers
             }
             
             // Register fingerprint information 
-            var fpData = SocketService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+            var fpData = FingerprintService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead);
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
