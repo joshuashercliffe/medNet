@@ -1,0 +1,64 @@
+import socket
+import sys
+
+HOST = 'localhost'
+PORT = 5555
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+s.bind((HOST, PORT))
+s.listen()
+conn, addr = s.accept()
+with conn:
+    print('Connected by', addr)
+    while True:
+
+
+        data = conn.recv(1024)
+        if not data:
+            break
+        conn.sendall(data)
+
+
+
+ui 
+windows service -> run python script
+fingerprint scanner, image to backend using tcp 
+
+backend sends request 
+ui header contain info (IP address, ports, seesion token) to windows service to image packet to backend to ui
+
+windows service constantly runs, tx and rx
+backend specifies keyword to start serial reader, then sends the image back 
+
+address and port
+
+https://github.com/liuyal/Temperature_System/blob/master/backend/python/udp_cmd.py
+
+
+start 
+- write a loop, read image, grab img, send image, 
+
+netcat -kluvw 0 5555
+nc -u 24.84.225.22 53
+35.155.4.38
+
+change computer IP to static
+
+
+https://realpython.com/python-sockets/
+http://thepythoncorner.com/dev/how-to-create-a-windows-service-in-python/
+https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcplistener?view=netframework-4.8
+https://docs.microsoft.com/en-us/dotnet/framework/network-programming/using-udp-services
+
+pywintypes38.dll in site-packages/win32
+
+
+# get public ip
+out, err = subprocess.Popen('curl ifconfig.co', stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate()
+out.decode('utf-8')
+
+client: public ip, local ip/GPS coord, keyword
+
+lifeblocks.site/Home/TestFingerprintButton
+HomeController.cs

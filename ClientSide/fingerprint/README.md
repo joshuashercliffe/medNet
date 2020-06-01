@@ -1,0 +1,1 @@
+replace pyfingerprint.py in /site-packages/pyfingerprint for python directory 

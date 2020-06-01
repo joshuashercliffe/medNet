@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29920.165
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPListener", "TCPListener.csproj", "{9305CE55-A53E-43FD-A91E-B70D35932F65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9305CE55-A53E-43FD-A91E-B70D35932F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9305CE55-A53E-43FD-A91E-B70D35932F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9305CE55-A53E-43FD-A91E-B70D35932F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9305CE55-A53E-43FD-A91E-B70D35932F65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB56F42E-F500-438A-B071-40686FAA5167}
+	EndGlobalSection
+EndGlobal

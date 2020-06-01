@@ -1,0 +1,8 @@
+Need to protect .pem file
+chmod 400 key_name.pem
+
+ssh -i AWSInstance1.pem ubuntu@anode.lifeblocks.site
+ssh -i AWSInstance1.pem ubuntu@bnode.lifeblocks.site
+ssh -i jwAWS.pem ubuntu@35.155.4.38
+ssh -i jwAWS.pem ubuntu@44.233.12.81
+
