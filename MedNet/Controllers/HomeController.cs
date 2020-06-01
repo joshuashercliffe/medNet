@@ -350,6 +350,8 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult RequestAccess(RequestAccessViewModel requestAccessViewModel)
         {
+            // Description: Authenticates a patient's identity when a Doctor requests access to their medical information
+            // Get's the Doctor's information for current session
             ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             if (!ModelState.IsValid)
                 return View(requestAccessViewModel);
@@ -360,19 +362,27 @@ namespace MedNet.Controllers
             string doctorAgreePrivatekey = HttpContext.Session.GetString(currentDAPriK);
             string doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivatekey);
             string keyword = requestAccessViewModel.keyword;
+
+            // Searches for a patient with the specified PHN
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, PHN);
             if (userAsset == null)
             {
                 ModelState.AddModelError("", "Could not find a patient profile with PHN: "+PHN);
                 return View(requestAccessViewModel);
             }
-            // Redirect all requests to Jacob's computers
-            var currentFPData = SocketService.tcpConnect("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+
+            // Send request to the Client Computer to authenticate with fingerprint
+            var currentFPData = SocketService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead); // DEBUG: Jacob's Computer 
+            // var currentFPData = SocketService.tcpScanFP(, "MEDNETFP:START", out int bytesRead); // General Computer 
+
+            // Check if fingerprint data is valid
             if (bytesRead < 5000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(requestAccessViewModel);
             }
+
+            // Decrypt the patient's fingerprint data stored in the Blockchain
             byte[] dbFPData;
             string patientSignPrivateKey, patientAgreePrivateKey;
             try
@@ -385,12 +395,15 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "Keyword may be incorrect");
                 return View(requestAccessViewModel);
             }
+
+            // Compare the scanned fingerprint with the one saved in the database 
             if (!FingerprintService.CompareFingerprints(currentFPData, dbFPData))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
             }
-            // choose the types of records we want to get
+
+            // Choose the types of records we want to get
             AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription };
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList, patientSignPublicKey);
@@ -418,21 +431,20 @@ namespace MedNet.Controllers
 
         public IActionResult TriggerFingerprint()
         {
+            // Description: Using for DEBUG. URL: https://lifeblocks.site/home/testfingerprintbutton 
             ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
-            // This is how to get IP address of the client. This is the public IP address. Create the TCPClient class here?
-            // and send the request to windows service to start getting fingerprint data.
+            
+            // Retrieve the Public IP of the Client Computer using the browser
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();
 
             // Do fingerprint fetch from windows service here 
-            // Jacob
-            var fpImg = SocketService.tcpConnect(ipAddress, "MEDNETFP:START", out _);
+            var fpImg = SocketService.tcpScanFP(ipAddress, "MEDNETFP:START", out _);
 
-            // This is a test message for testing purposes, you can put whatever string here and it will show up in the browser view
-            // for you to verify that your code worked. 
+            // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
             {
-                message = "The IP address of the client is: " + ipAddress
+                message = "The Public IP address of the client is: " + ipAddress
             };
             return RedirectToAction("TestFingerprintButton", model);
         }
@@ -440,22 +452,33 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
+            // Description: Signs patient up for a MedNet account
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
+            
+            // Check if PHN is already in use
             if (userAsset != null)
             {
                 ModelState.AddModelError("", "A Patient profile with that PHN already exists");
                 return View(patientSignUpViewModel);
             }
-            var fpData = SocketService.tcpConnect("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+            
+            // Register fingerprint information 
+            var fpData = SocketService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead);
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
             }
+            
+            // Parse the input data for user registration 
             var passphrase = patientSignUpViewModel.KeyWord;
             var password = patientSignUpViewModel.Password;
+            
+            // Create a user for the Blockchain 
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
+            
+            // Create the user Asset 
             var userAssetData = new UserCredAssetData
             {
                 FirstName = patientSignUpViewModel.FirstName,
@@ -469,10 +492,14 @@ namespace MedNet.Controllers
                 AgreePublicKey = agreePublicKey,
                 FingerPrintData = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fpData)
             };
+            
+            // Encrypt the user's password in the metadata
             var userMetadata = new UserCredMetadata
             {
                 hashedPassword = EncryptionService.hashPassword(password)
             };
+            
+            // Save the user Asset and Metadata
             var asset = new AssetSaved<UserCredAssetData>
             {
                 Type = AssetType.Patient,
@@ -483,7 +510,8 @@ namespace MedNet.Controllers
             {
                 data = userMetadata
             };
-
+           
+            // Send the user's information to the Blockchain database
             _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
             return RedirectToAction("Index");
         }

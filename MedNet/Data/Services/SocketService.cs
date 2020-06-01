@@ -15,7 +15,7 @@ namespace MedNet.Data.Services
             return;
         }
 
-        public static byte[] tcpConnect(String server, String message, out int numBytesRead)
+        public static byte[] tcpScanFP(String server, String message, out int numBytesRead)
         {
             // Inputs: 
             // - server: CLIENT_IP we want to connect to 
