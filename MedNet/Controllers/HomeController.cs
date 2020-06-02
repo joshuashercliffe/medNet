@@ -372,7 +372,7 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            var currentFPData = FingerprintService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead); // DEBUG: Jacob's Computer 
+            var currentFPData = FingerprintService.scanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead); // DEBUG: Jacob's Computer 
             // var currentFPData = FingerprintService.tcpScanFP(, "MEDNETFP:START", out int bytesRead); // General Computer 
 
             // Check if fingerprint data is valid
@@ -397,7 +397,7 @@ namespace MedNet.Controllers
             }
 
             // Compare the scanned fingerprint with the one saved in the database 
-            if (!FingerprintService.CompareFingerprints(currentFPData, dbFPData))
+            if (!FingerprintService.compareFP(currentFPData, dbFPData))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
@@ -437,9 +437,10 @@ namespace MedNet.Controllers
             // Retrieve the Public IP of the Client Computer using the browser
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();
+            // string ipAddress = "24.84.225.22"; // Jacob's IP
 
             // Do fingerprint fetch from windows service here 
-            var fpImg = FingerprintService.tcpScanFP(ipAddress, "MEDNETFP:START", out _);
+            var fpImg = FingerprintService.scanFP(ipAddress, "MEDNETFP:START", out _);
 
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
@@ -464,7 +465,7 @@ namespace MedNet.Controllers
             }
             
             // Register fingerprint information 
-            var fpData = FingerprintService.tcpScanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead);
+            var fpData = FingerprintService.scanFP("24.84.225.22", "MEDNETFP:START", out int bytesRead);
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");

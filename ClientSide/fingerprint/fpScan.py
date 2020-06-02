@@ -19,8 +19,8 @@ BAUDRATE = 57600
 SIZE = (227, 257)
 CROP = (15, 15, 15, 15)
 TCP_IP = '0.0.0.0'
-PORT = 15326
-# PORT = 15326
+PORT = 15326 # actual port we're using
+# PORT = 15327 # debugging port
 
 def fpScan():
     # initialize fingerprint sensor
@@ -115,8 +115,8 @@ def main():
                 # Check if the Client_IP, MEDNET_KEY and MEDNET_IP are expected
                 inData = lst + baddr
 
-                if inData == [bip, MEDNET_KEY, MEDNET_IP]:
-                # if inData == [bip, MEDNET_KEY]:
+                # if inData == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
+                if inData[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
                     # get fingerprint image
                     # DEBUG: could improve with multithreading
                     print("Authentication granted, starting FP process")
@@ -124,7 +124,6 @@ def main():
                     # get fp data
                     fpImg = fpScan() 
                     newImg = fpImg.resize(SIZE)
-
                     # newImg = fpImg.crop(CROP)
             
                     # convert to bytearray 

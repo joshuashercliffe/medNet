@@ -11,7 +11,7 @@ namespace MedNet.Data.Services
 {
     public static class FingerprintService
     {
-        public static bool CompareFingerprints(byte[] inputFingerprint, byte[] databaseFingerprint )
+        public static bool compareFP(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             // Convert fingerprint byte arrays into Bitmap image objects
             var incomingImage1 = Image.FromStream(new MemoryStream(inputFingerprint));
@@ -43,7 +43,7 @@ namespace MedNet.Data.Services
             }
         }
 
-        public static byte[] tcpScanFP(String server, String message, out int numBytesRead)
+        public static byte[] scanFP(String server, String message, out int numBytesRead)
         {
             // Inputs: 
             // - server: CLIENT_IP we want to connect to 
@@ -53,6 +53,7 @@ namespace MedNet.Data.Services
 
             // Connect to Specified CLIENT_IP (server), and send MEDNETFP:START (message) to start FP Service 
             Int32 port = 15326; // Use a specific port
+
             byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
             numBytesRead = 0;
             try
@@ -61,7 +62,7 @@ namespace MedNet.Data.Services
                 TcpClient client = new TcpClient(server, port);
 
                 // Convert the message to a bytearray using UTF-8 
-                String tcpMsg = server + "|" + message; // CLIENT_IP | MEDNETFP:START
+                String tcpMsg = server + "|" + message; // [CLIENT_IP]|MEDNETFP:START
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client stream for reading and writing.
