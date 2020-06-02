@@ -1,6 +1,7 @@
 ﻿using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.Matchers;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace MedNet.Data.Services
             }
         }
 
-        public static byte[] scanFP(String server, String message, out int numBytesRead)
+        public static byte[] scanFP(String server, out int numBytesRead)
         {
             // Inputs: 
             // - server: CLIENT_IP we want to connect to 
@@ -53,6 +54,7 @@ namespace MedNet.Data.Services
 
             // Connect to Specified CLIENT_IP (server), and send MEDNETFP:START (message) to start FP Service 
             Int32 port = 15326; // Use a specific port
+            String message = "MEDNETFP:START";
 
             byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
             numBytesRead = 0;
@@ -121,6 +123,17 @@ namespace MedNet.Data.Services
             }
             // Return fingerprint data as a byte array
             return fpByte;
+        }
+
+        public static List<byte[]> scanMultiFP(String server, int numScans)
+        {
+            // Description: Scan fingerprint multiple times 
+            List<byte[]> fpList = new List<byte[]>();
+            for(int i=0; i < numScans; i++)
+            {
+                fpList.Add(scanFP(server, out _));
+            }
+            return fpList;
         }
     }
 }

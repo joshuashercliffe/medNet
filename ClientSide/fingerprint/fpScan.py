@@ -115,8 +115,8 @@ def main():
                 # Check if the Client_IP, MEDNET_KEY and MEDNET_IP are expected
                 inData = lst + baddr
 
-                # if inData == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
-                if inData[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
+                if inData == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
+                # if inData[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
                     # get fingerprint image
                     # DEBUG: could improve with multithreading
                     print("Authentication granted, starting FP process")
