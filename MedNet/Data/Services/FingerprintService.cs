@@ -12,8 +12,15 @@ namespace MedNet.Data.Services
 {
     public static class FingerprintService
     {
+        // Class variables 
+        private static Int32 PORT = 15326; // Actual port
+        //private static Int32 PORT = 15327; // DEBUG port
+
+        private static String MSG = "MEDNETFP:START"; // Special MedNetFP Key
+
         public static bool compareFP(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
+            bool isMatch = false;
             // Convert fingerprint byte arrays into Bitmap image objects
             var incomingImage1 = Image.FromStream(new MemoryStream(inputFingerprint));
             var bitmap1 = new Bitmap(incomingImage1);
@@ -36,35 +43,31 @@ namespace MedNet.Data.Services
             // Check if similarity is greater than 0.40
             if(similarity >= 0.40)
             {
-                return true;
+                isMatch = true;   
             }
-            else
-            {
-                return false;
-            }
+
+            // Return the comparison result 
+            return isMatch;
         }
 
         public static byte[] scanFP(String server, out int numBytesRead)
         {
             // Inputs: 
             // - server: CLIENT_IP we want to connect to 
-            // - message: MEDNET_KEYWORD to start fingerprint process. eg. MEDNETFP:START
-
+            // Output: 
+            // - numBytesRead: the number of bytes read, this indicates the FP data
             // link: https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.tcpclient?view=netframework-4.8
 
-            // Connect to Specified CLIENT_IP (server), and send MEDNETFP:START (message) to start FP Service 
-            Int32 port = 15326; // Use a specific port
-            String message = "MEDNETFP:START";
-
+            // Connect to Specified CLIENT_IP (server), and send MEDNETFP:START (MSG) to start FP Service 
             byte[] fpByte = new byte[59707]; // for 227*257 img size incl header
             numBytesRead = 0;
             try
             {
                 // Connect to the TCP Client. ClientIP on specific port
-                TcpClient client = new TcpClient(server, port);
+                TcpClient client = new TcpClient(server, PORT);
 
                 // Convert the message to a bytearray using UTF-8 
-                String tcpMsg = server + "|" + message; // [CLIENT_IP]|MEDNETFP:START
+                String tcpMsg = server + "|" + MSG; // [CLIENT_IP]|MEDNETFP:START
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client stream for reading and writing.
@@ -72,7 +75,7 @@ namespace MedNet.Data.Services
 
                 // Send the message to the connected TcpServer. 
                 tcpStream.Write(wrBuf, 0, wrBuf.Length);
-                Console.WriteLine("Sent: {0}", tcpMsg); // Write to console the tcpMsg
+                Console.WriteLine("Sent: {0}", tcpMsg);
 
                 // Read the bytes from the buffer 
                 byte[] rdBuf = new byte[65000];
@@ -127,12 +130,60 @@ namespace MedNet.Data.Services
 
         public static List<byte[]> scanMultiFP(String server, int numScans)
         {
-            // Description: Scan fingerprint multiple times 
-            List<byte[]> fpList = new List<byte[]>();
+            // Description: Scan fingerprint multiple times using one request to the client computer
+            List<byte[]> fpList = new List<byte[]>(); // the resulting fingerprint images
+            int numBytesRead = 0;
+            // Connect to Specified Client IP and send message with number of scans todo
+            try
+            {
+                // Connect to TCP Client
+                TcpClient client = new TcpClient(server, PORT);
+
+                // Convert message to bytearray using UTF-8 
+                String tcpMsg = server + "|" + MSG + "|" + numScans.ToString();
+                Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
+
+                // Get a client RD/WR Stream 
+                NetworkStream tcpStream = client.GetStream();
+
+                // Send the message to the Client Computer (TCP Server) 
+                tcpStream.Write(wrBuf, 0, wrBuf.Length);
+                Console.WriteLine("Sent: {0}", tcpMsg);
+
+                // Read the bytes from the buffer 
+                byte[] rdBuf = new byte[65000];
+                byte[] incBytes = new byte[0];
+                if(tcpStream.CanRead)
+                {
+                    // Read the whole TCP Packet 
+                    do
+                    {
+                        // Read the bytes from the buffer 
+                        numBytesRead += tcpStream.Read(rdBuf, 0, rdBuf.Length);
+
+                        // Concat the bytes into a bytearray 
+                        incBytes = incBytes.Concat(rdBuf).ToArray();
+                    }
+                    while (tcpStream.DataAvailable);
+                }
+                else
+                {
+                    Console.WriteLine("Error: The TCP Stream has closed.");
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("ArgumentNullException: {0}", e);
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
             for(int i=0; i < numScans; i++)
             {
                 fpList.Add(scanFP(server, out _));
             }
+
             return fpList;
         }
     }
