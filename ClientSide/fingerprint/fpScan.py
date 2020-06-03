@@ -19,8 +19,8 @@ BAUDRATE = 57600
 SIZE = (227, 257)
 CROP = (15, 15, 15, 15)
 TCP_IP = '0.0.0.0'
-PORT = 15326 # actual port we're using
-# PORT = 15327 # debugging port
+# PORT = 15326 # actual port we're using
+PORT = 15327 # debugging port
 
 def fpScan():
     # initialize fingerprint sensor
@@ -104,40 +104,42 @@ def main():
 
             if data != b'':
                 # parse the input 
-                lst = data.splitlines()[0].split(b'|')
+                inData = data.splitlines()[0].split(b'|')
+                clientIP = inData[0]
+                fpKey = inData[1]
+                numScans = int(inData[2])
 
                 # get public IP
                 ip = get('https://api.ipify.org').text
                 bip = bytes(ip, 'utf-8') 
                 
-                baddr = [bytes(addr[0], 'utf-8')]
+                baddr = bytes(addr[0], 'utf-8')
 
-                # Check if the Client_IP, MEDNET_KEY and MEDNET_IP are expected
-                inData = lst + baddr
+                # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
+                inLst = [clientIP, fpKey, baddr]
 
-                if inData == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
-                # if inData[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
-                    # get fingerprint image
-                    # DEBUG: could improve with multithreading
+                if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
                     print("Authentication granted, starting FP process")
-                    
-                    # get fp data
-                    fpImg = fpScan() 
-                    newImg = fpImg.resize(SIZE)
-                    # newImg = fpImg.crop(CROP)
-            
-                    # convert to bytearray 
-                    bdata = io.BytesIO() 
-                    newImg.save(bdata, 'bmp') 
-                    bfp = bdata.getvalue()        
-                    
-                    # print(sys.getsizeof(bfp))
-                    
-                    # Create formatted message
-                    bmsg = bip + b'|' + bfp
-                    
-                    # Send message back to the AWS Server
-                    conn.send(bmsg)
+                # if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
+                    for i in range(numScans):
+                        print("Scan {0}/{1}".format(i, numScans))
+                        # get fingerprint image
+                        fpImg = fpScan() 
+                        newImg = fpImg.resize(SIZE)
+                        # newImg = fpImg.crop(CROP)
+                
+                        # convert to bytearray 
+                        bdata = io.BytesIO() 
+                        newImg.save(bdata, 'bmp') 
+                        bfp = bdata.getvalue()        
+                        
+                        # print(sys.getsizeof(bfp))
+                        
+                        # Create formatted message
+                        bmsg = bip + b'|' + bfp
+                        
+                        # Send message back to the AWS Server
+                        conn.send(bmsg)
                 else: 
                     conn.send(b'Authentication FAILED\n') # DEBUG
         except:
