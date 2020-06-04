@@ -18,7 +18,7 @@ namespace MedNet.Data.Services
 
         private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
         private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
-        private static string delim = "MEDNETFP"; // Delimiter
+        private static string delim = "|MEDNETFP|"; // Delimiter
         public static bool compareFP(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             bool isMatch = false;
@@ -173,49 +173,29 @@ namespace MedNet.Data.Services
                         }
                     }
                     while (numBytesRead > 0 && client.Connected);
+
+                    // Close the stream and socket connections to client
+                    tcpStream.Close();
+                    client.Close();
                 }
                 else
                 {
                     Console.WriteLine("Error: The TCP Stream has closed.");
                 }
 
-                List<byte[]> inData = new List<byte[]>();
-                int idx = 0;
-                int startIdx = 0;
-                byte[] tempBuf = rdBytes;
-                do
+                // Parse the rx data from client computer
+                string rdStr = Encoding.ASCII.GetString(rdBytes);
+                var inList = rdStr.Split(delim).ToList();
+
+                // Client IP
+                var clientIP = inList[0];
+
+                // Fingerprint data
+                for(int i = 1; i < inList.Count; i++)
                 {
-                    // find delimiters
-                    idx = Encoding.Default.GetString(tempBuf).IndexOf(delim)-1;
-                    startIdx += idx + delim.Length + 1;
-                    //idx = Array.IndexOf(tempBuf, delim[0]);
-                    var debugDataIn = Encoding.Default.GetString(tempBuf);
-                    string debugDataDelim = "";
-                    string debugDataNew = "";
-                    if (idx >= 0)
-                    {
-                        // put delimited data into a list
-                        byte[] rdData = new byte[idx];
-                        Array.Copy(tempBuf, rdData, idx);
-                        inData.Add(rdData);
+                    fpList.Add(Encoding.ASCII.GetBytes(inList[i]));
+                }
 
-                        debugDataDelim = Encoding.Default.GetString(rdData);
-
-                        // truncate the buffer without the delimited data
-                        Array.Copy(tempBuf, startIdx, tempBuf, 0, tempBuf.Length - startIdx);
-
-                        debugDataNew = Encoding.Default.GetString(tempBuf);
-                    }
-                    else
-                    {
-                        // last fingerprint data to add to the list
-                        inData.Add(tempBuf);
-                    }
-                } while (idx >= 0);
-
-                // Close the stream and socket connections to client
-                tcpStream.Close();
-                client.Close();
             }
             catch (ArgumentNullException e)
             {
@@ -226,6 +206,12 @@ namespace MedNet.Data.Services
                 Console.WriteLine("SocketException: {0}", e);
             }
 
+            // debug: convert bytearray to bitmap image file
+            //for(int i = 0; i < fpList.Count; i++)
+            //{
+            //    var img = Image.FromStream(new MemoryStream(fpList[i]));
+            //    var bmp = new Bitmap(img);
+            //}
 
             return fpList;
         }
