@@ -441,15 +441,16 @@ namespace MedNet.Controllers
 
             // Do fingerprint fetch from windows service here 
             //var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            var fpImg = FingerprintService.scanMultiFP(ipAddress, 10);
+            var fpImg = FingerprintService.scanMultiFP(ipAddress, 3);
 
             // do fingerprint comparison
-            FingerprintService.compareFP2(fpImg[0], fpImg);
+            var isMatch = FingerprintService.compareFP2(fpImg[0], fpImg);
 
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
             {
-                message = "The Public IP address of the client is: " + ipAddress
+                // message = "The Public IP address of the client is: " + ipAddress
+                message = "Fingerprints match?" + isMatch.ToString()
             };
             return RedirectToAction("TestFingerprintButton", model);
         }
