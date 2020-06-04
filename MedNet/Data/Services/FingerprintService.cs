@@ -19,8 +19,9 @@ namespace MedNet.Data.Services
         private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
         private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
         private static string delim = "|MEDNETFP|"; // Delimiter
-        public static bool compareFP(byte[] inputFingerprint, byte[] databaseFingerprint )
+        public static bool compareFP2(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
+            // old
             bool isMatch = false;
             // Convert fingerprint byte arrays into Bitmap image objects
             var incomingImage1 = Image.FromStream(new MemoryStream(inputFingerprint));
@@ -51,7 +52,7 @@ namespace MedNet.Data.Services
             return isMatch;
         }
 
-        public static bool compareFP2(byte[] inFp, List<byte[]> dbFp)
+        public static bool compareFP(byte[] inFp, List<byte[]> dbFp)
         {
             // description: compares the scanned fingerprint to all of the ones in the database
             bool isMatch = false;

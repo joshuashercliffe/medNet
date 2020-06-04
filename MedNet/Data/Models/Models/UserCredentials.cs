@@ -25,7 +25,7 @@ namespace MedNet.Data.Models.Models
 
         public DateTime DateOfRecord { get; set; }
 
-        public string FingerPrintData { get; set; }
+        public List<string> FingerPrintData { get; set; }
     }
 
     public class UserCredMetadata
