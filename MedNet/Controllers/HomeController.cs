@@ -441,7 +441,7 @@ namespace MedNet.Controllers
 
             // Do fingerprint fetch from windows service here 
             //var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            var fpImg = FingerprintService.scanMultiFP(ipAddress, 3);
+            var fpImg = FingerprintService.scanMultiFP(ipAddress, 2);
 
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()

@@ -16,8 +16,9 @@ namespace MedNet.Data.Services
         private static Int32 PORT = 15326; // Actual port
         //private static Int32 PORT = 15327; // DEBUG port
 
-        private static String MSG = "MEDNETFP:START"; // Special MedNetFP Key
-
+        private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
+        private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
+        private static string delim = "MEDNETFP"; // Delimiter
         public static bool compareFP(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             bool isMatch = false;
@@ -67,7 +68,7 @@ namespace MedNet.Data.Services
                 TcpClient client = new TcpClient(server, PORT);
 
                 // Convert the message to a bytearray using UTF-8 
-                String tcpMsg = server + "|" + MSG; // [CLIENT_IP]|MEDNETFP:START
+                String tcpMsg = server + "|" + startMsg; // [CLIENT_IP]|MEDNETFP:START
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client stream for reading and writing.
@@ -133,14 +134,18 @@ namespace MedNet.Data.Services
             // Description: Scan fingerprint multiple times using one request to the client computer
             List<byte[]> fpList = new List<byte[]>(); // the resulting fingerprint images
             int numBytesRead = 0;
+            int totalBytesRead = 0;
+            byte[] rdBytes = new byte[0];
             // Connect to Specified Client IP and send message with number of scans todo
             try
             {
                 // Connect to TCP Client
-                TcpClient client = new TcpClient(server, PORT);
+                //TcpClient client = new TcpClient(server, PORT); // Actual
+                TcpClient client = new TcpClient("localhost", PORT); // Debug
 
                 // Convert message to bytearray using UTF-8 
-                String tcpMsg = server + "|" + MSG + "|" + numScans.ToString();
+                // String tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                String tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // Debug
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client RD/WR Stream 
@@ -151,25 +156,66 @@ namespace MedNet.Data.Services
                 Console.WriteLine("Sent: {0}", tcpMsg);
 
                 // Read the bytes from the buffer 
-                byte[] rdBuf = new byte[65000];
-                byte[] incBytes = new byte[0];
-                if(tcpStream.CanRead)
+                byte[] rdBuf = new byte[65536]; // max TCP packet size
+                //byte[] rdBuf = new byte[1024];
+                if (tcpStream.CanRead)
                 {
-                    // Read the whole TCP Packet 
                     do
                     {
                         // Read the bytes from the buffer 
-                        numBytesRead += tcpStream.Read(rdBuf, 0, rdBuf.Length);
+                        numBytesRead = tcpStream.Read(rdBuf, 0, rdBuf.Length);
+                        totalBytesRead += numBytesRead;
 
                         // Concat the bytes into a bytearray 
-                        incBytes = incBytes.Concat(rdBuf).ToArray();
+                        if(numBytesRead > 0)
+                        {
+                            rdBytes = rdBytes.Concat(rdBuf).ToArray();
+                        }
                     }
-                    while (tcpStream.DataAvailable);
+                    while (numBytesRead > 0 && client.Connected);
                 }
                 else
                 {
                     Console.WriteLine("Error: The TCP Stream has closed.");
                 }
+
+                List<byte[]> inData = new List<byte[]>();
+                int idx = 0;
+                int startIdx = 0;
+                byte[] tempBuf = rdBytes;
+                do
+                {
+                    // find delimiters
+                    idx = Encoding.Default.GetString(tempBuf).IndexOf(delim)-1;
+                    startIdx += idx + delim.Length + 1;
+                    //idx = Array.IndexOf(tempBuf, delim[0]);
+                    var debugDataIn = Encoding.Default.GetString(tempBuf);
+                    string debugDataDelim = "";
+                    string debugDataNew = "";
+                    if (idx >= 0)
+                    {
+                        // put delimited data into a list
+                        byte[] rdData = new byte[idx];
+                        Array.Copy(tempBuf, rdData, idx);
+                        inData.Add(rdData);
+
+                        debugDataDelim = Encoding.Default.GetString(rdData);
+
+                        // truncate the buffer without the delimited data
+                        Array.Copy(tempBuf, startIdx, tempBuf, 0, tempBuf.Length - startIdx);
+
+                        debugDataNew = Encoding.Default.GetString(tempBuf);
+                    }
+                    else
+                    {
+                        // last fingerprint data to add to the list
+                        inData.Add(tempBuf);
+                    }
+                } while (idx >= 0);
+
+                // Close the stream and socket connections to client
+                tcpStream.Close();
+                client.Close();
             }
             catch (ArgumentNullException e)
             {
@@ -179,10 +225,7 @@ namespace MedNet.Data.Services
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
-            for(int i=0; i < numScans; i++)
-            {
-                fpList.Add(scanFP(server, out _));
-            }
+
 
             return fpList;
         }

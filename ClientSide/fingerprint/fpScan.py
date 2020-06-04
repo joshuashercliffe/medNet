@@ -13,6 +13,7 @@ import _thread as thread
 from requests import get 
 import sys
 
+DELIM = b'|MEDNETFP|' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
 MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
 BAUDRATE = 57600
@@ -39,7 +40,6 @@ def getImage(f):
     ## Reads image and download it
     ## Gets some sensor information
     # print('Currently used templates: ' + str(f.getTemplateCount()) +'/'+ str(f.getStorageCapacity()))
-
 
     ## Tries to read image and download it
     try:
@@ -118,11 +118,11 @@ def main():
                 # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
                 inLst = [clientIP, fpKey, baddr]
 
-                if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
-                # if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
+                # if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
+                if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
                     print("Authentication granted, starting FP process")
                     for i in range(numScans):
-                        print("Scan {0}/{1}".format(i, numScans))
+                        print("Scan {0}/{1}".format(i+1, numScans))
                         # get fingerprint image
                         fpImg = fpScan() 
                         newImg = fpImg.resize(SIZE)
@@ -135,8 +135,11 @@ def main():
                         
                         # print(sys.getsizeof(bfp))
                         
+                        bmsg = DELIM + bfp
                         # Create formatted message
-                        bmsg = bip + b'|' + bfp
+                        if i == 0:
+                            # Send IP for first message
+                            bmsg = bip + bmsg
                         
                         # Send message back to the AWS Server
                         conn.send(bmsg)
