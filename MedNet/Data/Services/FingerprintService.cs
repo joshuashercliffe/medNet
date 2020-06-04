@@ -51,6 +51,47 @@ namespace MedNet.Data.Services
             return isMatch;
         }
 
+        public static bool compareFP2(byte[] inFp, List<byte[]> dbFp)
+        {
+            // description: compares the scanned fingerprint to all of the ones in the database
+            bool isMatch = false;
+
+            // Convert scanned fingerprint bytearray into Bitmap image object
+            Image inImg = Image.FromStream(new MemoryStream(inFp));
+            Bitmap inBmp = new Bitmap(inImg);
+
+            // Build feature extractor, and extract features of each fingerprint image
+            MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
+            var inFeat = featExtract.ExtractFeatures(inBmp);
+
+            // Build matcher
+            M3gl matcher = new M3gl();
+
+            // Compare scanned image to all the ones in the database 
+            int numFp = dbFp.Count;
+            for(int i = 0; i < numFp; i++)
+            {
+                // Convert dbFp to Bitmap image object
+                Image dbImg = Image.FromStream(new MemoryStream(dbFp[i]));
+                Bitmap dbBmp = new Bitmap(dbImg);
+
+                // Extract features of dbBmp 
+                var dbFeat = featExtract.ExtractFeatures(dbBmp);
+
+                // Run similarity check 
+                var match = matcher.Match(inFeat, dbFeat);
+                if(match >= 0.5)
+                {
+                    // Fingerprints have above 0.5 similarity
+                    isMatch = true;
+                    Console.WriteLine("Similarity: ", match); // Debug
+                    break;
+                }
+            }
+
+            return isMatch;
+        }
+
         public static byte[] scanFP(String server, out int numBytesRead)
         {
             // Inputs: 
@@ -205,13 +246,6 @@ namespace MedNet.Data.Services
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
-
-            // debug: convert bytearray to bitmap image file
-            //for(int i = 0; i < fpList.Count; i++)
-            //{
-            //    var img = Image.FromStream(new MemoryStream(fpList[i]));
-            //    var bmp = new Bitmap(img);
-            //}
 
             return fpList;
         }
