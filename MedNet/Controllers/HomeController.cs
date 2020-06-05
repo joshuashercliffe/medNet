@@ -447,8 +447,8 @@ namespace MedNet.Controllers
             string ipAddress = ip.ToString();
 
             // Do fingerprint fetch from windows service here 
-            var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            //var fpImg = FingerprintService.scanMultiFP(ipAddress, 3, out _);
+            //var fpImg = FingerprintService.scanFP(ipAddress, out _);
+            var fpImg = FingerprintService.scanMultiFP(ipAddress, 3, out _);
 
             // do fingerprint comparison
             //var isMatch = FingerprintService.compareFP2(fpImg[0], fpImg);

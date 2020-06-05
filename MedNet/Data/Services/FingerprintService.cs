@@ -61,6 +61,9 @@ namespace MedNet.Data.Services
             Image inImg = Image.FromStream(new MemoryStream(inFp));
             Bitmap inBmp = new Bitmap(inImg);
 
+            // DEBUG: save to file
+            inBmp.Save("inFP.bmp");
+
             // Build feature extractor, and extract features of each fingerprint image
             MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
             var inFeat = featExtract.ExtractFeatures(inBmp);
@@ -76,17 +79,21 @@ namespace MedNet.Data.Services
                 Image dbImg = Image.FromStream(new MemoryStream(dbFp[i]));
                 Bitmap dbBmp = new Bitmap(dbImg);
 
+                // DEBUG: save to file
+                int j = i + 1;
+                dbBmp.Save("dbFP" + j.ToString() + ".bmp");
+
                 // Extract features of dbBmp 
                 var dbFeat = featExtract.ExtractFeatures(dbBmp);
 
                 // Run similarity check 
                 var match = matcher.Match(inFeat, dbFeat);
-                if(match >= 0.5)
+                if(match >= 0.1)
                 {
                     // Fingerprints have above 0.5 similarity
                     isMatch = true;
                     Console.WriteLine("Similarity: ", match); // Debug
-                    break;
+                    //break;
                 }
             }
 
@@ -101,23 +108,23 @@ namespace MedNet.Data.Services
             return fpImg;
         }
 
-        public static List<byte[]> scanMultiFP(String server, int numScans, out int bytesRead)
+        public static List<byte[]> scanMultiFP(String server, int numScans, out int totalBytesRead)
         {
             // Description: Scan fingerprint multiple times using one request to the client computer
             List<byte[]> fpList = new List<byte[]>(); // the resulting fingerprint images
-            bytesRead = 0;
-            int totalBytesRead = 0;
+            totalBytesRead = 0;
+            int bytesRead = 0;
             byte[] rdBytes = new byte[0];
             // Connect to Specified Client IP and send message with number of scans todo
             try
             {
                 // Connect to TCP Client
-                TcpClient client = new TcpClient(server, PORT); // Actual
-                //TcpClient client = new TcpClient("localhost", PORT); // Debug
+                //TcpClient client = new TcpClient(server, PORT); // Actual
+                TcpClient client = new TcpClient("localhost", PORT); // Debug
 
                 // Convert message to bytearray using UTF-8 
-                String tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
-                //String tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // Debug
+                //String tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                String tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // Debug
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client RD/WR Stream 
@@ -156,7 +163,8 @@ namespace MedNet.Data.Services
                 }
 
                 // Parse the rx data from client computer
-                string rdStr = Encoding.ASCII.GetString(rdBytes);
+                // Debug: need to find delim pattern in byte array. Cannot use a string search.
+                string rdStr = Encoding.Default.GetString(rdBytes);
                 var inList = rdStr.Split(delim).ToList();
 
                 // Client IP
@@ -165,8 +173,10 @@ namespace MedNet.Data.Services
                 // Fingerprint data
                 for(int i = 1; i < inList.Count; i++)
                 {
-                    fpList.Add(Encoding.ASCII.GetBytes(inList[i]));
+                    fpList.Add(Encoding.Default.GetBytes(inList[i]));
                 }
+
+                compareFP(fpList[0], fpList);
 
             }
             catch (ArgumentNullException e)
