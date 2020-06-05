@@ -18,7 +18,7 @@ namespace MedNet.Data.Services
 
         private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
         private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
-        private static string delim = "|MEDNETFP|"; // Delimiter
+        private static string delim = "MEDNETFP"; // Delimiter
         public static bool compareFP2(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             // old
@@ -162,21 +162,34 @@ namespace MedNet.Data.Services
                     Console.WriteLine("Error: The TCP Stream has closed.");
                 }
 
-                // Parse the rx data from client computer
-                // Debug: need to find delim pattern in byte array. Cannot use a string search.
-                string rdStr = Encoding.Default.GetString(rdBytes);
-                var inList = rdStr.Split(delim).ToList();
+                // Decode the incoming data
+                // Convert from base64 to bytearray
+                string b64Str1 = Encoding.ASCII.GetString(rdBytes, 0, totalBytesRead-16);
+                string b64Str2 = Convert.ToBase64String(rdBytes, 0, totalBytesRead - 16);
+                byte[] b64Bytes1 = Convert.FromBase64String(b64Str1);
+                byte[] b64Bytes2 = Convert.FromBase64String(b64Str2);
 
-                // Client IP
-                var clientIP = inList[0];
+                //string decStr = Convert.ToBase64String(rdBytes);
+                //byte[] decBytes = Convert.FromBase64String(decStr); // this value may have changed from when it was sent
+                //string testStr = Convert.ToBase64String(decBytes);
 
-                // Fingerprint data
-                for(int i = 1; i < inList.Count; i++)
-                {
-                    fpList.Add(Encoding.Default.GetBytes(inList[i]));
-                }
+                // Convert Delimiter to base64 
+                string b64Delim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim)); // this is the same as what's being sent
 
-                compareFP(fpList[0], fpList);
+                //// Debug: need to find delim pattern in byte array. Cannot use a string search.
+                //string rdStr = Encoding.Default.GetString(rdBytes);
+                var inList = b64Str1.Split(b64Delim).ToList();
+
+                //// Client IP
+                //var clientIP = inList[0];
+
+                //// Fingerprint data
+                //for(int i = 1; i < inList.Count; i++)
+                //{
+                //    fpList.Add(Encoding.Default.GetBytes(inList[i]));
+                //}
+
+                //compareFP(fpList[0], fpList);
 
             }
             catch (ArgumentNullException e)

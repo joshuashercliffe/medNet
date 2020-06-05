@@ -12,8 +12,10 @@ import io
 import _thread as thread
 from requests import get 
 import sys
+import base64
+import binascii
 
-DELIM = b'|MEDNETFP|' # Delimiter for TCP message to backend server
+DELIM = b'MEDNETFP' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
 MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
 BAUDRATE = 57600
@@ -21,7 +23,7 @@ SIZE = (227, 257)
 CROP = (15, 15, 15, 15)
 TCP_IP = '0.0.0.0'
 PORT = 15326 # actual port we're using
-#PORT = 15327 # debugging port
+# PORT = 15327 # debug
 
 def fpScan():
     # initialize fingerprint sensor
@@ -141,10 +143,13 @@ def main():
                             # Send IP for first message
                             bmsg = bip + bmsg
                         
-                        # Send message back to the AWS Server
-                        conn.send(bmsg)
+                        # Convert message to base64 string, ASCII
+                        b64Msg = base64.b64encode(bmsg)
+
+                        # Send encoded message back to the AWS Server
+                        conn.send(b64Msg)
                 else: 
-                    conn.send(b'Authentication FAILED\n') # DEBUG
+                    conn.send(b'AuthenticaDtion FAILED\n') # DEBUG
         except:
             print("Connection Lost. Closing socket.")
             sock.close()
