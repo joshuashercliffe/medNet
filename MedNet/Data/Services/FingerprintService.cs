@@ -119,12 +119,12 @@ namespace MedNet.Data.Services
             try
             {
                 // Connect to TCP Client
-                //TcpClient client = new TcpClient(server, PORT); // Actual
-                TcpClient client = new TcpClient("localhost", PORT); // DebugFP
+                TcpClient client = new TcpClient(server, PORT); // Actual
+                //TcpClient client = new TcpClient("localhost", PORT); // DebugFP
 
                 // Convert message to bytearray using UTF-8 
-                //string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
-                string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
+                string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                //string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client RD/WR Stream 
