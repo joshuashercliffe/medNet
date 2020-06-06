@@ -15,15 +15,15 @@ import sys
 import base64
 import binascii
 
-DELIM = b'MEDNETFP' # Delimiter for TCP message to backend server
+DELIM = b'MEDNET' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
 MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
 BAUDRATE = 57600
 SIZE = (227, 257)
 CROP = (15, 15, 15, 15)
 TCP_IP = '0.0.0.0'
-PORT = 15326 # actual port we're using
 # PORT = 15327 # debug
+PORT = 15326 # actual port we're using
 
 def fpScan():
     # initialize fingerprint sensor
@@ -113,9 +113,9 @@ def main():
 
                 # get public IP
                 ip = get('https://api.ipify.org').text
-                bip = bytes(ip, 'utf-8') 
+                bip = bytes(ip, 'ascii') 
                 
-                baddr = bytes(addr[0], 'utf-8')
+                baddr = bytes(addr[0], 'ascii')
 
                 # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
                 inLst = [clientIP, fpKey, baddr]
@@ -123,11 +123,13 @@ def main():
                 # if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
                 if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
                     print("Authentication granted, starting FP process")
+                    # Scan and save fingerprint data to a list
+                    fpList = []
                     for i in range(numScans):
                         print("Scan {0}/{1}".format(i+1, numScans))
                         # get fingerprint image
                         fpImg = fpScan() 
-                        newImg = fpImg.resize(SIZE)
+                        # newImg = fpImg.resize(SIZE)
                         # newImg = fpImg.crop(CROP)
                 
                         # convert to bytearray 
@@ -135,19 +137,29 @@ def main():
                         newImg.save(bdata, 'bmp') 
                         bfp = bdata.getvalue()        
                         
-                        # print(sys.getsizeof(bfp))
-                        
-                        bmsg = DELIM + bfp
-                        # Create formatted message
-                        if i == 0:
-                            # Send IP for first message
-                            bmsg = bip + bmsg
-                        
-                        # Convert message to base64 string, ASCII
-                        b64Msg = base64.b64encode(bmsg)
+                        fpList.append(bfp)
 
-                        # Send encoded message back to the AWS Server
-                        conn.send(b64Msg)
+                    # Create the binary message to send to MedNet Server
+                    # ip DELIM fp DELIM fp...
+                    b64Ip = base64.b64encode(bip)
+                    b64Delim = base64.b64encode(DELIM)
+                    b64FpList = []
+                    for fp in fpList:
+                        b64FpList.append(base64.b64encode(fp))
+
+                    b64Msg = b64Ip
+                    for b64Fp in b64FpList:
+                        b64Msg = b64Msg + b64Delim + b64Fp
+
+                    # Send batches of information
+                    for i in range(0, len(b64Msg)-1, 1024):
+                        if i+1024 > len(b64Msg):
+                            tcpMsg = b64Msg[i:len(b64Msg)]
+                        else:
+                            tcpMsg = b64Msg[i:i+1024]
+
+                        # Send encoded message back to the MedNet Server
+                        conn.send(tcpMsg)
                 else: 
                     conn.send(b'AuthenticaDtion FAILED\n') # DEBUG
         except:
