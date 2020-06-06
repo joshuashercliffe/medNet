@@ -110,11 +110,11 @@ def main():
                 clientIP = inData[0]
                 fpKey = inData[1]
                 numScans = int(inData[2])
-
+                
                 # get public IP
                 ip = get('https://api.ipify.org').text
                 bip = bytes(ip, 'ascii') 
-                
+                b64ip = base64.b64encode(bip)
                 baddr = bytes(addr[0], 'ascii')
 
                 # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
@@ -122,6 +122,7 @@ def main():
 
                 # if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
                 if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
+                    print("here4")
                     print("Authentication granted, starting FP process")
                     # Scan and save fingerprint data to a list
                     fpList = []
@@ -129,8 +130,8 @@ def main():
                         print("Scan {0}/{1}".format(i+1, numScans))
                         # get fingerprint image
                         fpImg = fpScan() 
-                        # newImg = fpImg.resize(SIZE)
-                        # newImg = fpImg.crop(CROP)
+
+                        newImg = fpImg.resize(SIZE)
                 
                         # convert to bytearray 
                         bdata = io.BytesIO() 
@@ -140,16 +141,10 @@ def main():
                         fpList.append(bfp)
 
                     # Create the binary message to send to MedNet Server
-                    # ip DELIM fp DELIM fp...
-                    b64Ip = base64.b64encode(bip)
                     b64Delim = base64.b64encode(DELIM)
-                    b64FpList = []
+                    b64Msg = b64ip
                     for fp in fpList:
-                        b64FpList.append(base64.b64encode(fp))
-
-                    b64Msg = b64Ip
-                    for b64Fp in b64FpList:
-                        b64Msg = b64Msg + b64Delim + b64Fp
+                        b64Msg = b64Msg + b64Delim + base64.b64encode(fp)
 
                     # Send batches of information
                     for i in range(0, len(b64Msg)-1, 1024):

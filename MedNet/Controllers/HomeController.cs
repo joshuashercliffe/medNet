@@ -393,7 +393,6 @@ namespace MedNet.Controllers
                 {
                     EncryptionService.decryptFingerprintData(PHN, keyword, fp, out dbFpData);
                     decrFpList.Add(dbFpData);
-
                 }
                 EncryptionService.getPrivateKeyFromIDKeyword(PHN,keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
             }
@@ -448,7 +447,7 @@ namespace MedNet.Controllers
 
             // Do fingerprint fetch from windows service here 
             //var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            var fpImgs = FingerprintService.scanMultiFP(ipAddress, 10, out _);
+            var fpImgs = FingerprintService.scanMultiFP(ipAddress, 3, out _);
 
             // do fingerprint comparison
             var isMatch = FingerprintService.compareFP(fpImgs[0], fpImgs);
@@ -465,7 +464,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
-            // Description: Signs patient up for a MedNet account
+            // Description: Registers a patient up for a MedNet account
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
             

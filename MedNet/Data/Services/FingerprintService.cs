@@ -62,7 +62,7 @@ namespace MedNet.Data.Services
             Bitmap inBmp = new Bitmap(inImg);
 
             // DEBUG: save to file
-            inBmp.Save("inFP.bmp");
+            //inBmp.Save("inFP.bmp");
 
             // Build feature extractor, and extract features of each fingerprint image
             MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
@@ -81,19 +81,19 @@ namespace MedNet.Data.Services
 
                 // DEBUG: save to file
                 int j = i + 1;
-                dbBmp.Save("dbFP" + j.ToString() + ".bmp");
+                //dbBmp.Save("dbFP" + j.ToString() + ".bmp");
 
                 // Extract features of dbBmp 
                 var dbFeat = featExtract.ExtractFeatures(dbBmp);
 
                 // Run similarity check 
                 var match = matcher.Match(inFeat, dbFeat);
-                if(match >= 0.1)
+                if(match >= 0.5)
                 {
                     // Fingerprints have above 0.5 similarity
                     isMatch = true;
                     Console.WriteLine("Similarity: ", match); // Debug
-                    //break;
+                    break;
                 }
             }
 
@@ -120,11 +120,11 @@ namespace MedNet.Data.Services
             {
                 // Connect to TCP Client
                 //TcpClient client = new TcpClient(server, PORT); // Actual
-                TcpClient client = new TcpClient("localhost", PORT); // Debug
+                TcpClient client = new TcpClient("localhost", PORT); // DebugFP
 
                 // Convert message to bytearray using UTF-8 
-                //String tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
-                String tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // Debug
+                //string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
                 Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client RD/WR Stream 
@@ -165,11 +165,7 @@ namespace MedNet.Data.Services
                 // Decode the incoming data
                 // Convert from base64 to bytearray
                 string b64Str = Encoding.ASCII.GetString(rdBytes, 0, totalBytesRead);
-                
-                // Convert Delimiter to base64 
-                string b64Delim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim)); // this is the same as what's being sent
-
-                // Debug: need to find delim pattern in byte array. Cannot use a string search.
+                string b64Delim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim));
                 var inList = b64Str.Split(b64Delim).ToList();
 
                 // Client IP
