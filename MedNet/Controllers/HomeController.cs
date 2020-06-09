@@ -477,6 +477,7 @@ namespace MedNet.Controllers
             
             // Register fingerprint information 
             var fpData = FingerprintService.scanMultiFP("24.84.225.22", 3, out int bytesRead);
+            FingerprintService.saveFP(fpData);
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");

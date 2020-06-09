@@ -100,6 +100,24 @@ namespace MedNet.Data.Services
             return isMatch;
         }
 
+        public static void saveFP(List<byte[]> fpList)
+        {
+            // Description: saves the fingerprints as images
+            int numFp = fpList.Count;
+            for (int i = 0; i < numFp; i++)
+            {
+                // Convert dbFp to Bitmap image object
+                Image dbImg = Image.FromStream(new MemoryStream(fpList[i]));
+                Bitmap dbBmp = new Bitmap(dbImg);
+
+                // DEBUG: save to file
+                int j = i + 1;
+                dbBmp.Save("FP" + j.ToString() + ".bmp");
+            }
+
+            return;
+        }
+
         public static byte[] scanFP(String server, out int bytesRead)
         {
             // Description: Only scan fingerprint once
