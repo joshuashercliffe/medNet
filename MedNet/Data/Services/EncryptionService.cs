@@ -7,6 +7,7 @@ namespace MedNet.Data.Services
 {
     public class EncryptionService
     {
+        private static string hashDelim = "lifeblocks";
         public static void getNewBlockchainUser(out string signPrivateKey, out string signPublicKey,
             out string agreePrivateKey, out string agreePublicKey)
         {
@@ -294,7 +295,7 @@ namespace MedNet.Data.Services
                     encrypted = msEncrypt.ToArray();
                 }
                 result = Convert.ToBase64String(encrypted);
-                result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV);
+                result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV); 
             }
             return result;
         }

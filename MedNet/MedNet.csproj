@@ -26,6 +26,7 @@
     <PackageReference Include="Omnibasis.CryptoConditionsCSharp" Version="1.0.2" />
     <PackageReference Include="SimpleBase" Version="3.0.1" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Windows.Extensions" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

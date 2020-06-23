@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Drawing;
+using Org.BouncyCastle.Asn1;
 
 namespace MedNet.Controllers
 {
@@ -265,7 +267,7 @@ namespace MedNet.Controllers
                 DateOfRecord = DateTime.Now,
                 SignPublicKey = signPublicKey,
                 AgreePublicKey = agreePublicKey,
-                FingerPrintData = new List<string>(),
+                FingerprintData = new List<string>(),
             };
             var userMetadata = new UserCredMetadata
             {
@@ -372,8 +374,8 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            var currentFPData = FingerprintService.scanFP("24.84.225.22", out int bytesRead); // DEBUG: Jacob's Computer 
-            // var currentFPData = FingerprintService.tcpScanFP(, "MEDNETFP:START", out int bytesRead); // General Computer 
+            byte[] fpByte = FingerprintService.scanFP("24.84.225.22", out int bytesRead); // DEBUG: Jacob's Computer 
+            //byte[] fpData = FingerprintService.bmpToByte(fpBmp);
 
             // Check if fingerprint data is valid
             if (bytesRead < 5000)
@@ -383,16 +385,17 @@ namespace MedNet.Controllers
             }
 
             // Decrypt the patient's fingerprint data stored in the Blockchain
-            byte[] dbFpData;
-            List<byte[]> decrFpList = new List<byte[]>();
+            byte[] dbFpData = null;
             string patientSignPrivateKey, patientAgreePrivateKey;
+            List<byte[]> fpList = new List<byte[]>();
+            List<string> dbList = userAsset.data.Data.FingerprintData;
             try
             {
-                // decrypt all the fingerprints stored in the database and add it to a List object
-                foreach(var fp in userAsset.data.Data.FingerPrintData)
+                //EncryptionService.decryptFingerprintData(PHN, keyword, userAsset.data.Data.FingerprintData, out dbFpData);
+                foreach(string db in dbList)
                 {
-                    EncryptionService.decryptFingerprintData(PHN, keyword, fp, out dbFpData);
-                    decrFpList.Add(dbFpData);
+                    EncryptionService.decryptFingerprintData(PHN, keyword, db, out dbFpData);
+                    fpList.Add(dbFpData);
                 }
                 EncryptionService.getPrivateKeyFromIDKeyword(PHN,keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
             }
@@ -403,7 +406,7 @@ namespace MedNet.Controllers
             }
 
             // Compare the scanned fingerprint with the one saved in the database 
-            if (!FingerprintService.compareFP(currentFPData, decrFpList))
+            if (!FingerprintService.compareFP(fpByte, fpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
@@ -447,16 +450,28 @@ namespace MedNet.Controllers
 
             // Do fingerprint fetch from windows service here 
             //var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            var fpImgs = FingerprintService.scanMultiFP(ipAddress, 3, out _);
-
+            List<byte[]> fpBytes = FingerprintService.scanMultiFP(ipAddress, 3, out _);
+            Bitmap fpBmp = null;
+            for(int i = 0; i < fpBytes.Count; i++)
+            {
+                fpBmp = FingerprintService.byteToBmp(fpBytes[i]);
+                fpBmp.Save(i.ToString() + ".bmp");
+            }
+            byte[] fpData = FingerprintService.bmpToByte(fpBmp);
+            Bitmap test = FingerprintService.byteToBmp(fpData);
+            test.Save("test.bmp");
             // do fingerprint comparison
-            var isMatch = FingerprintService.compareFP(fpImgs[0], fpImgs);
+            var isMatch = FingerprintService.compareFP(fpData, fpBytes);
+            bool compare = fpBytes[0] == fpData;
+
+            List<byte[]> fpList = new List<byte[]> {fpBytes[0], fpData };
+            //FingerprintService.saveFP(fpList);
 
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
             {
-                message = "The Public IP address of the client is: " + ipAddress
-                // message = "Fingerprints match?" + isMatch.ToString()
+                //message = "The Public IP address of the client is: " + ipAddress
+                message = "Fingerprints match?" + compare.ToString()
             };
             return RedirectToAction("TestFingerprintButton", model);
         }
@@ -476,8 +491,14 @@ namespace MedNet.Controllers
             }
             
             // Register fingerprint information 
-            var fpData = FingerprintService.scanMultiFP("24.84.225.22", 3, out int bytesRead);
-            FingerprintService.saveFP(fpData);
+            List<byte[]> fpList = FingerprintService.scanMultiFP("24.84.225.22", 1, out int bytesRead);
+            List<byte[]> fpdb = new List<byte[]>();
+            foreach(byte[] fp in fpList)
+            {
+                Bitmap bmp = FingerprintService.byteToBmp(fp);
+                fpdb.Add(FingerprintService.bmpToByte(bmp));
+            }
+            
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
@@ -489,13 +510,14 @@ namespace MedNet.Controllers
             var password = patientSignUpViewModel.Password;
 
             // Encrypt fingerprint data
-            List<string> encrFpList = new List<string>();
-            foreach (var fp in fpData)
+            List<string> encrList = new List<string>();
+            foreach(byte[] fp in fpdb)
             {
-                string encrFpData = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fp);
-                encrFpList.Add(encrFpData);
+                string encrStr = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fp);
+                encrList.Add(encrStr);
             }
-            
+            //string encrFpData = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fpdb[0]);
+
             // Create a user for the Blockchain 
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
 
@@ -511,7 +533,7 @@ namespace MedNet.Controllers
                 DateOfRecord = DateTime.Now,
                 SignPublicKey = signPublicKey,
                 AgreePublicKey = agreePublicKey,
-                FingerPrintData = encrFpList,
+                FingerprintData = encrList,
             };
             
             // Encrypt the user's password in the metadata

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 
@@ -18,7 +19,8 @@ namespace MedNet.Data.Services
 
         private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
         private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
-        private static string delim = "MEDNET"; // Delimiter
+        private static string delim = "MEDNET"; // Delimiter for FP
+        
         public static bool compareFP2(byte[] inputFingerprint, byte[] databaseFingerprint )
         {
             // old
@@ -88,7 +90,7 @@ namespace MedNet.Data.Services
 
                 // Run similarity check 
                 var match = matcher.Match(inFeat, dbFeat);
-                if(match >= 0.5)
+                if(match >= 0.4)
                 {
                     // Fingerprints have above 0.5 similarity
                     isMatch = true;
@@ -122,8 +124,7 @@ namespace MedNet.Data.Services
         {
             // Description: Only scan fingerprint once
             var fpList = scanMultiFP(server, 1, out bytesRead);
-            byte[] fpImg = fpList[0];
-            return fpImg;
+            return fpList[0];
         }
 
         public static List<byte[]> scanMultiFP(String server, int numScans, out int totalBytesRead)
@@ -137,13 +138,13 @@ namespace MedNet.Data.Services
             try
             {
                 // Connect to TCP Client
-                TcpClient client = new TcpClient(server, PORT); // Actual
-                //TcpClient client = new TcpClient("localhost", PORT); // DebugFP
+                //TcpClient client = new TcpClient(server, PORT); // Actual
+                TcpClient client = new TcpClient("localhost", PORT); // DebugFP
 
                 // Convert message to bytearray using UTF-8 
-                string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
-                //string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
-                Byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
+                //string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
+                byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
                 // Get a client RD/WR Stream 
                 NetworkStream tcpStream = client.GetStream();
@@ -164,11 +165,14 @@ namespace MedNet.Data.Services
                         totalBytesRead += bytesRead;
 
                         // Concat the bytes into a bytearray 
-                        if(bytesRead > 0)
+                        rdBytes = rdBytes.Concat(rdBuf).ToArray();
+
+                        if (bytesRead == 0)
                         {
-                            rdBytes = rdBytes.Concat(rdBuf).ToArray();
+                            Console.WriteLine("here");
                         }
                     }
+                    //while (bytesRead > 0 && client.Connected);
                     while (bytesRead > 0 && client.Connected);
 
                     // Close the stream and socket connections to client
@@ -177,25 +181,24 @@ namespace MedNet.Data.Services
                 }
                 else
                 {
-                    Console.WriteLine("Error: The TCP Stream has closed.");
+                    //Console.WriteLine("Error: The TCP Stream has closed.");
                 }
 
                 // Decode the incoming data
                 // Convert from base64 to bytearray
-                string b64Str = Encoding.ASCII.GetString(rdBytes, 0, totalBytesRead);
+                string b64Str = Encoding.ASCII.GetString(rdBytes);
                 string b64Delim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim));
                 var inList = b64Str.Split(b64Delim).ToList();
 
                 // Client IP
-                var debugClientIP = Convert.FromBase64String(inList[0]);
+                //var debugClientIP = Convert.FromBase64String(inList[0]);
 
                 // Fingerprint data
                 for (int i = 1; i < inList.Count; i++)
                 {
-                    byte[] b64Fp = Convert.FromBase64String(inList[i]);
-                    fpList.Add(b64Fp);
+                    byte[] fpByte = Convert.FromBase64String(inList[i]);
+                    fpList.Add(fpByte);
                 }
-
             }
             catch (ArgumentNullException e)
             {
@@ -207,6 +210,53 @@ namespace MedNet.Data.Services
             }
 
             return fpList;
+        }
+
+        public static string listToString(List<byte[]> fpList)
+        {
+            // Description: Converts a list to a string of fingerprint data
+            string fpStr = "";
+            for(int i = 0; i < fpList.Count; i++)
+            {
+                // convert fp data to base64 
+                string b64fp = Convert.ToBase64String(fpList[i]);
+                fpStr += b64fp; 
+                if(i != fpList.Count - 1)
+                {
+                    fpStr += delim;
+                }
+            }
+            return fpStr;
+        }
+
+        public static List<byte[]> stringToList(string fpStr)
+        {
+            // Description: Converts a string to list of fingerprint data
+            List<byte[]> fpList = new List<byte[]>();
+            var parsedFpData = fpStr.Split(delim);
+            foreach(var parsedFp in parsedFpData)
+            {
+                // Convert base64 to byte array 
+                byte[] fpData = Convert.FromBase64String(parsedFp);
+                fpList.Add(fpData);
+            }
+
+            return fpList;
+        }
+
+        public static byte[] bmpToByte(Bitmap img)
+        {
+            // Description: Converts a bmp image to a byte array
+            ImageConverter conv = new ImageConverter();
+            return (byte[])conv.ConvertTo(img, typeof(byte[]));
+        }
+
+        public static Bitmap byteToBmp(byte[] fpData)
+        {
+            // Description: Converts a byte array into a Bitmap object
+            MemoryStream ms = new MemoryStream(fpData);
+            Image img = Image.FromStream(ms);
+            return new Bitmap(img);
         }
     }
 }
