@@ -453,13 +453,16 @@ namespace MedNet.Controllers
             string ipAddress = ip.ToString();
 
             // Do fingerprint fetch from windows service here 
-            List<byte[]> fpBytes = FingerprintService.scanMultiFP(ipAddress, 5, out _);
+            List<byte[]> fpBytes = FingerprintService.scanMultiFP(ipAddress, 2, out _);
             Bitmap fpBmp = null;
+            Image fpImg = null;
             for(int i = 0; i < fpBytes.Count; i++)
             {
                 var fpStr = Convert.ToBase64String(fpBytes[i]);
                 var debugByte = Convert.FromBase64String(fpStr);
-                fpBmp = FingerprintService.byteToBmp(debugByte);
+                fpImg = FingerprintService.byteToImg(debugByte);
+                fpImg.Save(i.ToString() + ".jpeg");
+                //fpBmp = FingerprintService.byteToBmp(debugByte);
                 //fpBmp.Save(i.ToString() + ".bmp");
             }
             byte[] fpData = FingerprintService.bmpToByte(fpBmp);

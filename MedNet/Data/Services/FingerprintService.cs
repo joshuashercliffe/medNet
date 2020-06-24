@@ -123,7 +123,7 @@ namespace MedNet.Data.Services
 
                 // Read the bytes from the buffer 
                 //byte[] rdBuf = new byte[65536]; // max TCP packet size
-                byte[] rdBuf = new byte[16384];
+                byte[] rdBuf = new byte[1024];
                 if (tcpStream.CanRead)
                 {
                     do
@@ -164,8 +164,15 @@ namespace MedNet.Data.Services
                 // Fingerprint data
                 for (int i = 1; i < numScans+1; i++)
                 {
-                    byte[] fpByte = Convert.FromBase64String(inList[i]);
-                    fpList.Add(fpByte);
+                    Span<byte> buffer = new Span<byte>(new byte[inList[i].Length]);
+                    Convert.TryFromBase64String(inList[i], buffer, out int bytesParsed);
+                    if(bytesParsed > 0)
+                    {
+                        byte[] fpByte = Convert.FromBase64String(inList[i]);
+                        fpList.Add(fpByte);
+                    }
+                    //byte[] fpByte = Convert.FromBase64String(inList[i], bytesParsed);
+                    //fpList.Add(fpByte);
                 }
 
             }
@@ -194,6 +201,13 @@ namespace MedNet.Data.Services
             MemoryStream ms = new MemoryStream(fpData);
             Image img = Image.FromStream(ms);
             return new Bitmap(img);
+        }
+
+        public static Image byteToImg(byte[] fpData)
+        {
+            MemoryStream ms = new MemoryStream(fpData);
+            Image img = Image.FromStream(ms);
+            return img;
         }
     }
 }
