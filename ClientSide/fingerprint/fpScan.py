@@ -15,6 +15,7 @@ import sys
 import base64
 import binascii
 
+MSGSZ = 16384
 DELIM = b'MEDNET' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
 MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
@@ -141,39 +142,37 @@ def main():
                         # save fingerprint data as bas64 string      
                         fpList.append(bfp)
 
-                    # Create the binary message to send to MedNet Server
-                    
-
+                    # Create the binary message to send to MedNet Server                
                     # Case 1: Send batches of information (1024 bytes each), this works
-                    # # First send the IP
-                    # b64Msg = b64ip
-                    # for fp in fpList:
-                    #     b64Msg = b64Msg + b64delim + base64.b64encode(fp)
-                    #     print(len(b64Msg))
+                    # First send the IP
+                    b64Msg = b64ip
+                    for fp in fpList:
+                        b64Msg = b64Msg + b64delim + base64.b64encode(fp)
+                        print(len(b64Msg))
                     
-                    # for i in range(0, len(b64Msg)-1, 1024):
-                    #     if i+1024 > len(b64Msg):
-                    #         tcpMsg = b64Msg[i:len(b64Msg)]
-                    #     else:
-                    #         tcpMsg = b64Msg[i:i+1024]
+                    for i in range(0, len(b64Msg)-1, MSGSZ):
+                        if i+MSGSZ > len(b64Msg):
+                            tcpMsg = b64Msg[i:len(b64Msg)]
+                        else:
+                            tcpMsg = b64Msg[i:i+MSGSZ]
 
-                    #     # Send encoded message back to the MedNet Server
-                    #     conn.send(tcpMsg)
+                        # Send encoded message back to the MedNet Server
+                        conn.send(tcpMsg)
 
                     # Case 2: Send inconsistent batches of information, this works
-                    # first send the ip 
-                    conn.send(b64ip)
-                    # then send delimiter + fp data
-                    for fp in fpList:
-                        tcpMsg = b64delim + base64.b64encode(fp) 
-                        print(len(tcpMsg))
-                        conn.send(tcpMsg)
+                    # # first send the ip 
+                    # conn.send(b64ip)
+                    # # then send delimiter + fp data
+                    # for fp in fpList:
+                    #     tcpMsg = b64delim + base64.b64encode(fp) 
+                    #     print(len(tcpMsg))
+                    #     conn.send(tcpMsg)
                     
                     # # Case 3: Send everything at once, result: nothing gets sent
                     # b64Msg = b64ip
                     # for b64fp in b64fpList:
                     #      b64Msg = b64Msg + b64Delim + b64fp
-                    # connn.send(b64Msg)
+                    # conn.send(b64Msg)
                     
                 else: 
                     conn.send(b'AuthenticaDtion FAILED\n') # DEBUG

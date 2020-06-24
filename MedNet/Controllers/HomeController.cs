@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Drawing;
 using Org.BouncyCastle.Asn1;
+using System.Text;
 
 namespace MedNet.Controllers
 {
@@ -369,7 +370,7 @@ namespace MedNet.Controllers
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, PHN);
             if (userAsset == null)
             {
-                ModelState.AddModelError("", "Could not find a patient profile with PHN: "+PHN);
+                ModelState.AddModelError("", "Could not find a patient profile with PHN: " + PHN);
                 return View(requestAccessViewModel);
             }
 
@@ -389,14 +390,17 @@ namespace MedNet.Controllers
             string patientSignPrivateKey, patientAgreePrivateKey;
             List<byte[]> fpList = new List<byte[]>();
             List<string> dbList = userAsset.data.Data.FingerprintData;
+            //string dbList = userAsset.data.Data.FingerprintData;
             try
             {
                 //EncryptionService.decryptFingerprintData(PHN, keyword, userAsset.data.Data.FingerprintData, out dbFpData);
-                foreach(string db in dbList)
+                foreach (string db in dbList)
                 {
                     EncryptionService.decryptFingerprintData(PHN, keyword, db, out dbFpData);
                     fpList.Add(dbFpData);
                 }
+                //EncryptionService.decryptFingerprintData(PHN, keyword, dbList, out dbFpData);
+                //fpList.Add(dbFpData);
                 EncryptionService.getPrivateKeyFromIDKeyword(PHN,keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
             }
             catch
@@ -449,17 +453,18 @@ namespace MedNet.Controllers
             string ipAddress = ip.ToString();
 
             // Do fingerprint fetch from windows service here 
-            //var fpImg = FingerprintService.scanFP(ipAddress, out _);
-            List<byte[]> fpBytes = FingerprintService.scanMultiFP(ipAddress, 3, out _);
+            List<byte[]> fpBytes = FingerprintService.scanMultiFP(ipAddress, 5, out _);
             Bitmap fpBmp = null;
             for(int i = 0; i < fpBytes.Count; i++)
             {
-                fpBmp = FingerprintService.byteToBmp(fpBytes[i]);
-                fpBmp.Save(i.ToString() + ".bmp");
+                var fpStr = Convert.ToBase64String(fpBytes[i]);
+                var debugByte = Convert.FromBase64String(fpStr);
+                fpBmp = FingerprintService.byteToBmp(debugByte);
+                //fpBmp.Save(i.ToString() + ".bmp");
             }
             byte[] fpData = FingerprintService.bmpToByte(fpBmp);
             Bitmap test = FingerprintService.byteToBmp(fpData);
-            test.Save("test.bmp");
+            //test.Save("test.bmp");
             // do fingerprint comparison
             var isMatch = FingerprintService.compareFP(fpData, fpBytes);
             bool compare = fpBytes[0] == fpData;
@@ -491,7 +496,7 @@ namespace MedNet.Controllers
             }
             
             // Register fingerprint information 
-            List<byte[]> fpList = FingerprintService.scanMultiFP("24.84.225.22", 1, out int bytesRead);
+            List<byte[]> fpList = FingerprintService.scanMultiFP("24.84.225.22", 5, out int bytesRead);
             List<byte[]> fpdb = new List<byte[]>();
             foreach(byte[] fp in fpList)
             {
