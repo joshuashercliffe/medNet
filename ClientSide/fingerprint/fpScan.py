@@ -15,14 +15,13 @@ import sys
 import base64
 import binascii
 
-MSGSZ = 16384
+MSGSZ = 4096
 DELIM = b'MEDNET' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
 MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
 BAUDRATE = 57600
 # SIZE = (227, 257) # original 256x288
 SIZE = (205, 230)
-CROP = (15, 15, 15, 15)
 TCP_IP = '0.0.0.0'
 PORT = 15326 # actual port we're using
 # PORT = 15327 # debug
@@ -118,7 +117,6 @@ def main():
                 bip = bytes(ip, 'ascii') 
                 b64ip = base64.b64encode(bip)
                 baddr = bytes(addr[0], 'ascii')
-                b64delim = base64.b64encode(DELIM)
 
                 # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
                 inLst = [clientIP, fpKey, baddr]
@@ -136,7 +134,7 @@ def main():
 
                         # convert to bytearray 
                         bdata = io.BytesIO() 
-                        newImg.save(bdata, 'jpeg') 
+                        newImg.save(bdata, 'bmp') 
                         bfp = bdata.getvalue()
 
                         # save fingerprint data as bas64 string      
@@ -145,35 +143,30 @@ def main():
                     # Create the binary message to send to MedNet Server                
                     # # Case 1: Send batches of information (1024 bytes each), this works
                     # # First send the IP
-                    # b64Msg = b64ip
+                    # bMsg = b64ip
                     # for fp in fpList:
-                    #     b64Msg = b64Msg + b64delim + base64.b64encode(fp)
-                    #     print(len(b64Msg))
-                    
-                    # for i in range(0, len(b64Msg)-1, MSGSZ):
-                    #     if i+MSGSZ > len(b64Msg):
-                    #         tcpMsg = b64Msg[i:len(b64Msg)]
+                    #     bMsg = bMsg + base64.b64encode(DELIM) + base64.b64encode(fp)
+
+                    # for i in range(0, len(bMsg)-1, MSGSZ):
+                    #     if i+MSGSZ > len(bMsg):
+                    #         tcpMsg = bMsg[i:len(bMsg)]
                     #     else:
-                    #         tcpMsg = b64Msg[i:i+MSGSZ]
+                    #         tcpMsg = bMsg[i:i+MSGSZ]
+                    #     print(len(tcpMsg))
 
                     #     # Send encoded message back to the MedNet Server
                     #     conn.send(tcpMsg)
+                    
+                    # print("Total msg size: " + str(len(bMsg)))
 
                     # Case 2: Send inconsistent batches of information, this works
                     # first send the ip 
                     conn.send(b64ip)
                     # then send delimiter + fp data
                     for fp in fpList:
-                        tcpMsg = b64delim + base64.b64encode(fp) 
+                        tcpMsg = base64.b64encode(DELIM) + base64.b64encode(fp) 
                         print(len(tcpMsg))
-                        conn.send(tcpMsg)
-                    
-                    # Case 3: Send everything at once, result: nothing gets sent
-                    b64Msg = b64ip
-                    for b64fp in b64fpList:
-                         b64Msg = b64Msg + b64Delim + b64fp
-                    conn.send(b64Msg)
-                    
+                        conn.send(tcpMsg)                    
                 else: 
                     conn.send(b'AuthenticaDtion FAILED\n') # DEBUG
         except:
