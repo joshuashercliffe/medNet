@@ -87,6 +87,8 @@ namespace MedNet.Data.Services
         {
             // Description: Scan fingerprint multiple times using one request to the client computer
             List<Image> fpList = new List<Image>(); // the resulting fingerprint images
+            List<string> inList = new List<string>();
+            string bDelim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim));
             totalBytesRead = 0;
             int bytesRead = 0;
             byte[] rdBytes = new byte[0];
@@ -110,21 +112,24 @@ namespace MedNet.Data.Services
                 tcpStream.Write(wrBuf, 0, wrBuf.Length);
                 Console.WriteLine("Sent: {0}", tcpMsg);
 
-                // Read the bytes from the buffer 
-                //byte[] rdBuf = new byte[65536]; // max TCP packet size
-                byte[] rdBuf = new byte[4096];
+                // Read the bytes from the buffer
+                byte[] rdBuf = new byte[client.ReceiveBufferSize];
                 if (tcpStream.CanRead)
                 {
                     do
                     {
                         // Read the bytes from the buffer 
                         bytesRead = tcpStream.Read(rdBuf, 0, rdBuf.Length);
-                        totalBytesRead += bytesRead;
-
-                        // Concat the bytes into a bytearray 
-                        rdBytes = rdBytes.Concat(rdBuf).ToArray();
-
-                        if (bytesRead == 0)
+                        byte[] temp = new byte[bytesRead];
+                        Array.Copy(rdBuf, temp, bytesRead);
+                        
+                        if (bytesRead > 0)
+                        {
+                            // Concat the bytes into a bytearray 
+                            totalBytesRead += bytesRead;
+                            rdBytes = rdBytes.Concat(temp).ToArray();
+                        }
+                        else
                         {
                             Console.WriteLine("here");
                         }
@@ -142,14 +147,14 @@ namespace MedNet.Data.Services
 
                 /// Method: encode data as base64 before sending over TCP connection
                 string bStr = Encoding.ASCII.GetString(rdBytes);
-                string bDelim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim));
-                var inList = bStr.Split(bDelim).ToList();
+                inList = bStr.Split(bDelim).ToList();
 
                 // Client IP
-                //var debugClientIP = Convert.FromBase64String(inList[0]);
+                var debugClientIP = Convert.FromBase64String(inList[0]);
+                
 
                 // Fingerprint data
-                for (int i = 1; i < numScans+1; i++)
+                for (int i = 1; i < inList.Count; i++)
                 {
                     Span<byte> buffer = new Span<byte>(new byte[inList[i].Length]);
                     Convert.TryFromBase64String(inList[i], buffer, out int bytesParsed);
@@ -160,7 +165,6 @@ namespace MedNet.Data.Services
                         fpList.Add(fpImg);
                     }
                 }
-
             }
             catch (ArgumentNullException e)
             {

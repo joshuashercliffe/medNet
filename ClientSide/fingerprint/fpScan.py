@@ -166,7 +166,14 @@ def main():
                     for fp in fpList:
                         tcpMsg = base64.b64encode(DELIM) + base64.b64encode(fp) 
                         print(len(tcpMsg))
-                        conn.send(tcpMsg)                    
+                        conn.send(tcpMsg)
+
+                    # Case 3: trying something new 
+                    # conn.send(bip)
+                    # for fp in fpList: 
+                    #     tcpMsg = DELIM + fp;
+                    #     print(len(tcpMsg))
+                    #     conn.send(tcpMsg)                    
                 else: 
                     conn.send(b'AuthenticaDtion FAILED\n') # DEBUG
         except:

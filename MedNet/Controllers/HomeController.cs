@@ -453,7 +453,7 @@ namespace MedNet.Controllers
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();
 
-            // Do fingerprint fetch from windows service here 
+            // Do fingerprint fetch from windows service here
             List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
             Image fpImg = null;
             for(int i = 0; i < fpList.Count; i++)
@@ -487,10 +487,10 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "A Patient profile with that PHN already exists");
                 return View(patientSignUpViewModel);
             }
-            
+
             // Register fingerprint information 
             List<Image> fpList = FingerprintService.scanMultiFP("24.84.225.22", 5, out int bytesRead);
-            
+
             if (bytesRead < 50000)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
