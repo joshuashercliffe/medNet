@@ -13,6 +13,8 @@ using System.Linq;
 using System.Drawing;
 using Org.BouncyCastle.Asn1;
 using System.Text;
+using MongoDB.Driver;
+using System.Net.Sockets;
 
 namespace MedNet.Controllers
 {
@@ -375,7 +377,7 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            List<Image> fpBytes = FingerprintService.scanMultiFP("24.84.225.22", 1, out int bytesRead); // DEBUG: Jacob's Computer 
+            List<Image> fpBytes = FingerprintService.scanMultiFPtest("24.84.225.22", 1, out int bytesRead); // DEBUG: Jacob's Computer 
             Image fpByte = fpBytes[0];
             //byte[] fpData = FingerprintService.bmpToByte(fpBmp);
 
@@ -452,25 +454,66 @@ namespace MedNet.Controllers
             // Retrieve the Public IP of the Client Computer using the browser
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();
+            bool debug = true; // true for DEBUG
+            string status = "entered function";
+            TcpClient tcpClient = new TcpClient();
+
+            bool isConnected = FingerprintService.tcpConnect(ipAddress, debug, out tcpClient);
+            if (isConnected) { status = "tcp connection successful"; }
+            int numScans = 3;
+            List<Image> fpList = new List<Image>();
+            while(numScans > 0)
+            {
+                List<Image> rxList = FingerprintService.scanMultiFP(ipAddress, numScans, tcpClient, debug);
+                foreach(Image img in rxList)
+                {
+                    fpList.Add(img);
+                }
+                if(fpList.Count < numScans)
+                {
+                    numScans = numScans - fpList.Count;
+                }
+                else
+                {
+                    numScans = 0;
+                }
+            }
+            status = "got fingerprint data";
+            FingerprintService.tcpDisconnect(tcpClient);
+            status = "closed tcp connection";
 
             // Do fingerprint fetch from windows service here
-            List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
-            Image fpImg = null;
-            for(int i = 0; i < fpList.Count; i++)
-            {
-                var debugByte = FingerprintService.imgToByte(fpList[i]);
-                fpImg = FingerprintService.byteToImg(debugByte);
-                fpImg.Save(i.ToString() + ".bmp");
-            }
+            //List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
+            //Image fpImg = null;
+            //for(int i = 0; i < fpList.Count; i++)
+            //{
+            //    var debugByte = FingerprintService.imgToByte(fpList[i]);
+            //    fpImg = FingerprintService.byteToImg(debugByte);
+            //    fpImg.Save(i.ToString() + ".bmp");
+            //}
 
-            bool compare = FingerprintService.compareFP(fpImg, fpList);
+            //bool compare = FingerprintService.compareFP(fpImg, fpList);
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
             {
                 //message = "The Public IP address of the client is: " + ipAddress
-                message = "Fingerprints match?" + compare.ToString()
+                message = status
             };
 
+            return RedirectToAction("TestFingerprintButton", model);
+        }
+
+        public IActionResult fpPopupButton(fpPopupModel model)
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
+            return View(model);
+        }
+        public IActionResult fpPopup()
+        {
+            var model = new fpPopupModel()
+            {
+                message = "popup button works"
+            };
             return RedirectToAction("TestFingerprintButton", model);
         }
 
@@ -489,7 +532,7 @@ namespace MedNet.Controllers
             }
 
             // Register fingerprint information 
-            List<Image> fpList = FingerprintService.scanMultiFP("24.84.225.22", 5, out int bytesRead);
+            List<Image> fpList = FingerprintService.scanMultiFPtest("24.84.225.22", 5, out int bytesRead);
 
             if (bytesRead < 50000)
             {

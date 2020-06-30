@@ -1,4 +1,5 @@
-﻿using PatternRecognition.FingerprintRecognition.FeatureExtractors;
+﻿using Org.BouncyCastle.Asn1.Esf;
+using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.Matchers;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,14 @@ namespace MedNet.Data.Services
     public static class FingerprintService
     {
         // Class variables 
-        private static Int32 PORT = 15326; // Actual port
-        //private static Int32 PORT = 15327; // DEBUG port
+        //private static Int32 PORT = 15326; // Actual port
+        private static Int32 PORT = 15327;
 
-        private static string startMsg = "MEDNETFP:START"; // Special MedNetFP Key
-        private static string endMsg = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
-        private static string delim = "MEDNET"; // Delimiter for FP
+        private static string START = "MEDNETFP:START"; // Special MedNetFP Key
+        private static string STOP = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
+        private static string VERIFY = "MEDNETFP:VERIFY";
+        private static string VALID = "MEDNETFP:VALID";
+        private static string DELIM = Convert.ToBase64String(Encoding.ASCII.GetBytes("MEDNET")); // Delimiter for FP
 
         public static bool compareFP(Image inFp, List<Image> dbFp)
         {
@@ -76,19 +79,19 @@ namespace MedNet.Data.Services
             return;
         }
 
-        public static Image scanFP(String server, out int bytesRead)
+        public static Image scanFPtest(String server, out int bytesRead)
         {
             // Description: Only scan fingerprint once
-            List<Image> fpList = scanMultiFP(server, 1, out bytesRead);
+            List<Image> fpList = scanMultiFPtest(server, 1, out bytesRead);
             return fpList[0];
         }
 
-        public static List<Image> scanMultiFP(String server, int numScans, out int totalBytesRead)
+        public static List<Image> scanMultiFPtest(String server, int numScans, out int totalBytesRead)
         {
             // Description: Scan fingerprint multiple times using one request to the client computer
             List<Image> fpList = new List<Image>(); // the resulting fingerprint images
             List<string> inList = new List<string>();
-            string bDelim = Convert.ToBase64String(Encoding.ASCII.GetBytes(delim));
+            string bDelim = Convert.ToBase64String(Encoding.ASCII.GetBytes(DELIM));
             totalBytesRead = 0;
             int bytesRead = 0;
             byte[] rdBytes = new byte[0];
@@ -101,7 +104,7 @@ namespace MedNet.Data.Services
                 //string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
 
                 TcpClient client = new TcpClient(server, PORT); // Actual
-                string tcpMsg = server + "|" + startMsg + "|" + numScans.ToString(); // Actual
+                string tcpMsg = server + "|" + START + "|" + numScans.ToString(); // Actual
 
                 byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 
@@ -145,14 +148,13 @@ namespace MedNet.Data.Services
                     Console.WriteLine("Error: The TCP Stream has closed.");
                 }
 
-                /// Method: encode data as base64 before sending over TCP connection
+                // Encode data as base64 before sending over TCP connection
                 string bStr = Encoding.ASCII.GetString(rdBytes);
                 inList = bStr.Split(bDelim).ToList();
 
                 // Client IP
                 var debugClientIP = Convert.FromBase64String(inList[0]);
-                
-
+               
                 // Fingerprint data
                 for (int i = 1; i < inList.Count; i++)
                 {
@@ -178,6 +180,145 @@ namespace MedNet.Data.Services
             return fpList;
         }
 
+        public static bool tcpConnect(String server, bool debug, out TcpClient client)
+        {
+            ///Description: Create and validate connection to TCP client and stream
+            // initialize variables
+            bool result = false;
+            client = new TcpClient();             
+            if (debug) { server = "localhost"; }
+            byte[] rxData = new byte[0];
+            try
+            {
+                // Setup client and stream
+                client = new TcpClient(server, PORT);
+                NetworkStream stream = client.GetStream();
+
+                // Verify connection to stream
+                string msg = server + "|" + VERIFY;
+                byte[] wrBuf = Encoding.UTF8.GetBytes(msg);
+                stream.Write(wrBuf);
+
+                // Wait for valid response
+                byte[] rdBuf = new byte[client.ReceiveBufferSize];
+
+                if (stream.CanRead)
+                {
+                    int numBytesRd = stream.Read(rdBuf);
+                    byte[] bytesRd = new byte[numBytesRd];
+                    Array.Copy(rdBuf, bytesRd, numBytesRd);
+                    if(numBytesRd > 0) 
+                    { 
+                        rxData = rxData.Concat(bytesRd).ToArray();
+                        if(Encoding.ASCII.GetString(rxData) == VALID)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error: TCP Connection failure to Client Computer");
+                }
+
+                // Parse response from Client Computer
+                Console.WriteLine("here");
+                string bStr = Encoding.ASCII.GetString(rxData);
+            }
+            catch (ArgumentException e) { Console.WriteLine("ArgumentNullException: {0}", e); }
+            catch (SocketException e) { Console.WriteLine("SocketException: {0}", e); }
+
+            return result;
+        }
+
+        public static List<Image> scanMultiFP(string server, int numScans, TcpClient client, bool debug)
+        {
+            ///Description: Scan fingerprints
+            ///
+            // Initialize variables
+            List<Image> fpList = new List<Image>();
+            if (debug) { server = "localhost"; }
+            byte[] rxData = new byte[0];
+            string msg = server + "|" + START + "|" + numScans;
+            byte[] wrBuf = Encoding.UTF8.GetBytes(msg);
+            int totalBytesRd = 0;
+            int numBytesRd = 0;
+            List<string> inList = new List<string>();
+            bool readMore = true;
+            try
+            {
+                // Get previous stream and send formatted message
+                NetworkStream stream = client.GetStream();
+                stream.Write(wrBuf);
+
+                // Wait for valid response
+                byte[] rdBuf = new byte[client.ReceiveBufferSize];
+
+                if(stream.CanRead)
+                {
+                    do
+                    {
+                        numBytesRd = stream.Read(rdBuf);
+                        if (numBytesRd > 0)
+                        {
+                            byte[] bytesRd = new byte[numBytesRd];
+                            Array.Copy(rdBuf, bytesRd, numBytesRd);
+                            string test = Encoding.ASCII.GetString(bytesRd);
+                            if(Encoding.ASCII.GetString(bytesRd).Contains(STOP))
+                            {
+                                int newLen = numBytesRd - STOP.Length;
+                                bytesRd = new byte[newLen];
+                                Array.Copy(rdBuf, bytesRd, newLen);
+                                readMore = false;
+                            }
+                            rxData = rxData.Concat(bytesRd).ToArray();
+                            totalBytesRd += numBytesRd;
+                            
+                        }
+                    } while (readMore); 
+                }
+            }
+            catch (ArgumentException e) { Console.WriteLine("ArgumentNullException: {0}", e); }
+            catch (SocketException e) { Console.WriteLine("SocketException: {0}", e); }
+
+            // Parse data from Client Computer
+            string bStr = Encoding.ASCII.GetString(rxData);
+            inList = bStr.Split(DELIM).ToList();
+
+            // Client IP
+            var debugClientIP = Convert.FromBase64String(inList[0]);
+
+            // Fingerprint Data
+            for (int i = 1; i < inList.Count; i++)
+            {
+                Span<byte> buffer = new Span<byte>(new byte[inList[i].Length]);
+                Convert.TryFromBase64String(inList[i], buffer, out int bytesParsed);
+                if (bytesParsed > 0)
+                {
+                    byte[] fpByte = Convert.FromBase64String(inList[i]);
+                    Image fpImg = byteToImg(fpByte);
+                    fpList.Add(fpImg);
+                }
+            }
+
+            return fpList;
+        }
+
+        public static void tcpDisconnect(TcpClient client)
+        {
+            ///Description: Close the TCP connection to the Client Computer
+            NetworkStream stream = client.GetStream();
+            try
+            {
+                stream.Close();
+                client.Close();
+            }
+            catch (ArgumentException e) { Console.WriteLine("ArgumentNullException: {0}", e); }
+            catch (SocketException e) { Console.WriteLine("SocketException: {0}", e); }
+
+            return;
+        }
+        
         public static Image byteToImg(byte[] fpData)
         {
             MemoryStream ms = new MemoryStream(fpData);

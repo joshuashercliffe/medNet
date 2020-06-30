@@ -18,13 +18,17 @@ import binascii
 MSGSZ = 4096
 DELIM = b'MEDNET' # Delimiter for TCP message to backend server
 MEDNET_IP = b'3.23.5.132' # Backend public IP address of server
-MEDNET_KEY = b'MEDNETFP:START' # Keyword to wait from backend server 
+MEDNET_START = b'MEDNETFP:START' # Keyword to wait from backend server 
+MEDNET_STOP = b'MEDNETFP:STOP'
+MEDNET_VALID = b'MEDNETFP:VALID'
+MEDNET_VERIFY = b'MEDNETFP:VERIFY'
+MEDNET_FAIL = b'MEDNETFP:FAIL'
 BAUDRATE = 57600
 # SIZE = (227, 257) # original 256x288
 SIZE = (205, 230)
 TCP_IP = '0.0.0.0'
 PORT = 15326 # actual port we're using
-# PORT = 15327 # debug
+PORT = 15327 # debug
 
 def fpScan():
     # initialize fingerprint sensor
@@ -103,77 +107,61 @@ def main():
         # Start FP Process
         try:
             print('Connected by', addr)
-            data = conn.recv(1024)
+            
+            while(conn):
+                data = conn.recv(1024)
 
-            if data != b'':
-                # parse the input 
-                inData = data.splitlines()[0].split(b'|')
-                clientIP = inData[0]
-                fpKey = inData[1]
-                numScans = int(inData[2])
-                
-                # get public IP
-                ip = get('https://api.ipify.org').text
-                bip = bytes(ip, 'ascii') 
-                b64ip = base64.b64encode(bip)
-                baddr = bytes(addr[0], 'ascii')
+                if data != b'':
+                    print(data)
+                    # parse the input 
+                    inData = data.splitlines()[0].split(b'|')
+                    clientIP = inData[0]
+                    fpKey = inData[1]
+                    if fpKey == MEDNET_VERIFY:
+                        # Start connection with MedNet backend
+                        print("TCP Connection Successful.")
+                        conn.send(MEDNET_VALID)
 
-                # Check if the Client_IP, MEDNET_KEY, and MEDNET_IP are expected
-                inLst = [clientIP, fpKey, baddr]
-
-                # if inLst == [bip, MEDNET_KEY, MEDNET_IP]: # Actual: check for IP and message
-                if inLst[0:2] == [bip, MEDNET_KEY]: # DEBUG: only look at the message
-                    print("Authentication granted, starting FP process")
-                    # Scan and save fingerprint data to a list
-                    fpList = []
-                    for i in range(numScans):
-                        print("Scan {0}/{1}".format(i+1, numScans))
-                        # get fingerprint image
-                        fpImg = fpScan()
-                        newImg = fpImg.resize(SIZE)
-
-                        # convert to bytearray 
-                        bdata = io.BytesIO() 
-                        newImg.save(bdata, 'bmp') 
-                        bfp = bdata.getvalue()
-
-                        # save fingerprint data as bas64 string      
-                        fpList.append(bfp)
-
-                    # Create the binary message to send to MedNet Server                
-                    # # Case 1: Send batches of information (1024 bytes each), this works
-                    # # First send the IP
-                    # bMsg = b64ip
-                    # for fp in fpList:
-                    #     bMsg = bMsg + base64.b64encode(DELIM) + base64.b64encode(fp)
-
-                    # for i in range(0, len(bMsg)-1, MSGSZ):
-                    #     if i+MSGSZ > len(bMsg):
-                    #         tcpMsg = bMsg[i:len(bMsg)]
-                    #     else:
-                    #         tcpMsg = bMsg[i:i+MSGSZ]
-                    #     print(len(tcpMsg))
-
-                    #     # Send encoded message back to the MedNet Server
-                    #     conn.send(tcpMsg)
+                    elif fpKey == MEDNET_START:
+                        # Start FP Authentication
+                        numScans = int(inData[2])
                     
-                    # print("Total msg size: " + str(len(bMsg)))
+                        # get public IP
+                        ip = get('https://api.ipify.org').text
+                        bip = bytes(ip, 'ascii') 
+                        b64ip = base64.b64encode(bip)
+                        baddr = bytes(addr[0], 'ascii')
 
-                    # Case 2: Send inconsistent batches of information, this works
-                    # first send the ip 
-                    conn.send(b64ip)
-                    # then send delimiter + fp data
-                    for fp in fpList:
-                        tcpMsg = base64.b64encode(DELIM) + base64.b64encode(fp) 
-                        print(len(tcpMsg))
-                        conn.send(tcpMsg)
+                        print("Authentication granted, starting FP process")
+                        # Scan and save fingerprint data to a list
+                        fpList = []
+                        for i in range(numScans):
+                            print("Scan {0}/{1}".format(i+1, numScans))
+                            # get fingerprint image
+                            fpImg = fpScan()
+                            newImg = fpImg.resize(SIZE)
 
-                    # Case 3: trying something new 
-                    # conn.send(bip)
-                    # for fp in fpList: 
-                    #     tcpMsg = DELIM + fp;
-                    #     print(len(tcpMsg))
-                    #     conn.send(tcpMsg)                    
+                            # convert to bytearray 
+                            bdata = io.BytesIO() 
+                            newImg.save(bdata, 'bmp') 
+                            bfp = bdata.getvalue()
+
+                            # save fingerprint data as bas64 string      
+                            fpList.append(bfp)
+
+                        # Case 2: Send inconsistent batches of information, this works
+                        # first send the ip 
+                        conn.send(b64ip)
+                        # then send delimiter + fp data
+                        for fp in fpList:
+                            tcpMsg = base64.b64encode(DELIM) + base64.b64encode(fp) 
+                            print(len(tcpMsg))
+                            conn.send(tcpMsg)
+
+                        conn.send(MEDNET_STOP)
+                    else:
+                        # Not a valid response
+                        conn.send(MEDNET_FAIL)                
                 else: 
                     conn.send(b'AuthenticaDtion FAILED\n') # DEBUG
         except:
