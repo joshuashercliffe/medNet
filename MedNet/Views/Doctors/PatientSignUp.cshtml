@@ -15,7 +15,7 @@
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-action="SignUp" method="post" class="text-form">
+        <form asp-action="PatientSignUp" method="post" class="text-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
             <label>Last Name:</label>

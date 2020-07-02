@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using System.Drawing;
 using Microsoft.AspNetCore.Authentication;
 
 namespace MedNet.Controllers
@@ -68,6 +67,8 @@ namespace MedNet.Controllers
             {
                 HttpContext.Session.SetString(Globals.currentPSPriK, signPrivateKey);
                 HttpContext.Session.SetString(Globals.currentPAPriK, agreePrivateKey);
+                HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
+                HttpContext.Session.SetString(Globals.currentPAPubK, userAsset.data.Data.AgreePublicKey);
                 HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
                 return RedirectToAction("PatientOverview");
@@ -83,7 +84,7 @@ namespace MedNet.Controllers
         {
             ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
             if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("Login");
             else
             {
                 Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentUserID));
@@ -126,6 +127,12 @@ namespace MedNet.Controllers
 
                 return View(patientOverviewViewModel);
             }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View();
         }
     }
 }

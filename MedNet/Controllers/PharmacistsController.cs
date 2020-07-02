@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using System.Drawing;
 using Microsoft.AspNetCore.Authentication;
 
 namespace MedNet.Controllers
