@@ -2,28 +2,13 @@
 @{
     ViewData["Title"] = "Add New Record";
 }
-<style>
-    .topnav .topnav-plu {
-        background-color: #4CAF50;
-        color: white;
-    }
 
-    .topnav .topnav-home {
-        display: none;
-    }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-</style>
+@section NavButtons {
+    <a href="PatientLookUp" class="topnav-plu">Patient Look-Up</a>
+    <a href="PatientOverview" class="topnav-po">Patient Overview</a>
+    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
+    <a href="patientLookUp" class="topnav-name" style="float:right">@ViewBag.DoctorName</a>
+}
 
 <div class="add-record">
     <div class="form">
@@ -31,7 +16,7 @@
             <p>Add New Patient Record</p>
         </div>
         <br />
-        <form asp-controller="Home" asp-action="AddNewPatientRecord" method="post">
+        <form asp-action="AddNewPatientRecord" method="post">
             <div>
                 <label for="selectRecordType">New Record Type</label>
                 <select id="selectRecordType">
@@ -181,7 +166,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">$(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function () {
 
         bsCustomFileInput.init();
         var today = new Date();

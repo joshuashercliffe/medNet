@@ -2,23 +2,18 @@
 @{
     ViewData["Title"] = "Patient Overview";
 }
+
+@section NavButtons {
+    <a href="PatientOverview" class="topnav-po">Patient Overview</a>
+    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
+    <a href="PatientOverview" class="topnav-name" style="float:right">@ViewBag.UserName</a>
+}
+
 <style>
-    .topnav .topnav-home {
-        display: none;
+    .topnav .topnav-po {
+        background-color: #4CAF50;
+        color: white;
     }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-
 </style>
 
 <div class="patient-overview">
@@ -105,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <button onclick="window.location.href = '/Home/AddNewPatientRecord';">Add Record</button><br />
+        <button onclick="window.location.href = 'Edit Personal Info';">Add Record</button><br />
     </div>
 
     <div class="form2">
@@ -114,7 +109,7 @@
                 <button class="tablinks" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
                 <button class="tablinks" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
                 <!--<button class="tablinks" onclick="openTab(event, 'test_results')">Test Results</button>-->
-                <button class="tablinks, red" onclick="window.location.href = '/Home/RequestAccess';">Request Access</button>
+                <button class="tablinks, red" onclick="window.location.href = 'RevokeAccess';">Revoke Access</button>
             </div>
 
             <div id="doc_notes" class="tabcontent">
@@ -179,10 +174,6 @@
                     </div>
                 }
             </div>
-
-            <!--<div id="test_results" class="tabcontent">
-
-            </div>-->
 
         </div>
     </div>

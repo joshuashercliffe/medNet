@@ -1,30 +1,13 @@
-﻿@model doctorSignUpViewModel
+﻿@model pharmacistSignUpViewModel
 
 @{
-    ViewData["Title"] = "Doctor Sign-Up";
+    ViewData["Title"] = "Pharmacist Sign-Up";
 }
-<style>
 
-    .topnav .topnav-plu {
-        display: none;
-    }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-
-    .topnav .topnav-logout {
-        display: none;
-    }
-</style>
+@section NavButtons {
+    <a href="/Home" class="topnav-home">Home</a>
+    <a href="Login" class="topnav-dl">Login</a>
+}
 
 <div class="doctor-sign-up">
     <div class="form">
@@ -32,7 +15,7 @@
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-controller="Home" asp-action="DoctorSignUp" method="post" class="text-form">
+        <form asp-action="SignUp" method="post" class="text-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
             <label>Last Name:</label>
@@ -41,15 +24,15 @@
             @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
             @Html.ValidationMessageFor(n => n.Email)
             <div class="tooltip allign">
-                <label>Doctor MINC:</label>
-                <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
+                <label>Registration Number:</label>
+                <span class="tooltiptext">Registration Number issued by the College of Pharmacists of British Columbia.</span>
             </div>
-            @Html.TextBoxFor(n => n.DoctorMINC, new { id = "signup-minc", placeholder = "CAXX -XXXX-XXXX", title = "12 digit Medical Identification Number for Canada", @required = "required" })
+            @Html.TextBoxFor(n => n.PharmaNum, new { id = "signup-regnum", placeholder = "XXXX-XXXX-XXXX", title = "Registration Number issued by the College of Pharmacists of British Columbia.", @required = "required" })
             <div class="tooltip">
-                <label>Doctor Keyword:</label>
+                <label>Pharmacist Keyword:</label>
                 <span class="tooltiptext">Identification pass phrase.</span>
             </div>
-            @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
+            @Html.TextBoxFor(n => n.PharmaKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
             <label>Password:</label>
             @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
             <label>Confirm Password:</label>
@@ -89,8 +72,9 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">jQuery(function ($) {
-        $("#signup-minc").inputmask("AA99-9999-9999");
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#signup-regnum").inputmask("9999-9999-9999");
     });
 
     var check = function () {

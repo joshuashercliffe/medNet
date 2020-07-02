@@ -3,28 +3,12 @@
     ViewData["Title"] = "Request Access";
 }
 
-<style>
-    .topnav .topnav-plu {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .topnav .topnav-home {
-        display: none;
-    }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-</style>
+@section NavButtons {
+    <a href="PatientLookUp" class="topnav-plu">Patient Look-Up</a>
+    <a href="PatientOverview" class="topnav-po">Patient Overview</a>
+    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
+    <a href="patientLookUp" class="topnav-name" style="float:right">@ViewBag.DoctorName</a>
+}
 
 <div class="patient-lookup-page">
     <div class="form">
@@ -33,7 +17,7 @@
         </div>
         <p>Enter your details below retrieve patient information.</p>
         @Html.ValidationSummary(true)
-        <form class="text-form" asp-controller="Home" asp-action="RequestAccess" method="post">
+        <form class="text-form" asp-action="RequestAccess" method="post">
             <div class="tooltip">
                 <label>Patient Keyword:</label>
                 <span class="tooltiptext">Patient's identification pass phrase.</span>

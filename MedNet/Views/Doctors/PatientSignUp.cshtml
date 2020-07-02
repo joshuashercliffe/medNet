@@ -4,27 +4,10 @@
     ViewData["Title"] = "Patient Sign-Up";
 }
 
-<style>
-    .topnav .topnav-plu {
-        display: none;
-    }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-
-    .topnav .topnav-logout {
-        display: none;
-    }
-</style>
+@section NavButtons {
+    <a href="/Home" class="topnav-home">Home</a>
+    <a href="Login" class="topnav-dl">Login</a>
+}
 
 <div class="patient-signup-page">
     <div class="form">
@@ -32,7 +15,7 @@
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-controller="Home" asp-action="PatientSignUp" method="post" class="text-form">
+        <form asp-action="SignUp" method="post" class="text-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
             <label>Last Name:</label>
@@ -100,7 +83,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">jQuery(function ($) {
+<script type="text/javascript">
+    jQuery(function ($) {
         $("#patient-signup-PHN").inputmask("9999-999-999");
     });
 
@@ -130,4 +114,4 @@
     today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("DateOfBirth").setAttribute("max", today);
 
-    </script>
+</script>

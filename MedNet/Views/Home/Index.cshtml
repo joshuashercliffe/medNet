@@ -1,4 +1,4 @@
-﻿@model IndexViewModel
+﻿@model DoctorLoginViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -24,36 +24,13 @@
 </style>
 
 <div class="login-page">
-    <div class="form">
-        <div class="heading">
-            <p>Doctor Login</p>
-        </div>
-        <p>Enter your details below to continue.</p>
-        @Html.ValidationSummary(true)
-    <form asp-controller="Home" asp-action="Index" method="post" class="login-form">
-        <div class="tooltip">
-            <label>Doctor MINC:</label>
-            <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
-        </div>
-        @Html.TextBoxFor(n => n.DoctorMINC, new
-        {
-            id = "index-minc",
-            type = "text",
-            placeholder = "CA00-0000-0000",
-            title = "12 digit Medical Identification Number for Canada"
-        })            @Html.ValidationMessageFor(n => n.DoctorMINC)
-        <div class="tooltip">
-            <label>Doctor Keyword:</label>
-            <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
-        </div>
-        @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
-        <label>Password:</label>
-        @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-        @Html.ValidationMessageFor(n => n.password)
-        <button type="submit">Login</button>
-        <p class="message">Don't have an account? <a href="Home/DoctorSignUp">Sign up here.</a></p>
-    </form>
-    </div>
+    <a href="/Doctors/Login">Go to Doctor's Portal.</a>
+    <br />
+    <a href="/Patients/Login">Go to Patient's Portal.</a>
+    <br />
+    <a href="/MLTs/Login">Go to Lab Technologist's Portal.</a>
+    <br />
+    <a href="/Pharmacists/Login">Go to Pharmacist's Portal.</a>
 </div>
 
 <!-- Select2 -->

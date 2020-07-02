@@ -2,26 +2,17 @@
 @{
     ViewData["Title"] = "Patient Look Up";
 }
+
+@section NavButtons {
+    <a href="PatientLookUp" class="topnav-plu">Patient Look-Up</a>
+    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
+    <a href="patientLookUp" class="topnav-name" style="float:right">@ViewBag.DoctorName</a>
+}
+
 <style>
     .topnav .topnav-plu {
         background-color: #4CAF50;
         color: white;
-    }
-
-    .topnav .topnav-home {
-        display: none;
-    }
-
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
     }
 </style>
 
@@ -32,15 +23,15 @@
         </div>
         <p>Enter your details below retrieve patient information.</p>
         @Html.ValidationSummary(true)
-    <form class="text-form" asp-controller="Home" asp-action="PatientLookUp" method="post">
-        <div class="tooltip">
-            <label>Patient PHN:</label>
-            <span class="tooltiptext">10 digit Personal Health Number can be found on patient's CareCard/BC Services Card</span>
-        </div>
-        @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "XXXX-XXX-XXXX", title = "10 digit Personal Health Record Number." })
-        @Html.ValidationMessageFor(n => n.PHN)
-        <button type="submit">Submit</button>
-    </form>
+        <form class="text-form" asp-action="PatientLookUp" method="post">
+            <div class="tooltip">
+                <label>Patient PHN:</label>
+                <span class="tooltiptext">10 digit Personal Health Number can be found on patient's CareCard/BC Services Card</span>
+            </div>
+            @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "XXXX-XXX-XXXX", title = "10 digit Personal Health Record Number." })
+            @Html.ValidationMessageFor(n => n.PHN)
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </div>
 
@@ -74,7 +65,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">jQuery(function ($) {
+<script type="text/javascript">
+    jQuery(function ($) {
         $("#patient-look-up-PHN").inputmask("9999-999-999");
     });</script>
 
