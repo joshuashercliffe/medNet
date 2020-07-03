@@ -3,14 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
-<<<<<<< HEAD
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>false</Optimize>
   </PropertyGroup>
-
-=======
->>>>>>> 56ded6f731b589e3551c6416b95711524faba313
+  
   <ItemGroup>
     <Folder Include="wwwroot\theme\images\" />
 	<Foler Include="Styles\" />

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Drawing;
 using Microsoft.AspNetCore.Authentication;
+using System.Net.Sockets;
 
 namespace MedNet.Controllers
 {
@@ -348,32 +349,29 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            byte[] fpByte = FingerprintService.scanFP("24.84.225.22", out int bytesRead); // DEBUG: Jacob's Computer 
-            //byte[] fpData = FingerprintService.bmpToByte(fpBmp);
+            int numScans = 1;
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer 
 
             // Check if fingerprint data is valid
-            if (bytesRead < 5000)
+            if (fpList.Count < numScans)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(requestAccessViewModel);
             }
+            Image fpImg = fpList[0];
 
             // Decrypt the patient's fingerprint data stored in the Blockchain
             byte[] dbFpData = null;
             string patientSignPrivateKey, patientAgreePrivateKey;
-            List<byte[]> fpList = new List<byte[]>();
             List<string> dbList = userAsset.data.Data.FingerprintData;
-            //string dbList = userAsset.data.Data.FingerprintData;
+            List<Image> dbfpList = new List<Image>();
             try
             {
-                //EncryptionService.decryptFingerprintData(PHN, keyword, userAsset.data.Data.FingerprintData, out dbFpData);
                 foreach (string db in dbList)
                 {
                     EncryptionService.decryptFingerprintData(PHN, keyword, db, out dbFpData);
-                    fpList.Add(dbFpData);
+                    dbfpList.Add(FingerprintService.byteToImg(dbFpData));
                 }
-                //EncryptionService.decryptFingerprintData(PHN, keyword, dbList, out dbFpData);
-                //fpList.Add(dbFpData);
                 EncryptionService.getPrivateKeyFromIDKeyword(PHN, keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
             }
             catch
@@ -383,7 +381,7 @@ namespace MedNet.Controllers
             }
 
             // Compare the scanned fingerprint with the one saved in the database 
-            if (!FingerprintService.compareFP(fpByte, fpList))
+            if (!FingerprintService.compareFP(fpImg, fpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
@@ -430,15 +428,11 @@ namespace MedNet.Controllers
             }
 
             // Register fingerprint information 
-            List<byte[]> fpList = FingerprintService.scanMultiFP("24.84.225.22", 5, out int bytesRead);
+            int numScans = 5;
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans);
             List<byte[]> fpdb = new List<byte[]>();
-            foreach (byte[] fp in fpList)
-            {
-                Bitmap bmp = FingerprintService.byteToBmp(fp);
-                fpdb.Add(FingerprintService.bmpToByte(bmp));
-            }
 
-            if (bytesRead < 50000)
+            if (fpList.Count > numScans)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
@@ -455,7 +449,6 @@ namespace MedNet.Controllers
                 string encrStr = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fp);
                 encrList.Add(encrStr);
             }
-            //string encrFpData = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fpdb[0]);
 
             // Create a user for the Blockchain 
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
