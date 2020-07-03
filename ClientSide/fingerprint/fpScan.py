@@ -28,7 +28,7 @@ BAUDRATE = 57600
 SIZE = (205, 230)
 TCP_IP = '0.0.0.0'
 PORT = 15326 # actual port we're using
-PORT = 15327 # debug
+# PORT = 15327 # debug
 
 def fpScan():
     # initialize fingerprint sensor

@@ -15,8 +15,7 @@ namespace MedNet.Data.Services
     public static class FingerprintService
     {
         // Class variables 
-        //private static Int32 PORT = 15326; // Actual port
-        private static Int32 PORT = 15327;
+        private static Int32 PORT = 15326; // Actual port
 
         private static string START = "MEDNETFP:START"; // Special MedNetFP Key
         private static string STOP = "MEDNETFP:STOP"; // Special MedNetFP STOP Key
@@ -24,13 +23,37 @@ namespace MedNet.Data.Services
         private static string VALID = "MEDNETFP:VALID";
         private static string DELIM = Convert.ToBase64String(Encoding.ASCII.GetBytes("MEDNET")); // Delimiter for FP
 
+        public static List<Image> authenticateFP(string server, int numScans)
+        {
+            // Description: Combines functions together
+            // case 1: separated
+            bool debug = false; // JW: DEBUGFP
+            bool isConnected = tcpConnect(server, debug, out TcpClient tcpClient);
+            int numScansLeft = numScans;
+            List<Image> fpList = new List<Image>();
+            while (numScansLeft > 0)
+            {
+                List<Image> rxList = scanMultiFP(server, numScans, tcpClient, debug);
+                foreach (Image img in rxList)
+                {
+                    fpList.Add(img);
+                }
+                //numScansLeft -= fpList.Count;
+                numScansLeft = 0; // Make this more robust
+            }
+
+            // case 2: together
+            //List<Image> fpList = scanMultiFPtest(server, numScans, out _);
+            return fpList;
+        }
+
         public static bool compareFP(Image inFp, List<Image> dbFp)
         {
             // description: compares the scanned fingerprint to all of the ones in the database
             bool isMatch = false;
 
             // DEBUG: save to file
-            inFp.Save("inFP.jpeg");
+            //inFp.Save("inFP.jpeg");
 
             // Build feature extractor, and extract features of each fingerprint image
             MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
@@ -47,7 +70,7 @@ namespace MedNet.Data.Services
                 Image dbImg = dbFp[i];
                 // DEBUG: save to file
                 int j = i + 1;
-                dbImg.Save("dbFP" + j.ToString() + ".bmp");
+                //dbImg.Save("dbFP" + j.ToString() + ".bmp");
 
                 // Extract features of dbBmp 
                 var dbFeat = featExtract.ExtractFeatures(new Bitmap(dbImg));
@@ -100,11 +123,11 @@ namespace MedNet.Data.Services
             {
                 // Connect to TCP Client
                 // Convert message to bytearray using UTF-8 
-                //TcpClient client = new TcpClient("localhost", PORT); // DebugFP
-                //string tcpMsg = "24.84.225.22" + "|" + startMsg + "|" + numScans.ToString(); // DebugFP
+                TcpClient client = new TcpClient("localhost", PORT); // DebugFP
+                string tcpMsg = "24.84.225.22" + "|" + START + "|" + numScans.ToString(); // DebugFP
 
-                TcpClient client = new TcpClient(server, PORT); // Actual
-                string tcpMsg = server + "|" + START + "|" + numScans.ToString(); // Actual
+                //TcpClient client = new TcpClient(server, PORT); // Actual
+                //string tcpMsg = server + "|" + START + "|" + numScans.ToString(); // Actual
 
                 byte[] wrBuf = System.Text.Encoding.UTF8.GetBytes(tcpMsg);
 

@@ -377,12 +377,12 @@ namespace MedNet.Controllers
             }
 
             // Send request to the Client Computer to authenticate with fingerprint
-            List<Image> fpBytes = FingerprintService.scanMultiFPtest("24.84.225.22", 1, out int bytesRead); // DEBUG: Jacob's Computer 
-            Image fpByte = fpBytes[0];
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", 1); // JW
+            Image fpScanned = fpList[0];
             //byte[] fpData = FingerprintService.bmpToByte(fpBmp);
 
             // Check if fingerprint data is valid
-            if (bytesRead < 5000)
+            if (fpList.Count == 0)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(requestAccessViewModel);
@@ -391,19 +391,16 @@ namespace MedNet.Controllers
             // Decrypt the patient's fingerprint data stored in the Blockchain
             byte[] dbFpData = null;
             string patientSignPrivateKey, patientAgreePrivateKey;
-            List<Image> fpList = new List<Image>();
+            List<Image> fpdbList = new List<Image>();
             List<string> dbList = userAsset.data.Data.FingerprintData;
             //string dbList = userAsset.data.Data.FingerprintData;
             try
             {
-                //EncryptionService.decryptFingerprintData(PHN, keyword, userAsset.data.Data.FingerprintData, out dbFpData);
                 foreach (string db in dbList)
                 {
                     EncryptionService.decryptFingerprintData(PHN, keyword, db, out dbFpData);
-                    fpList.Add(FingerprintService.byteToImg(dbFpData));
+                    fpdbList.Add(FingerprintService.byteToImg(dbFpData));
                 }
-                //EncryptionService.decryptFingerprintData(PHN, keyword, dbList, out dbFpData);
-                //fpList.Add(dbFpData);
                 EncryptionService.getPrivateKeyFromIDKeyword(PHN,keyword, userAsset.data.Data.PrivateKeys, out patientSignPrivateKey, out patientAgreePrivateKey);
             }
             catch
@@ -412,8 +409,9 @@ namespace MedNet.Controllers
                 return View(requestAccessViewModel);
             }
 
-            // Compare the scanned fingerprint with the one saved in the database 
-            if (!FingerprintService.compareFP(fpByte, fpList))
+            // Compare the scanned fingerprint with the one saved in the database
+            // debug: errors happen here during published version
+            if (!FingerprintService.compareFP(fpScanned, fpdbList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
@@ -423,7 +421,7 @@ namespace MedNet.Controllers
             AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription };
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList, patientSignPublicKey);
-            foreach(var record in recordList)
+            foreach (var record in recordList)
             {
                 MetaDataSaved<Dictionary<string, string>> metadata = record.metadata;
                 if (!metadata.data.Keys.Contains(doctorSignPublicKey))
@@ -432,7 +430,7 @@ namespace MedNet.Controllers
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var newHash = EncryptionService.getEncryptedEncryptionKey(dataDecryptionKey, patientAgreePrivateKey, doctorAgreePublicKey);
                     metadata.data[doctorSignPublicKey] = newHash;
-                    _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata, 
+                    _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata,
                         patientSignPrivateKey, patientSignPublicKey, record.transID);
                 }
             }
@@ -447,7 +445,7 @@ namespace MedNet.Controllers
 
         public IActionResult TriggerFingerprint()
         {
-            // DEBUG:FP
+            // DEBUG:JW
             // Description: Using for DEBUG. URL: https://lifeblocks.site/home/testfingerprintbutton 
             ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
             
@@ -460,37 +458,38 @@ namespace MedNet.Controllers
 
             bool isConnected = FingerprintService.tcpConnect(ipAddress, debug, out tcpClient);
             if (isConnected) { status = "tcp connection successful"; }
-            int numScans = 3;
+            int numScansLeft = 5;
             List<Image> fpList = new List<Image>();
-            while(numScans > 0)
+            while(numScansLeft > 0)
             {
-                List<Image> rxList = FingerprintService.scanMultiFP(ipAddress, numScans, tcpClient, debug);
+                List<Image> rxList = FingerprintService.scanMultiFP(ipAddress, numScansLeft, tcpClient, debug);
                 foreach(Image img in rxList)
                 {
                     fpList.Add(img);
                 }
-                if(fpList.Count < numScans)
+                if(fpList.Count < numScansLeft)
                 {
-                    numScans = numScans - fpList.Count;
+                    numScansLeft = numScansLeft - fpList.Count;
                 }
                 else
                 {
-                    numScans = 0;
+                    numScansLeft = 0;
                 }
             }
-            status = "got fingerprint data";
+            
             FingerprintService.tcpDisconnect(tcpClient);
             status = "closed tcp connection";
+            status = "got fingerprint data";
 
             // Do fingerprint fetch from windows service here
             //List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
-            //Image fpImg = null;
-            //for(int i = 0; i < fpList.Count; i++)
-            //{
-            //    var debugByte = FingerprintService.imgToByte(fpList[i]);
-            //    fpImg = FingerprintService.byteToImg(debugByte);
-            //    fpImg.Save(i.ToString() + ".bmp");
-            //}
+            Image fpImg = null;
+            for (int i = 0; i < fpList.Count; i++)
+            {
+                var debugByte = FingerprintService.imgToByte(fpList[i]);
+                fpImg = FingerprintService.byteToImg(debugByte);
+                fpImg.Save(i.ToString() + ".bmp");
+            }
 
             //bool compare = FingerprintService.compareFP(fpImg, fpList);
             // Write the Public IP of the client computer on the window
@@ -520,7 +519,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
-            // Description: Registers a patient up for a MedNet account
+            // Description: Registers a patient up for a MedNet account // JW
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
             
@@ -532,9 +531,9 @@ namespace MedNet.Controllers
             }
 
             // Register fingerprint information 
-            List<Image> fpList = FingerprintService.scanMultiFPtest("24.84.225.22", 5, out int bytesRead);
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", 5);
 
-            if (bytesRead < 50000)
+            if (fpList.Count == 0)
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
