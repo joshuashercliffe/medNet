@@ -2,7 +2,7 @@
 
 namespace MedNet.Models
 {
-    public class IndexViewModel
+    public class DoctorLoginViewModel
     {
         [Required(ErrorMessage = "Doctor's MINC is required.")]
         public string DoctorMINC { get; set; }

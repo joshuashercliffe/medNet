@@ -167,8 +167,8 @@ namespace MedNet.Data.Services
             List<Image> fpList = new List<Image>();
             if (debug) { ipAddr = "localhost"; }
             byte[] rxData = new byte[0];
-            string msg = server + "|" + START + "|" + numScans;
-            byte[] wrBuf = ipAddr.UTF8.GetBytes(msg);
+            string msg = ipAddr + "|" + START + "|" + numScans;
+            byte[] wrBuf = Encoding.UTF8.GetBytes(msg);
             int totalBytesRd = 0;
             int numBytesRd = 0;
             List<string> inList = new List<string>();

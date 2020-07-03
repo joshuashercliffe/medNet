@@ -189,6 +189,48 @@ namespace MedNet.Data.Services
             return r.ToList();
         }
 
+        public List<AssetsMetadatas<A, Dictionary<string, string>>> GetAllTypeRecordsFromPPublicKey<A>
+    (AssetType type, string patientSignPublicKey)
+        {
+            // get unspent outputs of the patient, this means get all outputs that he owns
+            var rawPublicKey = EncryptionService.getRawBase58PublicKey(patientSignPublicKey);
+            var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
+            List<string> transactionIDs = new List<string>();
+            foreach (var unspentOutput in unspentOutsList)
+            {
+                transactionIDs.Add(unspentOutput.TransactionId);
+            }
+            var assets = bigchainDatabase.GetCollection<Assets<A>>("assets").AsQueryable();
+            var TypeAssets = assets.Where(x => x.data.Type == type);
+            // reduce to get only metadata where both public keys are present and is in the unspent list
+            var metadata = bigchainDatabase.GetCollection<Metadatas<Dictionary<string, string>>>("metadata").AsQueryable();
+            var metadataReduced = metadata.Where(x => transactionIDs.Contains(x.id));
+            List<Metadatas<Dictionary<string, string>>> metadataList = new List<Metadatas<Dictionary<string, string>>>();
+            foreach (var a in metadataReduced)
+            {
+                if (a.metadata.metadata.data.Keys.ToList().Contains(patientSignPublicKey))
+                {
+                    metadataList.Add(a);
+                }
+            }
+
+            var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
+            var transactionsReduced = transaction.AsQueryable().Where(x => transactionIDs.Contains(x.id));
+            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id });
+            var r = from t1 in metadataList
+                    join t2 in transactionsReduced on t1.id equals t2.id
+                    join t3 in TypeAssets on 1 equals 1
+                    where (t2.id == t3.id || (t2.asset != null && t2.asset.id == t3.id))
+                    select new AssetsMetadatas<A, Dictionary<string, string>>()
+                    {
+                        id = t3.id,
+                        data = t3.data,
+                        metadata = t1.metadata.metadata,
+                        transID = t2.id
+                    };
+            return r.ToList();
+        }
+
         public Models.Assets<UserCredAssetData> GetUserAssetFromTypeID(AssetType assetType, string id)
         {
             var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets");

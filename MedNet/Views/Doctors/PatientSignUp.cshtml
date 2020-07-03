@@ -1,61 +1,55 @@
-﻿@model doctorSignUpViewModel
+﻿@model PatientSignUpViewModel
 
 @{
-    ViewData["Title"] = "Doctor Sign-Up";
+    ViewData["Title"] = "Patient Sign-Up";
 }
-<style>
 
-    .topnav .topnav-plu {
-        display: none;
-    }
+@section NavButtons {
+    <a href="/Home" class="topnav-home">Home</a>
+    <a href="Login" class="topnav-dl">Login</a>
+}
 
-    .topnav .topnav-pp {
-        display: none;
-    }
-
-    .topnav .topnav-pli {
-        display: none;
-    }
-
-    .topnav .topnav-psu {
-        display: none;
-    }
-
-    .topnav .topnav-logout {
-        display: none;
-    }
-</style>
-
-<div class="doctor-sign-up">
+<div class="patient-signup-page">
     <div class="form">
         <div class="heading">
             <p>Sign Up for MedNet</p>
         </div>
         <p>Enter your details below to create an account.</p>
-        <form asp-controller="Home" asp-action="DoctorSignUp" method="post" class="text-form">
+        <form asp-action="PatientSignUp" method="post" class="text-form">
             <label>First Name:</label>
             @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
             <label>Last Name:</label>
             @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
             <label>Email:</label>
             @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-            @Html.ValidationMessageFor(n => n.Email)
             <div class="tooltip allign">
-                <label>Doctor MINC:</label>
-                <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
+                <label>Personal Health Record Number:</label>
+                <span class="tooltiptext">10 digit Personal Health Record Number</span>
             </div>
-            @Html.TextBoxFor(n => n.DoctorMINC, new { id = "signup-minc", placeholder = "CAXX -XXXX-XXXX", title = "12 digit Medical Identification Number for Canada", @required = "required" })
+            @Html.TextBoxFor(n => n.PHN, new { id = "patient-signup-PHN", placeholder = "XXXX-XXX-XXX", title = "10 digit Personal Health Record Number.", @required = "required" })
             <div class="tooltip">
-                <label>Doctor Keyword:</label>
+                <label>Keyword:</label>
                 <span class="tooltiptext">Identification pass phrase.</span>
             </div>
-            @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
+            @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
+            <div class="tooltip">
+                <label>Date of Birth:</label>
+                <span class="tooltiptext">Date of Birth.</span>
+            </div>
+            <div class="column">
+                @Html.TextBoxFor(n => n.DateOfBirth, new
+                {
+                    id = "DateOfBirth",
+                    type = "date",
+                    max = "2020-04-01"
+                })
+            </div>
             <label>Password:</label>
             @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
             <label>Confirm Password:</label>
             <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-            <span id='message'></span><br />
-            <button type="submit" id="submitButton">Register</button>
+            <span id='message'></span><br /><br />
+            <button type="submit" id="submitButton">Register with Fingerprint</button>
         </form>
     </div>
 </div>
@@ -89,8 +83,9 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">jQuery(function ($) {
-        $("#signup-minc").inputmask("AA99-9999-9999");
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#patient-signup-PHN").inputmask("9999-999-999");
     });
 
     var check = function () {
@@ -103,4 +98,20 @@
             document.getElementById('message').innerHTML = 'Passwords do not match, please try again.';
             document.getElementById('submitButton').disabled = true;
         }
-    }</script>
+    }
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("DateOfBirth").setAttribute("max", today);
+
+</script>
