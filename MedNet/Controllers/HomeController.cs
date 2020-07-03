@@ -456,30 +456,7 @@ namespace MedNet.Controllers
             string status = "entered function";
             TcpClient tcpClient = new TcpClient();
 
-            bool isConnected = FingerprintService.tcpConnect(ipAddress, debug, out tcpClient);
-            if (isConnected) { status = "tcp connection successful"; }
-            int numScansLeft = 5;
-            List<Image> fpList = new List<Image>();
-            while(numScansLeft > 0)
-            {
-                List<Image> rxList = FingerprintService.scanMultiFP(ipAddress, numScansLeft, tcpClient, debug);
-                foreach(Image img in rxList)
-                {
-                    fpList.Add(img);
-                }
-                if(fpList.Count < numScansLeft)
-                {
-                    numScansLeft = numScansLeft - fpList.Count;
-                }
-                else
-                {
-                    numScansLeft = 0;
-                }
-            }
-            
-            FingerprintService.tcpDisconnect(tcpClient);
-            status = "closed tcp connection";
-            status = "got fingerprint data";
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", 3);
 
             // Do fingerprint fetch from windows service here
             //List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
@@ -502,24 +479,10 @@ namespace MedNet.Controllers
             return RedirectToAction("TestFingerprintButton", model);
         }
 
-        public IActionResult fpPopupButton(fpPopupModel model)
-        {
-            ViewBag.DoctorName = HttpContext.Session.GetString(currentDoctorName);
-            return View(model);
-        }
-        public IActionResult fpPopup()
-        {
-            var model = new fpPopupModel()
-            {
-                message = "popup button works"
-            };
-            return RedirectToAction("TestFingerprintButton", model);
-        }
-
         [HttpPost]
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
-            // Description: Registers a patient up for a MedNet account // JW
+            // Description: Registers a patient up for a MedNet account
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
             
