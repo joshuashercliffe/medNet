@@ -23,15 +23,43 @@
     }
 </style>
 
-<div class="login-page">
-    <a href="/Doctors/Login">Go to Doctor's Portal.</a>
-    <br />
-    <a href="/Patients/Login">Go to Patient's Portal.</a>
-    <br />
-    <a href="/MLTs/Login">Go to Lab Technologist's Portal.</a>
-    <br />
-    <a href="/Pharmacists/Login">Go to Pharmacist's Portal.</a>
+<div class="jumbotron text-center">
+    <h1>Welcome to MedNet</h1>
+    <p>Please select  user type to begin.</p>
 </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="width 18rem;">
+                <div class="card-body">
+                    <h3 class="card-title">General User</h3>
+                    <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
+                    <a href="/Patients/Login" class="btn btn-success">Continue</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Healthcare Provider</h3>
+                    <p class="card-text">To add, and modify a patient's medical information.</p>
+                    <h4 class="card-text">Please select your profession below</h4>
+                    <a href="/Doctors/Login" class="btn btn-success">Doctor</a>
+                    <a href="/MLTs/Login" class="btn btn-success">Lab Technician</a>
+                    <a href="/Pharmacists/Login" class="btn btn-success">Pharmacist</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <!-- Select2 -->
 <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
@@ -62,6 +90,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">jQuery(function ($) {
-    $("#index-minc").inputmask("AA99-9999-9999");
-});</script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#index-minc").inputmask("AA99-9999-9999");
+    });</script>
