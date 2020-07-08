@@ -4,9 +4,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<header>
-    <style>
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style>
         .topnav .topnav-plu {
             display: none;
         }
@@ -23,13 +29,51 @@
             display: none;
         }
     </style>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
 
+
+<body>
+    <div class="jumbotron text-center" style="background:transparent !important">
+        <br />
+        <h1>Welcome to MedNet</h1>
+        <h2><em>"Your Health, Your Data."</em></h2>
+        <br />
+        <h4>To get started, please select your user type to begin.</h4>
+    </div>
+
+    <div class="container border-0">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">General User</h2>
+                        <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
+                        <a href="/Patients/Login" class="btn btn-success">Continue</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Healthcare Provider</h2>
+                        <p class="card-text">To add, and modify a patient's medical information.</p>
+                        <h4 class="card-text">Please select your profession below</h4>
+                        <a href="/Doctors/Login" class="btn btn-success" style="margin-bottom: 5px">Doctor</a>
+                        <a href="/MLTs/Login" class="btn btn-success" style="margin-bottom: 5px">Lab Technician</a>
+                        <a href="/Pharmacists/Login" class="btn btn-success" style="margin-bottom: 5px">Pharmacist</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <!-- Spacer -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Javascript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -58,43 +102,5 @@
     <script src="~/theme/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/theme/dist/js/demo.js"></script>
-
-</header>
-
-
-<body>
-    <div class="jumbotron text-center" style="background:transparent !important">
-        <br />
-        <h1>Welcome to MedNet</h1>
-        <h2><em>"Your Health, Your Data."</em></h2>
-        <br />
-        <h4>To get started, please select your user type to begin.</h4>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">General User</h2>
-                        <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
-                        <a href="/Patients/Login" class="btn btn-success">Continue</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">Healthcare Provider</h2>
-                        <p class="card-text">To add, and modify a patient's medical information.</p>
-                        <h4 class="card-text">Please select your profession below</h4>
-                        <a href="/Doctors/Login" class="btn btn-success">Doctor</a>
-                        <a href="/MLTs/Login" class="btn btn-success">Lab Technician</a>
-                        <a href="/Pharmacists/Login" class="btn btn-success">Pharmacist</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
