@@ -10,14 +10,16 @@
     <style>
         img {
             max-width: 200px;
-            max-height: 50px;
-            margin-left:auto;
-            margin-right:auto;
-            text-align:center;
-            }
+            max-height: 40px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-left: 5px;
+            margin-right: 5px;
+            text-align: center;
+        }
     </style>
     <div class="topnav" id="myTopnav">
-        <img src="~/theme/images/logo.png" style="float:left" />
+        <img src="~/theme/images/MedNetLogo.png" style="float: left;"/>
         @RenderSection("NavButtons", required: false)
         <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
             <i class="fa fa-bars"></i>
