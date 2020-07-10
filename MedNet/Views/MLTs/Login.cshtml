@@ -42,49 +42,41 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <!-- Spacer -->
-            </div>
-            <div class="col-sm-8">
-                <div class="login-form">
-                    <div class="login-header">
-                        <h2>Lab Technician Login</h2>
-                        <p>Enter your details below</p>
-                    </div>
-                    @Html.ValidationSummary(true)
-                    <form asp-action="Login" method="post" style="text-align: left;">
-                    
-                    <label>CSMLS ID:</label>
-                    <div class="tooltip">
-                        <span class="tooltiptext">Canadian Society for Medical Labroratory Science ID</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.CSMLSID, new
-                    {
-                        id = "index-csmlsid",
-                        type = "text",
-                        placeholder = "####-###",
-                        title = "7 digit Canadian Society for Medical Labroratory Science ID"
-                    })
-                    @Html.ValidationMessageFor(n => n.CSMLSID)
-                    <br/>
-                    <label>MLT Keyword:</label>
-                    <div class="tooltip">
-                        <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.MLTKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
-                    
-                    <label>Password:</label>
-                    @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-                    @Html.ValidationMessageFor(n => n.password)
-                    <button type="submit">Login</button>
 
-                    <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
-                </form>
-                </div>
-            </div>
+    <div class="login-form">
+        <div class="login-header">
+            <h2>Lab Technician Login</h2>
+            <p>Enter your details below</p>
         </div>
+        @Html.ValidationSummary(true)
+        <form asp-action="Login" method="post" style="text-align: left;">
+
+            <label>CSMLS ID:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Canadian Society for Medical Labroratory Science ID</span>
+            </div>
+            @Html.TextBoxFor(n => n.CSMLSID, new
+            {
+                id = "index-csmlsid",
+                type = "text",
+                placeholder = "####-###",
+                title = "7 digit Canadian Society for Medical Labroratory Science ID"
+            })
+            @Html.ValidationMessageFor(n => n.CSMLSID)
+            <br />
+            <label>MLT Keyword:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
+            </div>
+            @Html.TextBoxFor(n => n.MLTKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
+
+            <label>Password:</label>
+            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+            @Html.ValidationMessageFor(n => n.password)
+            <button type="submit">Login</button>
+
+            <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
+        </form>
     </div>
 
     <script type="text/javascript">

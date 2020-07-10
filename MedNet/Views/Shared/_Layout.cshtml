@@ -16,8 +16,13 @@
 
     <title>MedNet | @ViewData["Title"]</title>
 </head>
+
+<header>
+    
+</header>
+
 <body>
-    <style>
+    @*<style>
         img {
             max-width: 200px;
             max-height: 40px;
@@ -27,16 +32,16 @@
             margin-right: 5px;
             text-align: center;
         }
-    </style>
+    </style>*@
     <div class="topnav" id="myTopnav">
-        <img src="~/theme/images/MedNetLogo.png" style="float: left;"/>
+        <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left;" />
         @RenderSection("NavButtons", required: false)
         <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
             <i class="fa fa-bars"></i>
         </a>
     </div>
 
-    <div class="card border-0" style="min-height: 100vh;">
+    <div class="container" style="min-height: 100vh; padding-top: 40px; padding-bottom: 40px;">
         @RenderBody()
     </div>
 
@@ -50,7 +55,7 @@
     @RenderSection("Scripts", required: false)
 
     <script>
-    function resizeFunction() {
+        function resizeFunction() {
             var x = document.getElementById("myTopnav");
             if (x.className === "topnav") {
                 x.className += " responsive";

@@ -40,52 +40,41 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <!-- Spacer -->
-            </div>
-            <div class="col-sm-8">
-                <div class="login-form">
-                    <div class="login-header">
-                        <h2>Pharmacist Login</h2>
-                        <p>Enter your details below</p>
-                    </div>
-                    @Html.ValidationSummary(true)
-                <form asp-action="Login" method="post" style="text-align: left">
-
-                    <label>Registration number:</label>
-                    <div class="tooltip">
-                        <span class="tooltiptext">Registration Number issued by the College of Pharmacists of British Columbia.</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.PharmaNum, new
-                       {
-                           id = "index-regnum",
-                           type = "text",
-                           placeholder = "####-####-####",
-                           title = "Registration Number issued by the College of Pharmacists of British Columbia."
-                       })
-                    @Html.ValidationMessageFor(n => n.PharmaNum)
-
-                    <label>Pharmacist Keyword:</label>
-                    <div class="tooltip">
-                        <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
-
-                    <label>Password:</label>
-                    @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-                    @Html.ValidationMessageFor(n => n.password)
-
-                    <button type="submit">Login</button>
-                    <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
-                </form>
-                </div>
-            </div>
+    <div class="login-form">
+        <div class="login-header">
+            <h2>Pharmacist Login</h2>
+            <p>Enter your details below</p>
         </div>
+        @Html.ValidationSummary(true)
+        <form asp-action="Login" method="post" style="text-align: left">
+
+            <label>Registration number:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Registration Number issued by the College of Pharmacists of British Columbia.</span>
+            </div>
+            @Html.TextBoxFor(n => n.PharmaNum, new
+               {
+                   id = "index-regnum",
+                   type = "text",
+                   placeholder = "####-####-####",
+                   title = "Registration Number issued by the College of Pharmacists of British Columbia."
+               })
+            @Html.ValidationMessageFor(n => n.PharmaNum)
+
+            <label>Pharmacist Keyword:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Identification pass phrase created during Sign-Up.</span>
+            </div>
+            @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification pass phrase created during Sign-Up" })
+
+            <label>Password:</label>
+            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+            @Html.ValidationMessageFor(n => n.password)
+
+            <button type="submit">Login</button>
+            <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
+        </form>
     </div>
-
-
 
     <script type="text/javascript">
         jQuery(function ($) {

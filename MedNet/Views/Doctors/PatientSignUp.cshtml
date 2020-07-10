@@ -41,56 +41,47 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <!-- Spacer -->
-            </div>
-            <div class="col-sm-8">
-                <div class="login-form">
-                    <div class="login-header">
-                        <h2>Patient Sign Up</h2>
-                        <p>Enter your details below to create an account</p>
-                    </div>
-                    <form asp-action="PatientSignUp" method="post" style="text-align: left;">
-                        <label>First Name:</label>
-                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
-                        <label>Last Name:</label>
-                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
-                        <label>Email:</label>
-                        @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-                        <label>Personal Health Record Number:</label>
-                        <div class="tooltip allign">
-                            <span class="tooltiptext">10 digit Personal Health Record Number</span>
-                        </div>
-                        @Html.TextBoxFor(n => n.PHN, new { id = "patient-signup-PHN", placeholder = "XXXX-XXX-XXX", title = "10 digit Personal Health Record Number.", @required = "required" })
-                        <label>Keyword:</label>
-                        <div class="tooltip">
-                            <span class="tooltiptext">Identification pass phrase.</span>
-                        </div>
-                        @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
-                        <label>Date of Birth:</label>
-                        <div class="tooltip">
-                            <span class="tooltiptext">Date of Birth.</span>
-                        </div>
-                        <div class="column">
-                            @Html.TextBoxFor(n => n.DateOfBirth, new
-                            {
-                                id = "DateOfBirth",
-                                type = "date",
-                                max = "2020-04-01"
-                            })
-                        </div>
-                        <label>Password:</label>
-                        @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
-                        <label>Confirm Password:</label>
-                        <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-                        <span id='message'></span><br /><br />
-                        <button type="submit" id="submitButton">Register with Fingerprint</button>
-                    </form>
-                </div>
-            </div>
+    <div class="login-form">
+        <div class="login-header">
+            <h2>Patient Sign Up</h2>
+            <p>Enter your details below to create an account</p>
         </div>
+        <form asp-action="PatientSignUp" method="post" style="text-align: left;">
+            <label>First Name:</label>
+            @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
+            <label>Last Name:</label>
+            @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
+            <label>Email:</label>
+            @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
+            <label>Personal Health Record Number:</label>
+            <div class="tooltip allign">
+                <span class="tooltiptext">10 digit Personal Health Record Number</span>
+            </div>
+            @Html.TextBoxFor(n => n.PHN, new { id = "patient-signup-PHN", placeholder = "XXXX-XXX-XXX", title = "10 digit Personal Health Record Number.", @required = "required" })
+            <label>Keyword:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Identification pass phrase.</span>
+            </div>
+            @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
+            <label>Date of Birth:</label>
+            <div class="tooltip">
+                <span class="tooltiptext">Date of Birth.</span>
+            </div>
+            <div class="column">
+                @Html.TextBoxFor(n => n.DateOfBirth, new
+                {
+                    id = "DateOfBirth",
+                    type = "date",
+                    max = "2020-04-01"
+                })
+            </div>
+            <label>Password:</label>
+            @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
+            <label>Confirm Password:</label>
+            <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
+            <span id='message'></span><br /><br />
+            <button type="submit" id="submitButton">Register with Fingerprint</button>
+        </form>
     </div>
 
     <!-- Scripts -->
