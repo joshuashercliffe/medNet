@@ -1,7 +1,7 @@
 ﻿/* Shared Layout */
 
 html {
-    min-height:100vh
+    min-height: 100vh;
 }
 
 body {
@@ -40,9 +40,11 @@ body {
 
 .topnav {
     top: 0;
+    position: fixed;
     overflow: hidden;
     background-color: #333;
     height: 50px;
+    min-width: 100%;
 }
 
     .topnav a {
@@ -104,7 +106,6 @@ body {
 }
 
 .footer {
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;

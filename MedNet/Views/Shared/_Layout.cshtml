@@ -5,7 +5,7 @@
     <!-- External Stylesheets-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <!-- Custom Stylesheets -->
+    <!-- MedNet Stylesheets -->
     <link rel="stylesheet" type="text/css" href="~/Styles/style.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/Feedback.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/PatientOverview.css" />
@@ -17,22 +17,7 @@
     <title>MedNet | @ViewData["Title"]</title>
 </head>
 
-<header>
-    
-</header>
-
 <body>
-    @*<style>
-        img {
-            max-width: 200px;
-            max-height: 40px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-            margin-left: 5px;
-            margin-right: 5px;
-            text-align: center;
-        }
-    </style>*@
     <div class="topnav" id="myTopnav">
         <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left;" />
         @RenderSection("NavButtons", required: false)
@@ -41,7 +26,7 @@
         </a>
     </div>
 
-    <div class="container" style="min-height: 100vh; padding-top: 40px; padding-bottom: 40px;">
+    <div class="container" style="min-height: 100vh; margin-top: 50px; margin-bottom: 50px;  padding-top: 50px; padding-bottom: 50px;">
         @RenderBody()
     </div>
 
