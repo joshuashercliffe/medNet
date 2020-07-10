@@ -165,7 +165,7 @@ namespace MedNet.Controllers
             if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
                 return RedirectToAction("Login");
             else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("PatientLookUp");
             else
             {
                 Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
@@ -217,7 +217,7 @@ namespace MedNet.Controllers
             if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
                 return RedirectToAction("Login");
             else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("PatientLookUp");
             else
                 return View();
         }
@@ -319,7 +319,7 @@ namespace MedNet.Controllers
             if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
                 return RedirectToAction("Login");
             else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("PatientLookUp");
             else
                 return View();
         }

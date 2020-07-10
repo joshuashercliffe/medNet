@@ -11,15 +11,11 @@
     border-color: gainsboro;
 }
 
-    .login-form.login-header {
+    .login-form login-header {
         font-size: 20px;
         line-height: 25px;
         height: 30px;
         text-align: center;
-    }
-
-    .login-form.login-body {
-        text-align: left;
     }
 
     .login-form button {
