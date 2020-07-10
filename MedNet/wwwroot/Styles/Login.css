@@ -18,6 +18,10 @@
         text-align: center;
     }
 
+    .login-form.login-body {
+        text-align: left;
+    }
+
     .login-form button {
         font-family: "Roboto", sans-serif;
         text-transform: uppercase;

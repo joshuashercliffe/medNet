@@ -1,6 +1,4 @@
-﻿@import url(https://fonts.googleapis.com/css?family=Roboto:300);
-
-/* addNewPatientRecord */
+﻿/* addNewPatientRecord */
 .add-record {
     width: 450px;
     padding: 8% 0 0;
@@ -86,79 +84,8 @@
 /* end addNewPatientRecord */
 
 
-/* Doctor Sign up */
-/*.doctor-sign-up {
-    width: 360px;
-    padding: 8% 0 0;
-    margin: auto;
-}
-
-.doctor-sign-up .form {
-    position: absolute;
-    left: 50%;
-    top: 49%;
-    z-index: 1;
-    background: #FFFFFF;
-    max-width: 360px;
-    padding: 0px 40px 40px 40px;
-    text-align: center;
-    border-style: solid;
-    border-width: medium;
-    border-color: gainsboro;
-}
-
-.doctor-sign-up form.text-form {
-    text-align: left;
-}
-
-.doctor-sign-up .form input {
-    font-family: "Roboto", sans-serif;
-    outline: 0;
-    background: #f2f2f2;
-    width: 100%;
-    border: 0;
-    margin: 0 0 15px;
-    padding: 15px;
-    box-sizing: border-box;
-    font-size: 14px;
-}
-
-.doctor-sign-up #submitButton {
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    background: #4CAF50;
-    width: 100%;
-    border: 0;
-    padding: 15px;
-    color: #FFFFFF;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.doctor-sign-up #submitButton:hover {
-    background: #43A047;
-}
-
-.doctor-sign-up #submitButton:disabled {
-    background: grey;
-}
-
-.doctor-sign-up .form .message {
-    margin: 15px 0 0;
-    color: #b3b3b3;
-    font-size: 10px;
-    text-align: center;
-}
-
-.doctor-sign-up .form .message a {
-    color: #4CAF50;
-    text-decoration: none;
-}*/
-/* end Doctor Sign up */
-
 /* Patient Sign up */
-.patient-signup-page {
+/*.patient-signup-page {
     width: 360px;
     padding: 8% 0 0;
     margin: auto;
@@ -224,7 +151,7 @@
 .patient-signup-page .form message a {
     color: #4CAF50;
     text-decoration: none;
-}
+}*/
 /* end Patient Sign up */
 
 /* Patient Look up */
