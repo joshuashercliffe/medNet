@@ -186,10 +186,6 @@ body {
     padding: 10px;
 }
 
-.row {
-    border-style: hidden;
-}
-
 .content {
     margin: 0;
     margin-left: 200px;
@@ -202,12 +198,15 @@ body {
 .card {
     margin: 20px;
     padding: 15px;
-    border-style: solid;
-    border-width: thin;
+    border-style: none;
 }
 
 .card-header {
     text-align: center;
+    border-style: none;
+    border-bottom-style: solid;
+    border-bottom-width: medium;
+    border-bottom-color: gainsboro;
 }
 
 .card-body {

@@ -19,8 +19,8 @@
         </div>
         <div class="sidebar-body">
             <a href="PatientOverview" class="active">Overview</a>
-            @*<a href="PatientAppointment">Appointments</a>
-            <a href="PatientPrescription">Prescriptions</a>*@
+            <a href="PatientOverview">Appointments</a> <!-- debug -->
+            <a href="PatientOverview">Prescriptions</a> <!-- debug -->
         </div>
     </div>
 
@@ -31,9 +31,10 @@
                 <p>PHN: @Model.PatientPHN</p>
             </div>
             <div class="overview-body">
+                <!-- row 1-->
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="card border-0">
+                        <div class="card">
                             <div class="card-header">
                                 <h3>General Information</h3>
                             </div>
@@ -44,7 +45,7 @@
                     </div>
                     
                     <div class="col-sm-6">
-                        <div class="card border-0">
+                        <div class="card">
                             <div class="card-header">
                                 <h3>Allergies</h3>
                             </div>
@@ -53,6 +54,29 @@
                             </div>
                         </div>
                     </div> 
+                </div>
+                <!-- row 2-->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Current Medications</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Med1</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Medical History</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Hist1</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
