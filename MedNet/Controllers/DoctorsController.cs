@@ -73,7 +73,7 @@ namespace MedNet.Controllers
                 HttpContext.Session.SetString(Globals.currentDAPriK, agreePrivateKey);
                 HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("Home");
             }
             else
             {
@@ -158,6 +158,37 @@ namespace MedNet.Controllers
             HttpContext.Session.SetString(Globals.currentPPHN, userAsset.data.Data.ID);
             return RedirectToAction("PatientOverview");
         }
+
+        public IActionResult Home() 
+        {
+            // DEBUG: need to fix
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null
+                || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return RedirectToAction("Login");
+            else
+                return View();
+        }
+
+        [HttpPost]
+        public IActionResult Home(DoctorHomeViewModel doctorHomeViewModel)
+        {
+            // DEBUG: need to fix
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (!ModelState.IsValid)
+                return View(doctorHomeViewModel);
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, doctorHomeViewModel.PHN);
+            if (userAsset == null)
+            {
+                ModelState.AddModelError("", "We could not find a matching user");
+                return View(doctorHomeViewModel);
+            }
+            HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
+            HttpContext.Session.SetString(Globals.currentPAPubK, userAsset.data.Data.AgreePublicKey);
+            HttpContext.Session.SetString(Globals.currentPPHN, userAsset.data.Data.ID);
+            return RedirectToAction("Home");
+        }
+
 
         public IActionResult PatientOverview()
         {

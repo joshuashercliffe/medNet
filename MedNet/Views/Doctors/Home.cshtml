@@ -1,0 +1,31 @@
+﻿@model DoctorHomeViewModel
+@{
+    ViewData["Title"] = "Doctor Home";
+}
+
+<head>
+    <!-- -->
+</head>
+
+<body>
+    @section NavButtons {
+        <!-- L to R -->
+        <a href="Home" class="active">Home</a>
+        <a href="PatientLookUp">Search Patient</a>
+        <a href="PatientSignUp">Register Patient</a>
+        <!-- R to L-->
+        <a href="Logout" style="float:right">Logout</a>
+    }
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>@ViewBag.DoctorName</h3>
+        </div>
+        <div class="sidebar-body">
+            <p>some text</p>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Doctor Home page</h1>
+    </div>
+</body>

@@ -5,10 +5,12 @@
 
 @section NavButtons {
     <!-- L to R -->
-    <a href="PatientLookUp" class="active">Patient Look Up</a>
+    <a href="Home">Home</a>
+    <a href="PatientLookUp" class="active">Search Patient</a>
+    <a href="PatientSignUp">Register Patient</a>
+
     <!-- R to L-->
     <a href="Logout" style="float:right">Logout</a>
-    <a href="PatientLookUp" style="float:right">@ViewBag.DoctorName</a>
 }
 
 <head>
@@ -20,22 +22,25 @@
 </head>
 
 <body>
-    <div class="login-form">
-        <div class="login-header">
-            <h2>Patient Look Up</h2>
-            <p>Enter the patient's information</p>
-        </div>
-        @Html.ValidationSummary(true)
-        <form asp-action="PatientLookUp" method="post" style="text-align: left;">
-            <label>Patient PHN:</label>
-            <div class="tooltip">
-                <span class="tooltiptext">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</span>
+    <div class="content">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Patient Look Up</h2>
+                <p>Enter the patient's information</p>
             </div>
-            @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-####", title = "10 digit Personal Health Record Number." })
-            @Html.ValidationMessageFor(n => n.PHN)
-            <button type="submit">Submit</button>
-        </form>
+            @Html.ValidationSummary(true)
+            <form asp-action="PatientLookUp" method="post" style="text-align: left;">
+                <label>Patient PHN:</label>
+                <div class="tooltip">
+                    <span class="tooltiptext">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</span>
+                </div>
+                @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-####", title = "10 digit Personal Health Record Number." })
+                @Html.ValidationMessageFor(n => n.PHN)
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     </div>
+    
 
     <script type="text/javascript">
         jQuery(function ($) {

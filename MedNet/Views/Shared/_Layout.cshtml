@@ -19,16 +19,14 @@
 
 <body>
     <div class="topnav" id="myTopnav">
-        <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left;" />
+        <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left; width: 200px;" />
         @RenderSection("NavButtons", required: false)
         <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
             <i class="fa fa-bars"></i>
         </a>
     </div>
 
-    <div class="container" style="margin-top: 50px; margin-bottom: 30px;  padding-top: 50px; padding-bottom: 15px;">
-        @RenderBody()
-    </div>
+    @RenderBody()
 
     <div class="footer">
         <p>

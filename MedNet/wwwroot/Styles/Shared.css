@@ -8,13 +8,13 @@ html {
 body {
     position: relative;
     margin: 0 auto;
+    margin-top: 50px;
     top: 0;
     padding: 0;
     font-family: "Roboto", sans-serif;
     overflow: scroll;
     min-height: 100vh;
 }
-
 
 .tooltip {
     position: relative;
@@ -76,7 +76,10 @@ body {
 
 .mednet-logo {
     max-height: 100%;
-    padding: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 @media screen and (max-width: 600px) {
@@ -126,10 +129,6 @@ body {
         color: #7B7D7D;
     }
 
-.card {
-    padding: 20px;
-}
-
 .green-buttons-top {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
@@ -146,3 +145,89 @@ body {
     .green-buttons-top:hover {
         opacity: 0.8;
     }
+
+.sidebar {
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    width: 200px;
+    overflow: auto;
+    border-right-style: solid;
+    border-right-width: thin;
+    border-right-color: gainsboro;
+}
+
+    .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .sidebar a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+
+.sidebar-header {
+    text-align: right;
+    padding: 10px;
+}
+
+.sidebar-body {
+    text-align: left;
+    padding: 10px;
+}
+
+.row {
+    border-style: hidden;
+}
+
+.content {
+    margin: 0;
+    margin-left: 200px;
+    margin-top: 60px;
+    padding: 1px 16px;
+    height: 100%;
+    border-style: none;
+}
+
+.card {
+    margin: 20px;
+    padding: 15px;
+    border-style: solid;
+    border-width: thin;
+}
+
+.card-header {
+    text-align: center;
+}
+
+.card-body {
+    text-align: left;
+}
+
+/*Screens less than 700px, sidebar goes to the top*/
+@media screen and (max-width: 700px) {
+    .sidebar { 
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar a {
+        text-align: center;
+        float: none;
+    }
+
+    .content {
+        margin: 0 0 0 0 !important;
+    }
+}
