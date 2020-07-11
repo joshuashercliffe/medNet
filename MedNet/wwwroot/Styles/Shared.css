@@ -194,7 +194,7 @@ body {
     margin: 0;
     margin-left: 200px;
     margin-top: 60px;
-    padding: 1px 16px;
+    padding: 10px;
     height: 100%;
     border-style: none;
 }
@@ -220,6 +220,7 @@ body {
         width: 100%;
         height: auto;
         position: relative;
+        border-right-style: none;
     }
 
     .sidebar a {
