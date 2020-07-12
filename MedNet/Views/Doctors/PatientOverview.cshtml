@@ -10,17 +10,16 @@
     <a href="PatientSignUp">Register Patient</a>
     <!-- R to L-->
     <a href="Logout" style="float:right">Logout</a>
+    <a href="Home" style="float:right">@ViewBag.DoctorName</a>
 }
 
 <body>
     <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>@ViewBag.DoctorName</h3>
-        </div>
         <div class="sidebar-body">
             <a href="PatientOverview" class="active">Overview</a>
             <a href="PatientOverview">Appointments</a> <!-- debug -->
             <a href="PatientOverview">Prescriptions</a> <!-- debug -->
+            <a href="Home">Close</a> <!-- debug -->
         </div>
     </div>
 
@@ -39,41 +38,76 @@
                                 <h3>General Information</h3>
                             </div>
                             <div class="card-body">
-                                <p>Info1</p>
+                                <!-- Fill in info here -->
+                                <p>Age: @Model.PatientAge</p>
+                                <p>Date of Birth: @Model.PatientDOB.ToLongDateString()</p>
+                                <p>Address: </p>
+                                <p>Email: </p>
+                                <p>Phone: </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Emergency Contact
+                            </div>
+                            <div class="card-body">
+                                <!-- Debug: emergency contact name, phone, relationship to patient-->
+                                <ol>
+                                    <li>
+                                        <p>Name: </p>
+                                        <p>Phone: </p>
+                                        <p>Relationship: </p>
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Allergies</h3>
-                            </div>
-                            <div class="card-body">
-                                <p>Allergy1</p>
-                            </div>
-                        </div>
-                    </div> 
                 </div>
                 <!-- row 2-->
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Current Medications</h3>
+                                <h3>Allergies</h3>
                             </div>
                             <div class="card-body">
-                                <p>Med1</p>
+                                <!-- Maybe add 2 cols of allergies-->
+                                @*<ul>
+                                    <li>allergy1</li>
+                                </ul>*@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Current Medications</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Maybe add 2 cols of current meds-->
+                                @*<ul>
+                                    <li>allergy1</li>
+                                </ul>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3>Medical History</h3>
                             </div>
                             <div class="card-body">
-                                <p>Hist1</p>
+                                <!-- Fill in info here -->
+                                <!-- Maybe add 2 cols of allergies-->
+                                @*<ul>
+                                    <li>allergy1</li>
+                                </ul>*@
                             </div>
                         </div>
                     </div>
@@ -102,6 +136,167 @@
 
 @*
     <div class="patient-overview">
+        <div class="form1">
+            <div class="heading2">
+                <p><strong>Patient Profile</strong></p>
+            </div>
+            <div class="heading1">
+                <p><strong>@Model.PatientName</strong></p>
+            </div>
+            <div class="heading2">
+                <p>PHN: <strong>@Model.PatientPHN</strong></p>
+                <p>General Information</p>
+            </div>
+
+            <div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Age:</p>
+                    </div>
+                    <div class="column2">
+                        <p>@Model.PatientAge</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Date of Birth:</p>
+                    </div>
+                    <div class="column2">
+                        <p>@Model.PatientDOB.ToShortDateString()</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Blood Type:</p>
+                    </div>
+                    <div class="column2">
+                        <p>O+</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Allergies:</p>
+                    </div>
+                    <div class="column2">
+                        <p>Bees</p>
+                        <p>Peanuts</p>
+                        <p>Aspirin</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Current Medication(s):</p>
+                    </div>
+                    <div class="column2">
+                        <p>Levothyroxine</p>
+                        <p>Insulin</p>
+                        <p>Zoloft</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Smoker:</p>
+                    </div>
+                    <div class="column2">
+                        <p>Yes</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Drink Alcohol:</p>
+                    </div>
+                    <div class="column2">
+                        <p>Yes</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column1">
+                        <p>Known Medical History:</p>
+                    </div>
+                    <div class="column2">
+                        <p>Thyroid</p>
+                        <p>Diabetes</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="window.location.href = 'AddNewPatientRecord';">Add Record</button><br />
+        </div>
+
+        <div class="form2">
+            <div class="table">
+                <div class="tab">
+                    <button class="tablinks" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
+                    <button class="tablinks" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
+                    <!--<button class="tablinks" onclick="openTab(event, 'test_results')">Test Results</button>-->
+                    <button class="tablinks, red" onclick="window.location.href = 'RequestAccess';">Request Access</button>
+                </div>
+
+                <div id="doc_notes" class="tabcontent">
+                    @if (Model != null && Model.DoctorNotes != null && Model.DoctorNotes.Any())
+                    {
+                        @foreach (var doctorNote in Model.DoctorNotes)
+                        {
+                            <div class="record" align="left">
+                                <div class="heading1">
+                                    Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                                </div>
+                                <p>
+                                    Purpose of Visit: @doctorNote.PurposeOfVisit <br />
+                                    Description: @doctorNote.Description <br />
+                                    Final Diagnosis: @doctorNote.FinalDiagnosis <br />
+                                    Further Instructions and General Precautions: @doctorNote.FurtherInstructions   <br />
+                                    Doctor Visited: @doctorNote.DoctorName
+                                </p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <div class="heading1">
+                                No records shared.
+                            </div>
+                            <p>
+                                No medical records to show.
+                            </p>
+                        </div>
+                    }
+                </div>
+
+                <div id="prescriptions" class="tabcontent">
+                    @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
+                    {
+                        @foreach (var prescription in Model.Prescriptions)
+                        {
+                            <div class="record" align="left">
+                                <div class="heading1">
+                                    Date: @prescription.PrescribingDate.ToString("MMMM dd, yyyy")
+                                </div>
+                                <p>
+                                    Prescription: @prescription.DrugNameStrength <br />
+                                    Dosage: @prescription.Dosage <br />
+                                    Prescription Length: @prescription.StartDate.ToString("MMMM dd, yyyy") to @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                                    Prescribing Doctor: @prescription.DoctorName
+                                </p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <div class="heading1">
+                                No records shared.
+                            </div>
+                            <p>
+                                No medical records to show.
+                            </p>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div> <div class="patient-overview">
         <div class="form1">
             <div class="heading2">
                 <p><strong>Patient Profile</strong></p>
