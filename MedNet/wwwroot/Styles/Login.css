@@ -65,4 +65,9 @@
             text-decoration: none;
         }
 
+@media screen and (max-width: 825px) {
+    .login-form {
+        margin-top: 50px;
+    }
+}
 /* End Index */

@@ -11,21 +11,25 @@
 }
 
 <div class="patient-lookup-page">
-    <div class="form">
-        <div class="heading">
-            <p>Request Access</p>
+    <div class="login-form">
+        <div class="login-head">
+            <h3>Request Access</h3>
+            <p>Enter your details below retrieve patient information.</p>
         </div>
-        <p>Enter your details below retrieve patient information.</p>
-        @Html.ValidationSummary(true)
-        <form class="text-form" asp-action="RequestAccess" method="post">
-            <div class="tooltip">
+        <div class="login-body">
+            @Html.ValidationSummary(true)
+            <form class="text-form" asp-action="RequestAccess" method="post">
                 <label>Patient Keyword:</label>
-                <span class="tooltiptext">Patient's identification pass phrase.</span>
-            </div>
-            @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
-            @Html.ValidationMessageFor(n => n.keyword)
-            <button type="submit">Authorize with Fingerprint</button>
-        </form>
+                <div class="tooltip">
+                    <span class="tooltiptext">Patient's identification pass phrase.</span>
+                </div>
+                @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
+                @Html.ValidationMessageFor(n => n.keyword)
+                <button type="submit">Authorize with Fingerprint</button>
+            </form>
+        </div>
+        
+       
     </div>
 </div>
 
