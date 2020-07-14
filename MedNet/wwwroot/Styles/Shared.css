@@ -41,6 +41,15 @@ body {
     }
 
 
+.topnav-lbtn {
+    float: left;
+    display: block;
+}
+
+.topnav-rbtn {
+    float: right;
+    display: block;
+}
 
 .topnav {
     top: 0;
@@ -52,7 +61,6 @@ body {
 }
 
     .topnav a {
-        float: left;
         display: block;
         color: #f2f2f2;
         text-align: center;
@@ -74,16 +82,6 @@ body {
     .topnav .icon {
         display: none;
         height: auto;
-    }
-
-    .topnav .topnav-lbtn {
-        float: left;
-        display: block;
-    }
-
-    /topnav .topnav-rbtn {
-        float: right;
-        display: block;
     }
 
 .mednet-logo {

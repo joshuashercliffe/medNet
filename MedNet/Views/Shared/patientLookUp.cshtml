@@ -1,14 +1,16 @@
 ﻿@model PatientLookupViewModel
 @{
-    ViewData["Title"] = "Patient Look Up";
+    ViewData["Title"] = "Patient Search";
 }
 
 @section NavButtons {
     <!-- L to R -->
-    <a href="PatientLookUp" class="active topnav-lbtn topnav-first">Patient Look Up</a>
+    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
+    <a href="PatientLookUp" class="active topnav-lbtn">Search Patient</a>
+    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
     <!-- R to L-->
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+    @*<a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>*@
 }
 
 <head>
