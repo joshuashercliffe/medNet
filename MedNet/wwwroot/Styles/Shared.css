@@ -19,12 +19,15 @@ body {
 
 .sidebar {
     margin: 0;
-    padding: 0;
+    padding: 5px;
     width: 200px;
     background-color: #f1f1f1;
     position: fixed;
     height: 100%;
     overflow: auto;
+    border-right-width: thin;
+    border-right-color: gainsboro;
+    border-right-style: solid;
 }
 
 .sidebar a {
@@ -46,14 +49,17 @@ body {
 
 .content {
     margin-left: 200px;
-    margin-top: 85px;
-    padding: 0px;
+    margin-top: 65px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .content-full {
     margin: 0;
-    margin-top: 85px;
-    padding: 0px;
+    margin-top: 75px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 
@@ -100,6 +106,7 @@ body {
     min-width: 100%;
     display: block;
     margin-bottom: 50px;
+    z-index: 1;
 }
 
     .topnav a {
@@ -143,6 +150,7 @@ body {
         width: 100%;
         height: auto;
         position: relative;
+        margin-top: 50px;
     }
 
     .sidevbar a {
@@ -151,7 +159,6 @@ body {
 
     .content {
         margin-left: 10px;
-        margin-top: 85px;
     }
 
     .content-full {
