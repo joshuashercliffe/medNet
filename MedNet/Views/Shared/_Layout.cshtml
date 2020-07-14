@@ -35,7 +35,7 @@
         </p>
     </div>
 
-    @RenderSection("Scripts", required: false)
+
 
     <script>
         function resizeFunction() {
@@ -45,7 +45,10 @@
             } else {
                 x.className = "topnav";
             }
-        }</script>
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

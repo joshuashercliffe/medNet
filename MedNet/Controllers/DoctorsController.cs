@@ -173,7 +173,7 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult Home(DoctorHomeViewModel doctorHomeViewModel)
         {
-            // DEBUG: need to fix
+            // Description: Grab Doctor's Infomation: Office address, Email, Phone
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             if (!ModelState.IsValid)
                 return View(doctorHomeViewModel);

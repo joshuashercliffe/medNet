@@ -3,16 +3,16 @@
 
 html {
     min-height:100%;
+    min-width: 400px;
 }
 
 body {
     position: relative;
     margin: 0 auto;
-    margin-top: 50px;
     top: 0;
     padding: 0;
     font-family: "Roboto", sans-serif;
-    overflow: scroll;
+    overflow: auto;
     min-height: 100vh;
 }
 
@@ -40,13 +40,12 @@ body {
     }
 
 
-
 .topnav {
     top: 0;
     position: fixed;
     overflow: hidden;
     background-color: #333;
-    height: 50px;
+    height: auto;
     min-width: 100%;
 }
 
@@ -72,17 +71,39 @@ body {
 
     .topnav .icon {
         display: none;
+        height: auto;
     }
 
-.mednet-logo {
-    max-height: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    .topnav .topnav-lbtn {
+        float: left;
+        display: block;
+    }
+
+    .topnav .topnav-rbtn {
+        float: right;
+        display: block;
+    }
+
+@media screen and (max-width: 700px) {
+    .topnav a:not(:first-child) {
+        display: none;
+    }
+
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+
+    .topnav.topnav-rbtn {
+        float: left;
+    }
+
+    .topnav .topnav-first {
+        margin-top: 50px;
+    }
+
 }
 
-/*When screen size is less than 700px*/
 @media screen and (max-width: 700px) {
     .topnav.responsive {
         position: relative;
@@ -99,19 +120,16 @@ body {
             display: block;
             text-align: left;
         }
+}
 
-    .topnav a:not(:first-child) {
-        display: none;
-    }
 
-    .topnav a.icon {
-        float: right;
-        display: block;
-    }
 
-    body {
-        margin-top: 0;
-    }
+.mednet-logo {
+    max-height: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .footer {
@@ -230,6 +248,7 @@ body {
         height: auto;
         position: relative;
         border-right-style: none;
+        top:auto;
     }
 
     .sidebar a {
@@ -239,5 +258,11 @@ body {
 
     .content {
         margin: 0 0 0 0 !important;
+        position: relative;
+    }
+
+    .content-full {
+        margin: 0; 
+        position: relative;
     }
 }

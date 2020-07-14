@@ -5,21 +5,13 @@
 
 @section NavButtons {
     <!-- L to R -->
-    <a href="Home">Home</a>
-    <a href="PatientLookUp" class="active">Search Patient</a>
-    <a href="PatientSignUp">Register Patient</a>
+    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
+    <a href="PatientLookUp" class="active topnav-lbtn">Search Patient</a>
+    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
 
     <!-- R to L-->
-    <a href="Logout" style="float:right">Logout</a>
+    <a href="Logout" class="topnav-rbtn">Logout</a>
 }
-
-<head>
-    <!-- jQuery -->
-    <script src="~/theme/plugins/jquery/jquery.min.js"></script>
-    <!-- InputMask -->
-    <script src="~/theme/plugins/moment/moment.min.js"></script>
-    <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-</head>
 
 <body>
     <div class="content-full">
@@ -40,7 +32,13 @@
             </form>
         </div>
     </div>
-    
+
+    <!-- jQuery -->
+    <script src="~/theme/plugins/jquery/jquery.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/theme/plugins/moment/moment.min.js"></script>
+    <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+
 
     <script type="text/javascript">
         jQuery(function ($) {
