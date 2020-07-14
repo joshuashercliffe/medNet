@@ -47,12 +47,15 @@ body {
 }
 
 .sidebar-footer {
-    bottom: 50px;
+    /*bottom: 50px;
     left: 0px;
     position: absolute;
     width: 190px;
     margin-left: 5px;
-    margin-right: 5px;
+    margin-right: 5px;*/
+    border-top-style: solid;
+    border-top-width: thin;
+    border-top-color: gainsboro;
 }
 
 .content {
