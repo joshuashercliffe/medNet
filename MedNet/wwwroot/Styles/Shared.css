@@ -47,9 +47,18 @@ body {
     color: white;
 }
 
+.sidebar-footer {
+    bottom: 50px;
+    left: 0px;
+    position: absolute;
+    width: 190px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .content {
     margin-left: 200px;
-    margin-top: 10px;
+    margin-top: 63px;
     margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
@@ -58,6 +67,7 @@ body {
 .content-full {
     top: 53px;
     margin: 10px;
+    margin-top: 53px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -132,10 +142,54 @@ body {
         height: auto;
     }
 
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 2.5rem;
+    padding: 5px;
+}
+
+    .footer p {
+        color: gainsboro;
+        font-size: 12px;
+    }
+
+    .footer a {
+        color: #7B7D7D;
+    }
+
+.card {
+    padding: 20px;
+}
+
+.green-buttons-top {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 250px;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+    .green-buttons-top:hover {
+        opacity: 0.8;
+    }
+
 .mednet-logo {
+    height: 53px;
+    width: 200px;
+    float: left;
     max-height: 100%;
     padding: 5px 10px 5px 10px;
 }
+
 
 @media screen and (max-width: 400px) {
     .sidebar a {
@@ -149,19 +203,28 @@ body {
         width: 100%;
         height: auto;
         position: relative;
-        margin-top: 50px;
+        border-right-style: none;
+        border-right-style: none;
+        border-bottom-style: solid;
+        border-bottom-width: thin;
+        border-bottom-color: gainsboro;
     }
 
-    .sidevbar a {
+    .sidebar a {
         float: left;
+    }
+
+    .sidebar-footer {
+        position: relative;
     }
 
     .content {
         margin-left: 10px;
+        margin-top: 10px;
     }
 
-    .content-full {
-        top: auto;
+    .topnav {
+        position: relative;
     }
 
     .topnav a:not(:first-child) {
@@ -198,48 +261,3 @@ body {
     }
 }
 
-
-.footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    height: 2.5rem;
-    padding: 5px;
-}
-
-.footer p {
-    color: gainsboro;
-    font-size: 12px;
-}
-    .footer a {
-        color: #7B7D7D;
-    }
-
-.card {
-    padding: 20px;
-}
-
-.green-buttons-top {
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    background: #4CAF50;
-    width: 250px;
-    border: 0;
-    padding: 15px;
-    color: #FFFFFF;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-    .green-buttons-top:hover {
-        opacity: 0.8;
-    }
-
-.mednet-logo {
-    height: 53px;
-    width: 200px;
-    float: left;
-}

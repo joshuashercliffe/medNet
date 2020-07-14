@@ -11,7 +11,7 @@
     <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
     <!-- R to L-->
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="patientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+    <a href="Home" class="topnav-rbtn">@ViewBag.DoctorName</a>
 
     <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
         <i class="fa fa-bars"></i>
@@ -20,10 +20,16 @@
 
 <body>
     <div class="sidebar">
-        <a href="PatientOverview" class="active">Overview</a>
-        <a href="PatientOverview">Past Appointments</a>
-        <a href="PatientOverview">Prescriptions</a>
-        <a href="PatientOverview">Test Results</a>
+        <div class="sidebar-body">
+            <a href="PatientOverview" class="active">Overview</a>
+            <a href="PatientOverview">Past Appointments</a>
+            <a href="PatientOverview">Prescriptions</a>
+            <a href="PatientOverview">Test Results</a>
+            <a href="Home">Close</a>
+        </div>
+        @*<div class="sidebar-footer">
+            
+        </div>*@
     </div>
 
     <div class="content">
