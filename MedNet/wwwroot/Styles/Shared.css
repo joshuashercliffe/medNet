@@ -72,6 +72,15 @@ body {
     padding-right: 10px;
 }
 
+.content-header {
+    padding: 10px;
+    background-color: gainsboro;
+}
+
+.content-body {
+    padding: 10px;
+}
+
 
 .tooltip {
     position: relative;
@@ -161,8 +170,19 @@ body {
         color: #7B7D7D;
     }
 
+.col-sm-6 {
+    margin: 0 auto;
+}
+
 .card {
     padding: 20px;
+    border-style: none;
+    margin-top: 5px;
+}
+
+.card-header {
+    border-bottom-width: medium;
+    text-align: center;
 }
 
 .green-buttons-top {
