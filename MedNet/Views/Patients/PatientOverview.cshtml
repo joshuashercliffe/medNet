@@ -3,36 +3,103 @@
     ViewData["Title"] = "Patient Overview";
 }
 
-    <head>
-
-    </head>
-
 @section NavButtons {
-    <!-- L to R-->
-    @*<a href="PatientOverview" class="topnav-name" style="float:left">Overview</a>*@
-    @*<a href="PatientAppointment" class="topnav-name" style="float:left">Appointments</a>
-    <a href="PatientPrescription" class="topnav-name" style="float:left">Prescriptions</a>*@
+    <a href="Logout" class="topnav-rbtn">Logout</a>
 
-    <!-- R to L-->
-    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
-    @*<a href="PatientOverview" class="topnav-name" style="float:right">@ViewBag.UserName</a>*@
+    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 }
 
 <body>
     <div class="sidebar">
-        <div class="sidebar-header">
-            <h2>@ViewBag.UserName</h2>
-        </div>
-
         <div class="sidebar-body">
             <a href="PatientOverview" class="active">Overview</a>
-            <a href="PatientAppointment">Appointments</a>
-            <a href="PatientPrescription">Prescriptions</a>
-        </div>            
+            <a href="PatientOverview">Past Appointments</a>
+            <a href="PatientOverview">Prescriptions</a>
+            <a href="PatientOverview">Test Results</a>
+        </div>
+        <div class="sidebar-footer">
+            <a href="Home">Close</a>
+        </div>
     </div>
 
     <div class="content">
-        <h1>General Information</h1>
+        <div class="content-header">
+            <h1>@Model.PatientName</h1>
+            <div class="row">
+                <div class="col-sm-8">
+                    <p><strong>PHN: </strong>@Model.PatientPHN</p>
+                </div>
+                <div class="col-sm-4">
+                    <a class="btn btn-edit" href="EditProfile">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>General Information</h3>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Age: </strong>@Model.PatientAge</p>
+                            <p><strong>Date of Birth: </strong>@Model.PatientDOB.ToLongDateString()</p>
+                            <p><strong>Address: </strong></p>
+                            <p><strong>Email: </strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Emergency Contact</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Allergies</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- TODO: dynamically fill in list of patient's allergies-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Daily Medications</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- TODO: dynamically fill in patient's daily medications-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Medical History</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- TODO: dynamically fill in patient's medical history-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </body>
 

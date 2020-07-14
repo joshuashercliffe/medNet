@@ -67,9 +67,8 @@ body {
 }
 
 .content-full {
-    top: 53px;
     margin: 10px;
-    margin-top: 53px;
+    margin-top: 63px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -174,6 +173,7 @@ body {
 
 .col-sm-6 {
     margin: 0 auto;
+    width: 100%;
 }
 
 .card {
@@ -212,6 +212,20 @@ body {
     padding: 5px 10px 5px 10px;
 }
 
+.btn-edit {
+    color: #4CAF50;
+    background-color: gainsboro;
+    border-color: #4CAF50;
+    bottom: 0px;
+    right: 15px;
+    position: absolute
+}
+
+.btn-edit:hover {
+    color: gainsboro;
+    background-color: #4CAF50;
+    border-color: gainsboro;
+}
 
 @media screen and (max-width: 400px) {
     .sidebar a {
@@ -238,10 +252,15 @@ body {
 
     .sidebar-footer {
         position: relative;
+        border-top-style: none;
     }
 
     .content {
         margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .content-full {
         margin-top: 10px;
     }
 
