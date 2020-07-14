@@ -7,8 +7,4 @@ namespace MedNet.Models
         [Required(ErrorMessage = "PHN is required.")]
         public string PHN { get; set; }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> jacob-test
