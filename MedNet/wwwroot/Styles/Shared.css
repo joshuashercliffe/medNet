@@ -2,7 +2,8 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 html {
-    min-height:100%;
+    min-height: 100%;
+    min-width: 400px;
 }
 
 body {
@@ -46,7 +47,7 @@ body {
     position: fixed;
     overflow: hidden;
     background-color: #333;
-    height: 50px;
+    height: auto;
     min-width: 100%;
 }
 
@@ -72,6 +73,17 @@ body {
 
     .topnav .icon {
         display: none;
+        height: auto;
+    }
+
+    .topnav .topnav-lbtn {
+        float: left;
+        display: block;
+    }
+
+    /topnav .topnav-rbtn {
+        float: right;
+        display: block;
     }
 
 .mednet-logo {
@@ -79,7 +91,7 @@ body {
     padding: 5px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .topnav a:not(:first-child) {
         display: none;
     }
@@ -90,7 +102,7 @@ body {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .topnav.responsive {
         position: relative;
     }
@@ -106,6 +118,15 @@ body {
             display: block;
             text-align: left;
         }
+}
+@media screen and (max-width: 700px) {
+    .topnav-rbtn {
+        float: left;
+    }
+
+    .topnav-first {
+        margin-top: 50px;
+    }
 }
 
 .footer {
@@ -146,3 +167,9 @@ body {
     .green-buttons-top:hover {
         opacity: 0.8;
     }
+
+.mednet-logo {
+    height: 50px;
+    width: 200px;
+    float: left;
+}
