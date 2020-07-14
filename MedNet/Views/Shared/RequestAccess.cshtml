@@ -4,31 +4,32 @@
 }
 
 @section NavButtons {
-    <!-- L to R -->
-    <a href="Home" class="active">Home</a>
-    <a href="PatientLookUp">Search Patient</a>
-    <a href="PatientSignUp">Register Patient</a>
-    <!-- R to L-->
-    <a href="Logout" style="float:right">Logout</a>
-    <a href="Home" style="float:right">@ViewBag.DoctorName</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+    <a href="PatientOverview" class="topnav-lbtn">Patient Overview</a>
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="patientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
-<div class="content-full">
+<div class="patient-lookup-page">
     <div class="login-form">
-        <div class="login-header">
-            <h2>Request Access</h2>
-            <p>Enter the patient's information</p>
+        <div class="login-head">
+            <h3>Request Access</h3>
+            <p>Enter your details below retrieve patient information.</p>
         </div>
-        @Html.ValidationSummary(true)
-        <form asp-action="RequestAccess" method="post" style="text-align: left;">
-            <label>Patient Keyword:</label>
-            <div class="tooltip">
-                <span class="tooltiptext">Patient's identification key phrase.</span>
-            </div>
-            @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Key Phrase Here" })
-            @Html.ValidationMessageFor(n => n.keyword)
-            <button type="submit">Authorize with Fingerprint</button>
-        </form>
+        <div class="login-body">
+            @Html.ValidationSummary(true)
+            <form class="text-form" asp-action="RequestAccess" method="post">
+                <label>Patient Keyword:</label>
+                <div class="tooltip">
+                    <span class="tooltiptext">Patient's identification pass phrase.</span>
+                </div>
+                @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
+                @Html.ValidationMessageFor(n => n.keyword)
+                <button type="submit">Authorize with Fingerprint</button>
+            </form>
+        </div>
+        
+       
     </div>
 </div>
 

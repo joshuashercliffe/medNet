@@ -2,7 +2,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 html {
-    min-height:100%;
+    min-height: 100%;
     min-width: 400px;
 }
 
@@ -15,6 +15,71 @@ body {
     overflow: auto;
     min-height: 100vh;
 }
+
+.sidebar {
+    margin: 0;
+    padding: 5px;
+    width: 200px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    border-right-width: thin;
+    border-right-color: gainsboro;
+    border-right-style: solid;
+}
+
+.sidebar a {
+    display: block;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.sidebar a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.sidebar a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+.sidebar-footer {
+    bottom: 50px;
+    left: 0px;
+    position: absolute;
+    width: 190px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.content {
+    margin-left: 200px;
+    margin-top: 63px;
+    margin-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.content-full {
+    top: 53px;
+    margin: 10px;
+    margin-top: 53px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.content-header {
+    padding: 10px;
+    background-color: gainsboro;
+}
+
+.content-body {
+    padding: 10px;
+}
+
 
 .tooltip {
     position: relative;
@@ -40,6 +105,16 @@ body {
     }
 
 
+.topnav-lbtn {
+    float: left;
+    display: block;
+}
+
+.topnav-rbtn {
+    float: right;
+    display: block;
+}
+
 .topnav {
     top: 0;
     position: fixed;
@@ -47,10 +122,11 @@ body {
     background-color: #333;
     height: auto;
     min-width: 100%;
+    display: block;
+    z-index: 1;
 }
 
     .topnav a {
-        float: left;
         display: block;
         color: #f2f2f2;
         text-align: center;
@@ -74,64 +150,6 @@ body {
         height: auto;
     }
 
-    .topnav .topnav-lbtn {
-        float: left;
-        display: block;
-    }
-
-    .topnav .topnav-rbtn {
-        float: right;
-        display: block;
-    }
-
-@media screen and (max-width: 700px) {
-    .topnav a:not(:first-child) {
-        display: none;
-    }
-
-    .topnav a.icon {
-        float: right;
-        display: block;
-    }
-
-    .topnav.topnav-rbtn {
-        float: left;
-    }
-
-    .topnav .topnav-first {
-        margin-top: 50px;
-    }
-
-}
-
-@media screen and (max-width: 700px) {
-    .topnav.responsive {
-        position: relative;
-    }
-
-        .topnav.responsive .icon {
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-
-        .topnav.responsive a {
-            float: none;
-            display: block;
-            text-align: left;
-        }
-}
-
-
-
-.mednet-logo {
-    max-height: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .footer {
     position: absolute;
     left: 0;
@@ -142,13 +160,29 @@ body {
     padding: 5px;
 }
 
-.footer p {
-    color: gainsboro;
-    font-size: 12px;
-}
+    .footer p {
+        color: gainsboro;
+        font-size: 12px;
+    }
+
     .footer a {
         color: #7B7D7D;
     }
+
+.col-sm-6 {
+    margin: 0 auto;
+}
+
+.card {
+    padding: 20px;
+    border-style: none;
+    margin-top: 5px;
+}
+
+.card-header {
+    border-bottom-width: medium;
+    text-align: center;
+}
 
 .green-buttons-top {
     font-family: "Roboto", sans-serif;
@@ -167,102 +201,82 @@ body {
         opacity: 0.8;
     }
 
-.sidebar {
-    margin: 0;
-    padding: 0;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
+.mednet-logo {
+    height: 53px;
     width: 200px;
-    overflow: auto;
-    border-right-style: solid;
-    border-right-width: thin;
-    border-right-color: gainsboro;
+    float: left;
+    max-height: 100%;
+    padding: 5px 10px 5px 10px;
 }
 
-    .sidebar a {
-        display: block;
-        color: black;
-        padding: 16px;
-        text-decoration: none;
-    }
 
-        .sidebar a.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .sidebar a:hover:not(.active) {
-            background-color: #555;
-            color: white;
-        }
-
-.sidebar-header {
-    text-align: right;
-    padding: 10px;
-}
-
-.sidebar-body {
-    text-align: left;
-    padding: 10px;
-}
-
-.content {
-    margin: 0;
-    margin-left: 200px;
-    margin-top: 60px;
-    padding: 10px;
-    height: 100%;
-    border-style: none;
-}
-
-.content-full {
-    margin: 0;
-    padding: 10px;
-    height: 100%;
-    border-style: none;
-}
-
-.card {
-    margin: 20px;
-    padding: 15px;
-    border-style: none;
-}
-
-.card-header {
-    text-align: center;
-    border-style: none;
-    border-bottom-style: solid;
-    border-bottom-width: medium;
-    border-bottom-color: gainsboro;
-}
-
-.card-body {
-    text-align: left;
-}
-
-/*Screens less than 700px, sidebar goes to the top*/
-@media screen and (max-width: 700px) {
-    .sidebar { 
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right-style: none;
-        top:auto;
-    }
-
+@media screen and (max-width: 400px) {
     .sidebar a {
         text-align: center;
         float: none;
     }
+}
+
+@media screen and (max-width: 825px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right-style: none;
+        border-right-style: none;
+        border-bottom-style: solid;
+        border-bottom-width: thin;
+        border-bottom-color: gainsboro;
+    }
+
+    .sidebar a {
+        float: left;
+    }
+
+    .sidebar-footer {
+        position: relative;
+    }
 
     .content {
-        margin: 0 0 0 0 !important;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+
+    .topnav {
         position: relative;
     }
 
-    .content-full {
-        margin: 0; 
+    .topnav a:not(:first-child) {
+        display: none;
+    }
+
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+
+    .topnav.responsive {
         position: relative;
     }
+
+        .topnav.responsive .icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .topnav.responsive a {
+            float: none;
+            display: block;
+            text-align: left;
+        }
+
+    .topnav-rbtn {
+        float: left;
+    }
+
+    .topnav-first {
+        margin-top: 50px;
+    }
 }
+

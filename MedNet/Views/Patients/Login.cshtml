@@ -6,6 +6,7 @@
 
 @section NavButtons {
     <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
+<<<<<<< HEAD
 }
 
 <body>
@@ -17,13 +18,35 @@
         @Html.ValidationSummary(true)
         <div class="login-body">
             <form asp-action="Login" method="post">
+=======
+
+    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
+}
+
+<body>
+    <div class="content-full">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Patient Login</h2>
+                <p>Enter your details below</p>
+            </div>
+            @Html.ValidationSummary(true)
+            <form asp-action="Login" method="post" style="text-align: left">
+
+>>>>>>> jacob-test
                 <label>Personal Health Number:</label>
                 <div class="tooltip">
                     <span class="tooltiptext">10 digit Personal Health Record Number</span>
                 </div>
                 @Html.TextBoxFor(n => n.PatientPHN,
                 new
+<<<<<<< HEAD
                         {
+=======
+                     {
+>>>>>>> jacob-test
                         id = "patient-login-PHN",
                         type = "text",
                         placeholder = "####-###-###",

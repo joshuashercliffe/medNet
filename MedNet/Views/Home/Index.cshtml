@@ -3,45 +3,41 @@
 @{
     ViewData["Title"] = "Welcome";
 }
-<html>
-    <body>
-        <div class="container" style="margin: 0 auto; width: 100%;">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="jumbotron text-center" style="background:transparent !important">
-                        <br />
-                        <h1>Welcome to MedNet</h1>
-                        <h3><em>Your Health, Your Data.</em></h3>
-                        <br />
-                        <p>To get started, please select your user type to begin.</p>
+
+<body>
+    <div class="jumbotron text-center" style="background:transparent !important">
+        <br />
+        <h1>Welcome to MedNet</h1>
+        <h3><em>Your Health, Your Data.</em></h3>
+        <br />
+        <p>To get started, please select your user type to begin.</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Patient User</h2>
+                        <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
+                        <a href="/Patients/Login" class="btn btn-success">Continue</a>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card border-0">
-                        <div class="card-body">
-                            <h2 class="card-title">Patient User</h2>
-                            <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
-                            <a href="/Patients/Login" class="btn btn-success">Continue</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card border-0">
-                        <div class="card-body">
-                            <h2 class="card-title">Healthcare Provider</h2>
-                            <p class="card-text">To add, and modify a patient's medical information.</p>
-                            <h4 class="card-text">Please select your profession below</h4>
-                            <a href="/Doctors/Login" class="btn btn-success" style="margin-bottom: 5px">Doctor</a>
-                            <a href="/MLTs/Login" class="btn btn-success" style="margin-bottom: 5px">Lab Technician</a>
-                            <a href="/Pharmacists/Login" class="btn btn-success" style="margin-bottom: 5px">Pharmacist</a>
-                        </div>
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Healthcare Provider</h2>
+                        <p class="card-text">To add, and modify a patient's medical information.</p>
+                        <h4 class="card-text">Please select your profession below</h4>
+                        <a href="/Doctors/Login" class="btn btn-success" style="margin-bottom: 5px">Doctor</a>
+                        <a href="/MLTs/Login" class="btn btn-success" style="margin-bottom: 5px">Lab Technician</a>
+                        <a href="/Pharmacists/Login" class="btn btn-success" style="margin-bottom: 5px">Pharmacist</a>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+</body>
    
 

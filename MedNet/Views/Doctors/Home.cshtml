@@ -1,4 +1,7 @@
-﻿@model DoctorHomeViewModel
+﻿﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model DoctorHomeViewModel
 @{
     ViewData["Title"] = "Doctor Home";
 }
@@ -10,20 +13,13 @@
     <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
     <!-- R to L-->
     <a href="Logout" class="topnav-rbtn">Logout</a>
+
+    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 }
-
 <body>
-
-
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h3>@ViewBag.DoctorName</h3>
-        </div>
-        <div class="sidebar-body">
-            <p>some text</p>
-        </div>
+    <div class="content-full">
+        <h1>Doctor's Homepage</h1>
     </div>
-    <div class="content">
-        <h1>Doctor Home page</h1>
-    </div>
-</body>
+</body> 
