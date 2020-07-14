@@ -49,15 +49,15 @@ body {
 
 .content {
     margin-left: 200px;
-    margin-top: 65px;
+    margin-top: 10px;
     margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 .content-full {
-    margin: 0;
-    margin-top: 75px;
+    top: 53px;
+    margin: 10px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -105,7 +105,6 @@ body {
     height: auto;
     min-width: 100%;
     display: block;
-    margin-bottom: 50px;
     z-index: 1;
 }
 
@@ -135,7 +134,7 @@ body {
 
 .mednet-logo {
     max-height: 100%;
-    padding: 5px;
+    padding: 5px 10px 5px 10px;
 }
 
 @media screen and (max-width: 400px) {
@@ -162,7 +161,7 @@ body {
     }
 
     .content-full {
-        margin-top: 85px;
+        top: auto;
     }
 
     .topnav a:not(:first-child) {
@@ -240,7 +239,7 @@ body {
     }
 
 .mednet-logo {
-    height: 50px;
+    height: 53px;
     width: 200px;
     float: left;
 }
