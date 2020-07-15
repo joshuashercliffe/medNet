@@ -26,9 +26,8 @@
             </div>
             @Html.ValidationSummary(true)
             <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
-
-                <label>Doctor MINC:</label>
                 <div class="tooltip">
+                    <label>Doctor MINC:</label>
                     <span class="tooltiptext">12 digit Medical Identification Number for Canada</span>
                 </div>
                 @Html.TextBoxFor(n => n.DoctorMINC, new
