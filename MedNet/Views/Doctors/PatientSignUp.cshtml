@@ -1,17 +1,16 @@
 ﻿@model PatientSignUpViewModel
 
 @{
-    ViewData["Title"] = "Patient Sign Up";
+    ViewData["Title"] = "Patient Registration";
 }
 
 @section NavButtons {
-    <a href="/Home" class="topnav-home">Home</a>
-    <a href="Login" class="topnav-dl">Login</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Search Patient</a>
+    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
+
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <!--<a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>--> <!-- DEBUG: does not show up-->
 }
-
-<head>
-
-</head>
 
 <body>
     <div class="login-form">
@@ -47,7 +46,7 @@
             <button type="submit" id="submitButton">Register with Fingerprint</button>
         </form>
     </div>
-    
+
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->

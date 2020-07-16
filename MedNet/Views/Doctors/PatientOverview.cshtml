@@ -4,18 +4,12 @@
 }
 
 @section NavButtons {
-    <a href="PatientLookUp" class="topnav-plu">Patient Look-Up</a>
-    <a href="PatientOverview" class="topnav-po">Patient Overview</a>
-    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
-    <a href="patientLookUp" class="topnav-name" style="float:right">@ViewBag.DoctorName</a>
-}
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Search Patient</a>
+    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
 
-<style>
-    .topnav .topnav-po {
-        background-color: #4CAF50;
-        color: white;
-    }
-</style>
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+}
 
 <div class="patient-overview">
     <div class="form1">
