@@ -160,11 +160,6 @@ body {
         color: #7B7D7D;
     }
 
-.col-sm-6 {
-    margin: 0 auto;
-    width: 100%;
-}
-
 .card {
     padding: 20px;
     border-style: none;
@@ -227,10 +222,6 @@ body {
     height: 53px;
     max-height: 100%;
     padding: 5px;
-}
-
-.content-full {
-    margin-top: 43px;
 }
 
 @media screen and (max-width: 825px) {

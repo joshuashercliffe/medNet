@@ -11,18 +11,91 @@
 <body>
     <div class="content-full">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
                         <h3>General Information</h3>
                     </div>
                     <div class="card-body">
                         <form>
-                            <label>Age:</label>
-                            <label>Date of Birth:</label>
-                            <label>Email:</label>
-                            <label>Address:</label>
-                            <label>Phone:</label>
+                            <!-- name -->
+                            <div class="form-group">
+                                <label for="patientName">Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="patientFirstName" readonly />
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="patientLastName" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- age -->
+                            <div class="form-row">
+                                <!-- date of birth-->
+                                <div class="form-group col-sm-9">
+                                    <label for="patientDOB">Date of Birth</label>
+                                    <input class="form-control" type="text" placeholder="patientDOB" readonly />
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="patientAge">Age</label>
+                                    <input class="form-control" type="text" placeholder="patientAge" readonly />
+                                </div>
+                            </div>
+                            
+                            <!-- email-->
+                            <div class="form-group">
+                                <label for="patientEmail">Email</label>
+                                <input type="email" class="form-control" id="patientEmail" aria-describedby="emailHelp" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="example@lifeblocks.com"/>
+                                <small id="emailHelp" class="form-text text-muted">Your email, Our secret.</small>
+                            </div>
+                            <!-- phone -->
+                            <div class="form-group">
+                                <label for="patientPhone">Phone</label>
+                                <input type="tel" class="form-control" aria-describedby="phoneHelp" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="###-###-####"/>
+                                <small id="phoneHelp" class="form-text text-muted">Format: ###-###-####</small>
+                            </div>
+                            <!-- address info -->
+                            <div class="form-group">
+                                <label for="patientAddr">Address</label>
+                                <input type="text" class="form-control" id="patientAddr" placeholder="Address" />
+                            </div>
+                            @*<div class="form-group">
+                                <label for="patientAddr2">Address 2:</label>
+                                <input type="text" class="form-control" id="patientAddr2" placeholder="Address 2" />
+                            </div>*@
+                            <div class="form-row">
+                                <div class="form-group col-sm-6">
+                                    <label for="patientCity">City</label>
+                                    <input type="text" class="form-control" id="patientCity" placeholder="City" />
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="patientProv">Province</label>
+                                    <select id="patientProv" class="form-control">
+                                        <!-- provinces -->
+                                        <option>Alb.</option>
+                                        <option selected>B.C.</option>
+                                        <option>Man.</option>
+                                        <option>N.B.</option>
+                                        <option>N.L.</option>
+                                        <option>N.S.</option>
+                                        <option>Ont.</option>
+                                        <option>P.E.I</option>
+                                        <option>Sask.</option>
+                                        <option>Que.</option>
+
+                                        <!-- territories -->
+                                        <option>N.W.T</option>
+                                        <option>Nvt.</option>
+                                        <option>Y.T</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="patientPostal">Postal</label>
+                                    <input type="text" class="form-control" id="patientPostal" />
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -30,18 +103,110 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Emergency Contact</h3>
+                        <h3>Emergency Contact(s)</h3>
                     </div>
                     <div class="card-body">
                         <form>
                             <!-- add multiple items to the list-->
-                            <label>Name:</label>
+                            <!-- <label>Name:</label>
                             <label>Phone:</label>
                             <label>Address:</label>
-                            <label>Relationship:</label>
+                            <label>Relationship:</label> -->
+
+                            <h5>Emergency Contact 1</h5>
+                            <div class="form-group">
+                                <label for="patientName">Name</label>
+                                <!-- name -->
+                                <div class="form-row">
+                                    <div class="col">
+                                        <input id="emerFirstName1" type="text" class="form-control" placeholder="First" />
+                                    </div>
+                                    <div class="col">
+                                        <input id="emerLastName1" type="text" class="form-control" placeholder="Last" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- phone -->
+                            <div class="form-group">
+                                <label for="emerPhone1">Phone</label>
+                                <input type="tel" class="form-control" aria-describedby="phoneHelp" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="###-###-####" />
+                                <small id="phoneHelp" class="form-text text-muted">Format: ###-###-####</small>
+                            </div>
+                            <!-- address info -->
+                            <div class="form-group">
+                                <label for="emerAddr1">Address</label>
+                                <input type="text" class="form-control" id="emerAddr1" placeholder="Address" />
+                            </div>
+ 
+                            <div class="form-row">
+                                <div class="form-group col-sm-6">
+                                    <label for="patientCity">City</label>
+                                    <input type="text" class="form-control" id="patientCity" placeholder="City" />
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="patientProv">Province</label>
+                                    <select id="patientProv" class="form-control">
+                                        <!-- provinces -->
+                                        <option>Alb.</option>
+                                        <option selected>B.C.</option>
+                                        <option>Man.</option>
+                                        <option>N.B.</option>
+                                        <option>N.L.</option>
+                                        <option>N.S.</option>
+                                        <option>Ont.</option>
+                                        <option>P.E.I</option>
+                                        <option>Sask.</option>
+                                        <option>Que.</option>
+
+                                        <!-- territories -->
+                                        <option>N.W.T</option>
+                                        <option>Nvt.</option>
+                                        <option>Y.T</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label for="patientPostal">Postal</label>
+                                    <input type="text" class="form-control" id="patientPostal" />
+                                </div>
+                            </div>
+                            <!-- Emergency relationship -->
+                            <!-- partner -->
+                            <div class="form-group">
+                                <label>Relationship</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientPartner" value="partner" />
+                                    <label class="form-check-label" for="patientPartner">Partner</label>
+                                </div>
+                                <!-- parent -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientParent" value="parent" />
+                                    <label class="form-check-label" for="patientParent">Parent/Guardian</label>
+                                </div>
+                                <!-- sibling -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientSibling" value="sibling" />
+                                    <label class="form-check-label" for="patientSibling">Sibling</label>
+                                </div>
+                                <!-- relative -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientRelative" value="relative" />
+                                    <label class="form-check-label" for="patientRelative">Relative</label>
+                                </div>
+                                <!-- friend -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientFriend" value="friend" />
+                                    <label class="form-check-label" for="patientFriend">Friend</label>
+                                </div>
+                                <!-- other -->
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="emerRelationship" id="patientOther" value="other" />
+                                    <label class="form-check-label" for="patientOther">Other, please specify.</label>
+                                    <input class="form-check" type="text" name="emerRelationship" id="patientOther" />
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -49,7 +214,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
                         <h3>Allergies</h3>
@@ -62,7 +227,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
                         <h3>Daily Medications</h3>
@@ -73,12 +238,12 @@
                         </form>
                     </div>
                 </div>
-                
+
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-6">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
                         <h3>Medical History</h3>
