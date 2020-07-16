@@ -12,7 +12,33 @@
     <a href="Login" style="float:right">Login</a>
 }
 
-<head>
+<body>
+    <div class="login-form">
+        <div class="login-header">
+            <h2>Pharmacist Sign Up</h2>
+            <p>Enter your details below to create an account</p>
+        </div>
+        <form asp-action="SignUp" method="post" style="text-align: left;">
+            <p>First Name:</p>
+            @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
+            <p>Last Name:</p>
+            @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
+            <p>Email:</p>
+            @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
+            @Html.ValidationMessageFor(n => n.Email)
+            <p data-toggle="tooltip" data-placement="right" title="Registration Number issued by the College of Pharmacists of BC">Registration Number:</p>
+            @Html.TextBoxFor(n => n.PharmaNum, new { id = "signup-regnum", placeholder = "XXXX-XXXX-XXXX", title = "Registration Number issued by the College of Pharmacists of BC", @required = "required" })
+            <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Pharmacist Keyword:</p>
+            @Html.TextBoxFor(n => n.PharmaKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
+            <p>Password:</p>
+            @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
+            <p>Confirm Password:</p>
+            <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
+            <span id='message'></span><br />
+            <button type="submit" id="submitButton">Register</button>
+        </form>
+    </div>
+
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -41,73 +67,6 @@
     <script src="~/theme/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/theme/dist/js/demo.js"></script>
-</head>
-
-<body>
-    @*<div class="doctor-sign-up">
-            <div class="form">
-                <div class="heading">
-                    <p>Sign Up for MedNet</p>
-                </div>
-                <p>Enter your details below to create an account.</p>
-                <form asp-action="SignUp" method="post" class="text-form">
-                    <label>First Name:</label>
-                    @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
-                    <label>Last Name:</label>
-                    @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
-                    <label>Email:</label>
-                    @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-                    @Html.ValidationMessageFor(n => n.Email)
-                    <div class="tooltip allign">
-                        <label>Registration Number:</label>
-                        <span class="tooltiptext">Registration Number issued by the College of Pharmacists of British Columbia.</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.PharmaNum, new { id = "signup-regnum", placeholder = "XXXX-XXXX-XXXX", title = "Registration Number issued by the College of Pharmacists of British Columbia.", @required = "required" })
-                    <div class="tooltip">
-                        <label>Pharmacist Keyword:</label>
-                        <span class="tooltiptext">Identification pass phrase.</span>
-                    </div>
-                    @Html.TextBoxFor(n => n.PharmaKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
-                    <label>Password:</label>
-                    @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
-                    <label>Confirm Password:</label>
-                    <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-                    <span id='message'></span><br />
-                    <button type="submit" id="submitButton">Register</button>
-                </form>
-            </div>
-        </div>*@
-    <div class="login-form">
-        <div class="login-header">
-            <h2>Pharmacist Sign Up</h2>
-            <p>Enter your details below to create an account</p>
-        </div>
-        <form asp-action="SignUp" method="post" style="text-align: left;">
-            <label>First Name:</label>
-            @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
-            <label>Last Name:</label>
-            @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
-            <label>Email:</label>
-            @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-            @Html.ValidationMessageFor(n => n.Email)
-            <label>Registration Number:</label>
-            <div class="tooltip allign">
-                <span class="tooltiptext">Registration Number issued by the College of Pharmacists of British Columbia.</span>
-            </div>
-            @Html.TextBoxFor(n => n.PharmaNum, new { id = "signup-regnum", placeholder = "XXXX-XXXX-XXXX", title = "Registration Number issued by the College of Pharmacists of British Columbia.", @required = "required" })
-            <label>Pharmacist Keyword:</label>
-            <div class="tooltip">
-                <span class="tooltiptext">Identification pass phrase.</span>
-            </div>
-            @Html.TextBoxFor(n => n.PharmaKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
-            <label>Password:</label>
-            @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
-            <label>Confirm Password:</label>
-            <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-            <span id='message'></span><br />
-            <button type="submit" id="submitButton">Register</button>
-        </form>
-    </div>
 
     <script type="text/javascript">
         jQuery(function ($) {
