@@ -10,41 +10,43 @@
 
     <!-- R to L -->
     <a href="SignUp" class="topnav-rbtn">Sign Up</a>
-    <a href="Login" class="active topnav-rbtn">Login</a>
-
-    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
-        <i class="fa fa-bars"></i>
-    </a>
+    <a href="Login" class="topnav-rbtn active">Login</a>
 }
 
 <body>
-    <div class="login-form">
-        <div class="login-header">
-            <h2>Doctor Login</h2>
-            <p>Enter your details below</p>
+    <div class="content-full">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Doctor Login</h2>
+                <p>Enter your details below</p>
+            </div>
+            <div class="login-body">
+                @Html.ValidationSummary(true)
+                <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
+                    <p data-toggle="tooltip" data-placement="right" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
+                    @Html.TextBoxFor(n => n.DoctorMINC, new
+                    {
+                        id = "index-minc",
+                        type = "text",
+                        placeholder = "CA##-####-####",
+                        title = "12-digit Medical Identification Number for Canada"
+                    })
+                    @Html.ValidationMessageFor(n => n.DoctorMINC)
+                    <br />
+                    <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Doctor Keyword:</p>
+                    @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
+
+                    <p>Password:</p>
+                    @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+                    @Html.ValidationMessageFor(n => n.password)
+                    <button type="submit">Login</button>
+
+                    <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
+                </form>
+            </div>
         </div>
-        @Html.ValidationSummary(true)
-        <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
-            <p data-toggle="tooltip" data-placement="top" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
-            @Html.TextBoxFor(n => n.DoctorMINC, new
-            {
-                id = "index-minc",
-                type = "text",
-                placeholder = "CA##-####-####",
-                title = "12-digit Medical Identification Number for Canada"
-            })
-            @Html.ValidationMessageFor(n => n.DoctorMINC)
-            <p data-toggle="tooltip" data-placement="top" title="Identification Keyphrase">Doctor Keyword:</p>
-            @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
-
-            <p>Password:</p>
-            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-            @Html.ValidationMessageFor(n => n.password)
-            <button type="submit">Login</button>
-
-            <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
-        </form>
     </div>
+    
 
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>

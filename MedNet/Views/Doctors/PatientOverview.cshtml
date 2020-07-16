@@ -4,28 +4,20 @@
 }
 
 @section NavButtons {
-
-    <!-- L to R -->
-    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
-    <a href="PatientLookUp" class="topnav-lbtn">Search Patient</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Search Patient</a>
     <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
-    <!-- R to L-->
-    <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="Home" class="topnav-rbtn">@ViewBag.DoctorName</a>
 
-    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
-        <i class="fa fa-bars"></i>
-    </a>
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
-<body>
-    <div class="sidebar">
-        <div class="sidebar-body">
-            <a href="PatientOverview" class="active">Overview</a>
-            <a href="PatientOverview">Past Appointments</a>
-            <a href="PatientOverview">Prescriptions</a>
-            <a href="PatientOverview">Test Results</a>
-            <a href="RequestAccess">Request Access</a>
+<div class="patient-overview">
+    <div class="form1">
+        <div class="heading2">
+            <p><strong>Patient Profile</strong></p>
+        </div>
+        <div class="heading1">
+            <p><strong>@Model.PatientName</strong></p>
         </div>
         <div class="sidebar-footer">
             <a href="Home">Close</a>
@@ -102,7 +94,6 @@
 
         </div>
     </div>
-</body>
 
     
     @*

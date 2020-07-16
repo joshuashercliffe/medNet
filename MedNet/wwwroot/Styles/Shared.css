@@ -106,26 +106,14 @@ body {
         visibility: visible;
     }*/
 
-
-.topnav-lbtn {
-    float: left;
-    display: block;
-}
-
-.topnav-rbtn {
-    float: right;
-    display: block;
-}
-
 .topnav {
     top: 0;
     position: fixed;
     overflow: hidden;
     background-color: #333;
-    height: auto;
+    min-height: 53px;
     min-width: 100%;
-    display: block;
-    z-index: 1;
+    margin-bottom: 50px;
 }
 
     .topnav a {
@@ -204,70 +192,48 @@ body {
         opacity: 0.8;
     }
 
+.topnav-lbtn {
+    float: left;
+}
+
+.topnav-rbtn {
+    float: right;
+}
+
+.footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;
+    padding: 5px;
+    position: absolute;
+}
+
+.footer p {
+    color: gainsboro;
+    font-size: 12px;
+}
+    .footer a {
+        color: #7B7D7D;
+    }
+
+.green-buttons-top:hover {
+    opacity: 0.8;
+}
+
 .mednet-logo {
     height: 53px;
-    width: 200px;
-    float: left;
     max-height: 100%;
-    padding: 5px 10px 5px 10px;
+    padding: 5px;
 }
 
-.btn-edit {
-    color: #4CAF50;
-    background-color: gainsboro;
-    border-color: #4CAF50;
-    bottom: 0px;
-    right: 15px;
-    position: absolute
+.content-full {
+    margin-top: 63px;
 }
 
-.btn-edit:hover {
-    color: gainsboro;
-    background-color: #4CAF50;
-    border-color: gainsboro;
-}
-
-@media screen and (max-width: 400px) {
-    .sidebar a {
-        text-align: center;
-        float: none;
-    }
-}
 
 @media screen and (max-width: 825px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right-style: none;
-        border-right-style: none;
-        border-bottom-style: solid;
-        border-bottom-width: thin;
-        border-bottom-color: gainsboro;
-    }
-
-    .sidebar a {
-        float: left;
-    }
-
-    .sidebar-footer {
-        position: relative;
-        border-top-style: none;
-    }
-
-    .content {
-        margin-left: 10px;
-        margin-top: 10px;
-    }
-
-    .content-full {
-        margin-top: 10px;
-    }
-
-    .topnav {
-        position: relative;
-    }
-
     .topnav a:not(:first-child) {
         display: none;
     }
@@ -279,6 +245,7 @@ body {
 
     .topnav.responsive {
         position: relative;
+        margin-bottom: -50px;
     }
 
         .topnav.responsive .icon {
@@ -294,11 +261,14 @@ body {
         }
 
     .topnav-rbtn {
-        float: left;
+        float: none;
+    }
+
+    .topnav-lbtn {
+        float: none;
     }
 
     .topnav-first {
-        margin-top: 50px;
+        margin-top: 53px;
     }
 }
-

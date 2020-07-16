@@ -4,8 +4,12 @@
     ViewData["Title"] = "Welcome";
 }
 
+@section NavButtons {
+    <!-- L to R -->
+    <a href="/Home" class="topnav-lbtn topnav-first active">Home</a>
+}
 
-<body> 
+<body>
     <div class="jumbotron text-center" style="background:transparent !important">
         <br />
         <h1>Welcome to MedNet</h1>
@@ -19,7 +23,7 @@
             <div class="col-sm-6">
                 <div class="card border-0">
                     <div class="card-body">
-                        <h2 class="card-title">Patient User</h2>
+                        <h2 class="card-title">General User</h2>
                         <p class="card-text">To view your personal medical information. If you are looking to sign up for MedNet, please contact a registered healthcare provider.</p>
                         <a href="/Patients/Login" class="btn btn-success">Continue</a>
                     </div>
@@ -40,5 +44,4 @@
         </div>
     </div>
 </body>
-   
 
