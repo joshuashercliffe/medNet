@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MedNet.Models;
 using MedNet.Data.Models.Models;
@@ -222,6 +221,21 @@ namespace MedNet.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+            return View();
+        }
+
+        public IActionResult PreviousAppointments()
+        {
+            return View();
+        }
+
+        public IActionResult PrescriptionList()
+        {
+            return View();
+        }
+
+        public IActionResult TestResultList()
+        {
             return View();
         }
     }
