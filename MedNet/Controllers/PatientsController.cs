@@ -37,7 +37,6 @@ namespace MedNet.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult Login(PatientLoginViewModel indexViewModel)
         {
@@ -217,6 +216,12 @@ namespace MedNet.Controllers
             };
 
             return View(patientOverviewViewModel);
+        }
+
+        public IActionResult EditProfile(PatientEditProfileViewModel editProfileViewModel)
+        {
+            //Description: page where patient can edit their basic personal information
+            return View(editProfileViewModel);
         }
 
         public IActionResult Logout()

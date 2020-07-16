@@ -1,7 +1,9 @@
 ﻿/* Login forms */
 
 .login-form {
-    margin: auto;
+    margin-top: 85px;
+    margin-left: auto;
+    margin-right: auto;
     padding: 30px 40px 40px 30px;
     min-width: 360px;
     max-width: 460px;
@@ -11,12 +13,14 @@
     border-color: gainsboro;
 }
 
-    .login-form.login-header {
-        font-size: 20px;
-        line-height: 25px;
-        height: 30px;
-        text-align: center;
-    }
+.login-header {
+    text-align: center;
+}
+
+.login-body {    
+    text-align: left;
+}
+
 
     .login-form button {
         font-family: "Roboto", sans-serif;
@@ -63,4 +67,9 @@
             text-decoration: none;
         }
 
+@media screen and (max-width: 825px) {
+    .login-form {
+        margin-top: 50px;
+    }
+}
 /* End Index */

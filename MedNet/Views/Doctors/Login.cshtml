@@ -6,11 +6,15 @@
 
 @section NavButtons {
     <!-- L to R -->
-    <a href="/Home" style="float: left;">Home</a>
+    <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
 
     <!-- R to L -->
-    <a href="SignUp" style="float:right">Sign Up</a>
-    <a href="Login" style="float:right" class="active">Login</a>
+    <a href="SignUp" class="topnav-rbtn">Sign Up</a>
+    <a href="Login" class="active topnav-rbtn">Login</a>
+
+    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 }
 
 <body>
@@ -21,7 +25,7 @@
         </div>
         @Html.ValidationSummary(true)
         <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
-            <p data-toggle="tooltip" data-placement="right" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
+            <p data-toggle="tooltip" data-placement="top" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
             @Html.TextBoxFor(n => n.DoctorMINC, new
             {
                 id = "index-minc",
@@ -30,8 +34,7 @@
                 title = "12-digit Medical Identification Number for Canada"
             })
             @Html.ValidationMessageFor(n => n.DoctorMINC)
-            <br />
-            <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Doctor Keyword:</p>
+            <p data-toggle="tooltip" data-placement="top" title="Identification Keyphrase">Doctor Keyword:</p>
             @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
 
             <p>Password:</p>

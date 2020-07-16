@@ -1,12 +1,20 @@
 ﻿@model PatientSignUpViewModel
 
 @{
-    ViewData["Title"] = "Patient Sign Up";
+    ViewData["Title"] = "Patient Registration";
 }
 
 @section NavButtons {
-    <a href="/Home" class="topnav-home">Home</a>
-    <a href="Login" class="topnav-dl">Login</a>
+    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
+    <a href="PatientLookUp" class="topnav-lbtn">Search Patient</a>
+    <a href="PatientSignUp" class="active topnav-lbtn">Register Patient</a>
+    <!-- R to L-->
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    @*<a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>*@
+
+    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
+        <i class="fa fa-bars"></i>
+    </a>
 }
 
 <head>
@@ -76,7 +84,6 @@
     <script src="~/theme/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/theme/dist/js/demo.js"></script>
-
 
     <!-- Scripts -->
     <script type="text/javascript">

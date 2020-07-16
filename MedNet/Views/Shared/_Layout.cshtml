@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <!-- MedNet Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="~/Styles/Login.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/style.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/Feedback.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/PatientOverview.css" />
-    <link rel="stylesheet" type="text/css" href="~/Styles/Login.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/Logout.css" />
     <link rel="stylesheet" type="text/css" href="~/Styles/Shared.css" />
 
@@ -19,11 +19,8 @@
 
 <body>
     <div class="topnav" id="myTopnav">
-        <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left;" />
+        <img class="mednet-logo" src="~/theme/images/MedNetLogo.png" style="float: left; width: 200px;" />
         @RenderSection("NavButtons", required: false)
-        <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
-            <i class="fa fa-bars"></i>
-        </a>
     </div>
 
     @RenderBody()
@@ -35,7 +32,7 @@
         </p>
     </div>
 
-    @RenderSection("Scripts", required: false)
+
 
     <!-- for Bootstrap v4.5-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -50,12 +47,18 @@
             } else {
                 x.className = "topnav";
             }
-        }</script>
+        }
+    </script>
 
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+
+    @RenderSection("Scripts", required: false)
+
+
+
 </body>
 </html>

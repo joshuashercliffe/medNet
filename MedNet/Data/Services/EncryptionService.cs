@@ -7,7 +7,6 @@ namespace MedNet.Data.Services
 {
     public class EncryptionService
     {
-        private static string hashDelim = "lifeblocks";
         public static void getNewBlockchainUser(out string signPrivateKey, out string signPublicKey,
             out string agreePrivateKey, out string agreePublicKey)
         {

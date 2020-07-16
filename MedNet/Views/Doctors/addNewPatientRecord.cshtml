@@ -4,10 +4,10 @@
 }
 
 @section NavButtons {
-    <a href="PatientLookUp" class="topnav-plu">Patient Look-Up</a>
-    <a href="PatientOverview" class="topnav-po">Patient Overview</a>
-    <a href="Logout" class="topnav-logout" style="float:right">Logout</a>
-    <a href="patientLookUp" class="topnav-name" style="float:right">@ViewBag.DoctorName</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+    <a href="PatientOverview" class="topnav-lbtn">Patient Overview</a>
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="patientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
 <div class="add-record">
@@ -116,7 +116,7 @@
                     <option>Chemistry</option>
                     <option>Microbiology</option>
                     <option>Lipid</option>
-                    <option>Thyroid Functions</option>
+                    <option>Thyroid Functions</option> 
                     <option>Other tests</option>
                     <option>Other chemistry tests</option>
                 </select>

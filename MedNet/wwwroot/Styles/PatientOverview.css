@@ -1,5 +1,6 @@
-﻿/* Patient Overview */
-.patient-overview {
+﻿
+/* Patient Overview */
+/*.patient-overview {
     width: 360px;
     padding: 8% 0 0;
     margin: auto;
@@ -163,3 +164,33 @@
 }
 
 /* end Patient Overview */
+
+
+.overview {
+    margin: 0;
+    text-align: left;
+    border-bottom-width: medium;
+    border-color: gainsboro;
+}
+
+.overview-header {
+    padding: 10px;
+    background-color: gainsboro;
+}
+
+.overview-body {
+    margin-top: 10px;
+    border-style: none;
+}
+
+.overview-body .row {
+    margin-top: 10px;
+    border-right-style: solid;
+}
+
+.overview-body .card {
+    height: 100%;
+    width: 100%;
+    margin: 5px;
+    border-style: none;
+}
