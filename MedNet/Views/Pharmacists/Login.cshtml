@@ -14,36 +14,40 @@
 }
 
 <body>
-    <div class="login-form">
-        <div class="login-header">
-            <h2>Pharmacist Login</h2>
-            <p>Enter your details below</p>
+    <div class="login-page">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Pharmacist Login</h2>
+                <p>Enter your details below</p>
+            </div>
+            @Html.ValidationSummary(true)
+            <form asp-action="Login" method="post" style="text-align: left">
+
+                <p data-toggle="tooltip" data-placement="right" title="Registration Number issued by the College of Pharmacists of BC">Registration Number:</p>
+                @Html.TextBoxFor(n => n.PharmaNum, new
+                   {
+                       id = "index-regnum",
+                       type = "text",
+                       placeholder = "####-####-####",
+                       title = "Registration Number issued by the College of Pharmacists of BC"
+                   })
+                @Html.ValidationMessageFor(n => n.PharmaNum)
+
+                <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Pharmacist Keyword:</p>
+                @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
+
+                <p>Password:</p>
+                @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+                @Html.ValidationMessageFor(n => n.password)
+
+                <button type="submit">Login</button>
+                <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
+            </form>
         </div>
-        @Html.ValidationSummary(true)
-        <form asp-action="Login" method="post" style="text-align: left">
-
-            <p data-toggle="tooltip" data-placement="right" title="Registration Number issued by the College of Pharmacists of BC">Registration Number:</p>
-            @Html.TextBoxFor(n => n.PharmaNum, new
-               {
-                   id = "index-regnum",
-                   type = "text",
-                   placeholder = "####-####-####",
-                   title = "Registration Number issued by the College of Pharmacists of BC"
-               })
-            @Html.ValidationMessageFor(n => n.PharmaNum)
-
-            <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Pharmacist Keyword:</p>
-            @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
-
-            <p>Password:</p>
-            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-            @Html.ValidationMessageFor(n => n.password)
-
-            <button type="submit">Login</button>
-            <p class="message">Don't have an account? <a href="SignUp">Sign up here.</a></p>
-        </form>
     </div>
+</body>
 
+@section Scripts{
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -77,4 +81,4 @@
         jQuery(function ($) {
             $("#index-regnum").inputmask("9999-9999-9999");
         });</script>
-</body>
+}

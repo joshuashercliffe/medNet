@@ -11,24 +11,27 @@
     <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
-<div class="content-full">
-    <div class="login-form">
-        <div class="login-header">
-            <h3>Patient Search</h3>
-            <p>Enter a patient's PHN</p>
-        </div>
-        <div class="login-body">
-            @Html.ValidationSummary(true)
-            <form asp-action="PatientLookUp" method="post">
-                <p data-toggle="tooltip" data-placement="right" title="10-digit Personal Health Nmber can be found on the patient's CareCard/BC Services Card">Patient PHN:</p>
-                @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "XXXX-XXX-XXXX", title = "10-digit Personal Health Number" })
-                @Html.ValidationMessageFor(n => n.PHN)
-                <button type="submit">Submit</button>
-            </form>
+<body>
+    <div class="login-page">
+        <div class="login-form">
+            <div class="login-header">
+                <h3>Patient Search</h3>
+                <p>Enter a patient's PHN</p>
+            </div>
+            <div class="login-body">
+                @Html.ValidationSummary(true)
+                <form asp-action="PatientLookUp" method="post">
+                    <p data-toggle="tooltip" data-placement="right" title="10-digit Personal Health Nmber can be found on the patient's CareCard/BC Services Card">Patient PHN:</p>
+                    @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "XXXX-XXX-XXXX", title = "10-digit Personal Health Number" })
+                    @Html.ValidationMessageFor(n => n.PHN)
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-    
+</body>
+
+@section Scripts {
     <!-- jQuery -->
     <script src="~/theme/plugins/jquery/jquery.min.js"></script>
     <!-- InputMask -->
@@ -39,3 +42,5 @@
         jQuery(function ($) {
             $("#patient-look-up-PHN").inputmask("9999-999-999");
         });</script>
+}
+

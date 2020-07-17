@@ -13,35 +13,39 @@
 }
 
 <body>
-    <div class="login-form">
-        <div class="login-header">
-            <h2>Patient Login</h2>
-            <p>Enter your details below</p>
+    <div class="login-page">
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Patient Login</h2>
+                <p>Enter your details below</p>
+            </div>
+            @Html.ValidationSummary(true)
+            <form asp-action="Login" method="post" style="text-align: left">
+
+                <p data-toggle="tooltip" data-placement="right" title="10-digit Personal Health Number">Personal Health Number:</p>
+                @Html.TextBoxFor(n => n.PatientPHN,
+                new
+                     {
+                        id = "patient-login-PHN",
+                        type = "text",
+                        placeholder = "####-###-###",
+                        title = "10-digit Personal Health Record Number."
+                    })
+                @Html.ValidationMessageFor(n => n.PatientPHN)
+                <br />
+                <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Patient Keyword:</p>
+                @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
+
+                <p>Password:</p>
+                @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
+                @Html.ValidationMessageFor(n => n.password)
+                <button type="submit">Login</button>
+            </form>
         </div>
-        @Html.ValidationSummary(true)
-        <form asp-action="Login" method="post" style="text-align: left">
-
-            <p data-toggle="tooltip" data-placement="right" title="10-digit Personal Health Number">Personal Health Number:</p>
-            @Html.TextBoxFor(n => n.PatientPHN,
-            new
-                 {
-                    id = "patient-login-PHN",
-                    type = "text",
-                    placeholder = "####-###-###",
-                    title = "10-digit Personal Health Record Number."
-                })
-            @Html.ValidationMessageFor(n => n.PatientPHN)
-            <br />
-            <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Patient Keyword:</p>
-            @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
-
-            <p>Password:</p>
-            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password" })
-            @Html.ValidationMessageFor(n => n.password)
-            <button type="submit">Login</button>
-        </form>
     </div>
+</body>
 
+@section Scripts{
     <!-- Select2 -->
     <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
     <!-- Bootstrap4 Duallistbox -->
@@ -76,6 +80,4 @@
             $("#patient-login-PHN").inputmask("9999-999-999");
         });
     </script>
-
-</body>
-
+}
