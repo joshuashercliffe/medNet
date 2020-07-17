@@ -26,13 +26,12 @@
                     <p data-toggle="tooltip" data-placement="right" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
                     @Html.TextBoxFor(n => n.DoctorMINC, new
                     {
-                        id = "index-minc",
+                        id = "DoctorMinc",
                         type = "text",
                         placeholder = "CA##-####-####",
                         title = "12-digit Medical Identification Number for Canada"
                     })
                     @Html.ValidationMessageFor(n => n.DoctorMINC)
-                    <br />
                     <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Doctor Keyword:</p>
                     @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase" })
 
@@ -59,6 +58,6 @@
 
     <script type="text/javascript">
         jQuery(function ($) {
-            $("#index-minc").inputmask("AA99-9999-9999");
+            $("#DoctorMinc").inputmask("AA99-9999-9999");
         });</script>
 }
