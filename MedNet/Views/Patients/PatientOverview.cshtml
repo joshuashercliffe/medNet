@@ -4,11 +4,8 @@
 }
 
 @section NavButtons {
-    <a href="Logout" class="topnav-rbtn">Logout</a>
-
-    <a href="javascript:void(0);" class="icon" onclick="resizeFunction()">
-        <i class="fa fa-bars"></i>
-    </a>
+    <a href="Logout" class="topnav-rbtn topnav-first">Logout</a>
+    @*<a href="PatientOverview" class="topnav-rbtn">@Model.PatientName</a>*@
 }
 
 <body>
@@ -18,9 +15,6 @@
             <a href="PreviousAppointments">Past Appointments</a>
             <a href="PrescriptionList">Prescriptions</a>
             <a href="TestResultList">Test Results</a>
-        </div>
-        <div class="sidebar-footer">
-            <a href="Home">Close</a>
         </div>
     </div>
 

@@ -3,5 +3,22 @@
     ViewData["Title"] = "TestResultList";
 }
 
-<h1>TestResultList</h1>
+@section NavButtons {
+    <a href="Logout" class="topnav-rbtn topnav-first">Logout</a>
+    @*<a href="PatientOverview" class="topnav-rbtn">@Model.PatientName</a>*@
+}
 
+<body>
+    <div class="sidebar">
+        <div class="sidebar-body">
+            <a href="PatientOverview">Overview</a>
+            <a href="PreviousAppointments">Past Appointments</a>
+            <a href="PrescriptionList">Prescriptions</a>
+            <a href="TestResultList" class="active">Test Results</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Test Results</h1>
+    </div>
+</body>
