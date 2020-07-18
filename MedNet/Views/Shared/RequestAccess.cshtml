@@ -4,64 +4,65 @@
 }
 
 @section NavButtons {
+    <a href="PatientOverview" class="topnav-lbtn">Back to Patient Overview</a>
     <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
-    <a href="PatientOverview" class="topnav-lbtn">New Patient Sign-Up</a>
+    <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
     <a href="Logout" class="topnav-rbtn">Logout</a>
     <!-- <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a> -->
-}
+    }
 
-<body>
-    <div class="content-full">
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Request Access</h3>
-                        <p>Enter details below retrieve patient information.</p>
-                    </div>
-                    <div class="card-body">
-                        @Html.ValidationSummary(true)
-                        <form class="text-form" asp-action="RequestAccess" method="post">
+    <body>
+        <div class="content-full">
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Request Access</h3>
+                            <p>Enter details below retrieve patient information.</p>
+                        </div>
+                        <div class="card-body">
+                            @Html.ValidationSummary(true)
+                            <form class="text-form" asp-action="RequestAccess" method="post">
 
-                            <!-- Keyword -->
-                            <div class="form-group">
-                                <label for="patientPhone">Keyword</label>
-                                @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required", @class = "form-control" })
-                                @Html.ValidationMessageFor(n => n.keyword)
-                                <small id="phoneHelp" class="form-text text-muted">Patient's Identification Keyphrase</small>
-                            </div>
-                            <button type="submit" id="submitButton" class="btn btn-success">Authorize with Fingerprint</button>
-                        </form>
+                                <!-- Keyword -->
+                                <div class="form-group">
+                                    <label for="patientPhone">Patient Keyword</label>
+                                    @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required", @class = "form-control" })
+                                    @Html.ValidationMessageFor(n => n.keyword)
+                                    <small id="phoneHelp" class="form-text text-muted">Patient's Identification Keyphrase</small>
+                                </div>
+                                <button type="submit" id="submitButton" class="btn btn-success">Authorize with Fingerprint</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 
-<!--
-<body>
-    <div class="login-page">
-        <div class="login-form">
-            <div class="login-header">
-                <h3>Request Access</h3>
-                <p>Enter your details below retrieve patient information.</p>
-            </div>
-            <div class="login-body">
-                @Html.ValidationSummary(true)
-                <form class="text-form" asp-action="RequestAccess" method="post">
-                    <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Patient Keyword:</p>
-                    @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
-                    @Html.ValidationMessageFor(n => n.keyword)
-                    <button type="submit">Authorize with Fingerprint</button>
-                </form>
+    <!--
+    <body>
+        <div class="login-page">
+            <div class="login-form">
+                <div class="login-header">
+                    <h3>Request Access</h3>
+                    <p>Enter your details below retrieve patient information.</p>
+                </div>
+                <div class="login-body">
+                    @Html.ValidationSummary(true)
+                    <form class="text-form" asp-action="RequestAccess" method="post">
+                        <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Patient Keyword:</p>
+                        @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification Passphrase Here" })
+                        @Html.ValidationMessageFor(n => n.keyword)
+                        <button type="submit">Authorize with Fingerprint</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</body>
--->
+    </body>
+    -->
 
-<script type="text/javascript"></script>
+    <script type="text/javascript"></script>
 
 
 

@@ -14,10 +14,10 @@
 <div class="sidebar">
     <div class="sidebar-body">
         <a href="PatientOverview">Overview</a>
-        <a href="RequestAccess">Request Access</a>
+        <a href="RequestAccess">Request Full Access</a>
         <a href="AddNewPatientRecord" class="active">Add New Record</a>
 
-        <a href="PatientOverview">Past Appointments</a>
+        <a href="PatientOverview">Doctor Appointments</a>
         <a href="PatientOverview">Prescriptions</a>
         <a href="PatientOverview">Test Results</a>
     </div>
@@ -75,6 +75,7 @@
                                 @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new { type = "date", id = "PrescribingDate", @class = "form-control" })
                             </div>
 
+                            <!-- NOT SURE IF WE NEED THIS FIELD -->
                             <div class="form-group" id="prescription2">
                                 <label>Superscription (Rx Label)</label>
                                 @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
@@ -146,7 +147,7 @@
 
                             <!-- STYLE OF THE CHECKBOX NEEDS TO BE FIXED -->
                             <div class="form-group" id="prescription6">
-                                <label>Substitution Allowed (Yes)</label>
+                                <label>Substitution Allowed (check for 'Yes')</label>
                                 @Html.CheckBoxFor(n => n.Prescription.Substitution, new { @class = "form-control" })
                             </div>
 
@@ -154,8 +155,6 @@
                                 <label>Direction for Use or Special Instructions</label>
                                 @Html.TextAreaFor(n => n.Prescription.DirectionForUse, new { @rows = 3, placeholder = "Restrictions and Recommendations", @class = "form-control" })
                             </div>
-
-
 
                             <div class="form-group" id="test1">
                                 <label for="selectTestType">Test Type</label>
@@ -165,10 +164,7 @@
                                     <option>Urine Tests</option>
                                     <option>Chemistry</option>
                                     <option>Microbiology</option>
-                                    <option>Lipid</option>
-                                    <option>Thyroid Functions</option>
                                     <option>Other tests</option>
-                                    <option>Other chemistry tests</option>
                                 </select>
                             </div>
 
@@ -178,11 +174,9 @@
                             </div>
 
                             <div class="form-group" id="test3">
-                                <label>Attach file</label>
+                                <label>Attach Complete Requisition Form</label>
                                 @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control" })
                             </div>
-
-
 
                             <button type="submit" id="buttonSubmit" class="btn btn-success">Submit</button>
                         </form>
