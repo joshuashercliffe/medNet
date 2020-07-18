@@ -298,16 +298,19 @@ namespace MedNet.Controllers
                 _bigChainDbService.SendCreateTransferTransactionToDataBase<string, Dictionary<string, string>>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
-            if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.Prescription.DrugNameStrength))
+            if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.Prescription.DrugName))
             {
                 var prescriptionViewModel = addNewPatientRecordViewModel.Prescription;
                 var prescription = new Prescription
                 {
                     PrescribingDate = prescriptionViewModel.PrescribingDate,
-                    DrugNameStrength = prescriptionViewModel.DrugNameStrength,
-                    Dosage = prescriptionViewModel.Dosage,
+                    Superscription = prescriptionViewModel.Superscription,
+                    DrugName = prescriptionViewModel.DrugName,
+                    Concentration = prescriptionViewModel.Concentration,
                     StartDate = prescriptionViewModel.StartDate,
                     EndDate = prescriptionViewModel.EndDate,
+                    Refill = prescriptionViewModel.Refill,
+                    Substitution = prescriptionViewModel.Substitution,
                     DoctorName = HttpContext.Session.GetString(Globals.currentUserName),
                     DoctorMinsc = HttpContext.Session.GetString(Globals.currentUserID),
                     DirectionForUse = prescriptionViewModel.DirectionForUse

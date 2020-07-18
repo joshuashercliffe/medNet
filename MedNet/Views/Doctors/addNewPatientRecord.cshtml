@@ -5,138 +5,193 @@
 
 @section NavButtons {
     <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
-    <a href="PatientOverview" class="topnav-lbtn">Patient Overview</a>
+    <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
+
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="patientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+    <a class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
-<div class="add-record">
-    <div class="form">
-        <div class="heading">
-            <p>Add New Patient Record</p>
-        </div>
-        <br />
-        <form asp-action="AddNewPatientRecord" method="post">
-            <div>
-                <label for="selectRecordType">New Record Type</label>
-                <select id="selectRecordType">
-                    <option value="" disabled selected hidden>Select Record Type</option>
-                    <option value="doctorsNote">Add New Doctor's Note</option>
-                    <option value="prescription">Add New Prescription</option>
-                    <!--<option value="testResult">Add New Test Results</option>-->
-                </select>
-            </div>
+<div class="sidebar">
+    <div class="sidebar-body">
+        <a href="PatientOverview">Overview</a>
+        <a href="RequestAccess">Request Access</a>
+        <a href="AddNewPatientRecord" class="active">Add New Record</a>
 
-            <div id="doctorsNote1">
-                <label>Purpose of Visit</label>
-                @Html.TextBoxFor(n => n.DoctorsNote.PurposeOfVisit, new { placeholder = "Main concern addressed" })
-            </div>
-
-            <div id="doctorsNote2">
-                <label>Description</label>
-                @Html.TextAreaFor(n => n.DoctorsNote.Description, new { @rows = 3, placeholder = "Enter appointment notes" })
-            </div>
-
-            <div id="doctorsNote3">
-                <label>Final Diagnoses</label>
-                @Html.TextBoxFor(n => n.DoctorsNote.FinalDiagnosis, new { placeholder = "Identification of concern raised" })
-            </div>
-
-            <div id="doctorsNote4">
-                <label>Further Instructions and General Precautions</label>
-                @Html.TextAreaFor(n => n.DoctorsNote.FurtherInstructions, new { @rows = 3, placeholder = "Physical/dietary precautions, restrictions and recommendations" })
-            </div>
-
-            <div id="prescription1">
-                <label>Prescribing Date</label>
-                @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new
-                {
-                    type = "text",
-                    id = "todaysDate"
-                })
-            </div>
-
-            <div id="prescription2">
-                <label>Drug Name and Strength</label>
-                @Html.TextBoxFor(n => n.Prescription.DrugNameStrength, new { placeholder = "Drug name, strength" })
-            </div>
-
-            <div id="prescription3">
-                <label>Dosage</label>
-                @Html.TextBoxFor(n => n.Prescription.Dosage, new
-                {
-                    placeholder = "00.00",
-                    onkeypress = "return isFloat(event)",
-                    @class = "form-control",
-
-                })
-            </div>
-
-            <div id="prescription4">
-                <div class="row">
-                    <div class="column">
-                        <label>Start Day</label>
-                    </div>
-                    <div class="column">
-                        <label>End Day</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="column">
-                        @Html.TextBoxFor(n => n.Prescription.StartDate, new
-                        {
-                            type = "date",
-                            min = "2020-04-01",
-                            max = "2050-04-01"
-                        })
-                    </div>
-                    <div class="column">
-                        @Html.TextBoxFor(n => n.Prescription.EndDate, new
-                        {
-                            type = "date",
-                            min = "2020-04-01",
-                            max = "2050-04-01"
-                        })
-                    </div>
-                </div>
-            </div>
-
-            <div id="prescription5">
-                <label>Direction for Use or Special Instructions</label>
-                @Html.TextAreaFor(n => n.Prescription.DirectionForUse, new { @rows = 3, placeholder = "Restrictions and Recommendations" })
-            </div>
-
-            <!--
-            <div id="test1">
-                <label for="selectTestType">Test Type</label>
-                <select id="selectRecordType">
-                    <option value="" disabled selected hidden>Select Test Type</option>
-                    <option>Hematology</option>
-                    <option>Urine Tests</option>
-                    <option>Chemistry</option>
-                    <option>Microbiology</option>
-                    <option>Lipid</option>
-                    <option>Thyroid Functions</option> 
-                    <option>Other tests</option>
-                    <option>Other chemistry tests</option>
-                </select>
-            </div>
-
-            <div id="test2">
-                <label>Reason for Test</label>
-                <textarea rows="3" placeholder="List symptoms and suspected illness"></textarea>
-            </div>
-
-            <div id="test3">
-                <label>Attach file</label>
-                <input type="file">
-                <label>Choose file</label>
-            </div>
-            -->
-            <button type="submit" id="buttonSubmit">Submit</button>
-        </form>
+        <a href="PatientOverview">Past Appointments</a>
+        <a href="PatientOverview">Prescriptions</a>
+        <a href="PatientOverview">Test Results</a>
+    </div>
+    <div class="sidebar-footer">
+        <a href="Home">Close</a>
     </div>
 </div>
+
+
+<body>
+    <div class="content">
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add New Medical Record</h3>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="AddNewPatientRecord" method="post">
+
+                            <div class="form-group">
+                                <label for="selectRecordType">New Record Type</label>
+                                <select id="selectRecordType" class="form-control">
+                                    <option value="" disabled selected hidden>Select Record Type</option>
+                                    <option value="doctorsNote">Add New Doctor's Note</option>
+                                    <option value="prescription">Add New Prescription</option>
+                                    <option value="testResult">Add New Test Results</option>
+                                </select>
+                                <small id="phoneHelp" class="form-text text-muted">Please select the type of medical record you wish to add.</small>
+                            </div>
+
+                            <div class="form-group" id="doctorsNote1">
+                                <label>Purpose of Visit</label>
+                                @Html.TextBoxFor(n => n.DoctorsNote.PurposeOfVisit, new { placeholder = "Main concern addressed in today's appointment", @class = "form-control" })
+                            </div>
+
+
+                            <div class="form-group" id="doctorsNote2">
+                                <label>Description</label>
+                                @Html.TextAreaFor(n => n.DoctorsNote.Description, new { @rows = 3, placeholder = "Enter appointment notes", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="doctorsNote3">
+                                <label>Final Diagnoses</label>
+                                @Html.TextBoxFor(n => n.DoctorsNote.FinalDiagnosis, new { placeholder = "Identification of concern raised", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="doctorsNote4">
+                                <label>Further Instructions and General Precautions</label>
+                                @Html.TextAreaFor(n => n.DoctorsNote.FurtherInstructions, new { @rows = 3, placeholder = "Physical/dietary precautions, restrictions and recommendations", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="prescription1">
+                                <label>Date Prescribed</label>
+                                @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new { type = "date", id = "PrescribingDate", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="prescription2">
+                                <label>Superscription (Rx Label)</label>
+                                @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="prescription3">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label>Drug Name</label>
+                                    </div>
+                                    <div class="col">
+                                        <label>Concentration</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.Prescription.DrugName, new { placeholder = "Drug name, strength", @class = "form-control" })
+                                    </div>
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.Prescription.Concentration, new
+                                        {
+                                            placeholder = "00.00",
+                                            onkeypress = "return isFloat(event)",
+                                            @class = "form-control",
+
+                                        })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="prescription4">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label>Start Day</label>
+                                    </div>
+                                    <div class="col">
+                                        <label>End Day</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.Prescription.StartDate, new
+                                        {
+                                            type = "date",
+                                            id = "PrescribingStartDate",
+                                            @class = "form-control"
+                                        })
+                                    </div>
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.Prescription.EndDate, new
+                                        {
+                                            type = "date",
+                                            id = "PrescribingEndDate",
+                                            @class = "form-control"
+                                        })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="prescription5">
+                                <label>Refill Data</label>
+                                @Html.TextBoxFor(n => n.Prescription.Refill, new
+                                {
+                                    placeholder = "Number of refills",
+                                    onkeypress = "return isFloat(event)",
+                                    @class = "form-control",
+                                })
+                            </div>
+
+                            <!-- STYLE OF THE CHECKBOX NEEDS TO BE FIXED -->
+                            <div class="form-group" id="prescription6">
+                                <label>Substitution Allowed (Yes)</label>
+                                @Html.CheckBoxFor(n => n.Prescription.Substitution, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="prescription7">
+                                <label>Direction for Use or Special Instructions</label>
+                                @Html.TextAreaFor(n => n.Prescription.DirectionForUse, new { @rows = 3, placeholder = "Restrictions and Recommendations", @class = "form-control" })
+                            </div>
+
+
+
+                            <div class="form-group" id="test1">
+                                <label for="selectTestType">Test Type</label>
+                                <select name="TestResult.TestTypeId" class="form-control">
+                                    <option value="" disabled selected hidden>Select Test Type</option>
+                                    <option>Hematology</option>
+                                    <option>Urine Tests</option>
+                                    <option>Chemistry</option>
+                                    <option>Microbiology</option>
+                                    <option>Lipid</option>
+                                    <option>Thyroid Functions</option>
+                                    <option>Other tests</option>
+                                    <option>Other chemistry tests</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="test2">
+                                <label>Reason for Test</label>
+                                @Html.TextAreaFor(n => n.TestResult.ReasonForTest, new { @rows = 3, placeholder = "List any symptoms, suspected illness and reason for ordering the test.", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group" id="test3">
+                                <label>Attach file</label>
+                                @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control" })
+                            </div>
+
+
+
+                            <button type="submit" id="buttonSubmit" class="btn btn-success">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
 <!-- Select2 -->
 <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
@@ -166,8 +221,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="~/theme/dist/js/demo.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+<script type="text/javascript">$(document).ready(function () {
 
         bsCustomFileInput.init();
         var today = new Date();
@@ -222,6 +276,8 @@
             $('#prescription3').show();
             $('#prescription4').show();
             $('#prescription5').show();
+            $('#prescription6').show();
+            $('#prescription7').show();
             $('#buttonSubmit').show();
         } else {
             $('#prescription1').hide();
@@ -229,17 +285,38 @@
             $('#prescription3').hide();
             $('#prescription4').hide();
             $('#prescription5').hide();
+            $('#prescription6').hide();
+            $('#prescription7').hide();
         }
 
-        /*        if ($(this).val() == "testResult") {
-                    $('#test1').show();
-                    $('#test2').show();
-                    $('#test3').show();
-                    $('#submit').show();
-                } else {
-                    $('#test1').hide();
-                    $('#test2').hide();
-                    $('#test3').hide();
-                }*/
+        if ($(this).val() == "testResult") {
+            $('#test1').show();
+            $('#test2').show();
+            $('#test3').show();
+            $('#submit').show();
+            $('#buttonSubmit').show();
+
+        } else {
+            $('#test1').hide();
+            $('#test2').hide();
+            $('#test3').hide();
+        }
     });
-    $("#selectRecordType").trigger("change");</script>
+    $("#selectRecordType").trigger("change");
+
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("PrescribingDate").setAttribute("min", today);
+    document.getElementById("PrescribingStartDate").setAttribute("min", today);
+    document.getElementById("PrescribingEndDate").setAttribute("min", today);</script>

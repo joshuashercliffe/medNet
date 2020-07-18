@@ -9,10 +9,61 @@
     <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
 
     <!-- R to L -->
-    <a href="SignUp" class="topnav-rbtn">Sign Up</a>
-    <a href="Login" class="topnav-rbtn active">Login</a>
+    <a href="SignUp" class="topnav-rbtn">Doctor Sign-Up</a>
+    <a href="Login" class="topnav-rbtn active">Log-In</a>
 }
 
+<body>
+    <div class="content-full">
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Doctor Log-In</h3>
+                    </div>
+                    <div class="card-body">
+                        @Html.ValidationSummary(true)
+                        <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
+
+
+                            <!-- MINC -->
+                            <div class="form-group">
+                                <label for="patientPhone">Doctor MINC</label>
+                                @Html.TextBoxFor(n => n.DoctorMINC, new { id = "index-minc", type = "text", placeholder = "CA##-####-####", title = "12-digit Medical Identification Number for Canada", @class = "form-control" })
+                                @Html.ValidationMessageFor(n => n.DoctorMINC)
+                                <small id="phoneHelp" class="form-text text-muted">12-digit Medical Identification Number for Canada</small>
+                            </div>
+
+                            <!-- Keyword -->
+                            <div class="form-group">
+                                <label for="patientPhone">Keyword</label>
+                                @Html.TextBoxFor(n => n.DoctorKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase", @class = "form-control" })
+                                <small id="phoneHelp" class="form-text text-muted">Identification Keyphrase</small>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label for="patientPhone">Password</label>
+                                @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
+                                @Html.ValidationMessageFor(n => n.password)
+                            </div>
+
+                            <button type="submit" id="submitButton" class="btn btn-success">Log-In</button>
+                            <div class="form-group">
+                                <small class="message">Don't have a doctor's account? <a href="SignUp">Sign-up here.</a></small>
+                            </div>
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!--
 <body>
     <div class="login-page">
         <div class="login-form">
@@ -46,10 +97,8 @@
             </div>
         </div>
     </div>
-
-
-
 </body>
+-->
 
 @section Scripts {
     <!-- InputMask -->
