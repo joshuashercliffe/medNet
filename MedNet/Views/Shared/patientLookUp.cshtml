@@ -4,14 +4,43 @@
 }
 
 @section NavButtons {
-    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
-    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Search Patient</a>
-    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first active">Patient Look-Up</a>
+    <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+    <!-- <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a> -->
 }
 
+<body>
+    <div class="content-full">
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Patient Look-Up</h3>
+                    </div>
+                    <div class="card-body">
+
+                        @Html.ValidationSummary(true)
+                        <form asp-action="PatientLookUp" method="post">
+
+                            <!-- PHN -->
+                            <div class="form-group">
+                                <label for="patientPhone">Personal Health Number</label>
+                                @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "form-control" })
+                                @Html.ValidationMessageFor(n => n.PHN)
+                                <small id="phoneHelp" class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
+                            </div>
+                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!--
 <body>
     <div class="login-page">
         <div class="login-form">
@@ -23,7 +52,7 @@
                 @Html.ValidationSummary(true)
                 <form asp-action="PatientLookUp" method="post">
                     <p data-toggle="tooltip" data-placement="right" title="10-digit Personal Health Nmber can be found on the patient's CareCard/BC Services Card">Patient PHN:</p>
-                    @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "XXXX-XXX-XXXX", title = "10-digit Personal Health Number" })
+                    @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number" })
                     @Html.ValidationMessageFor(n => n.PHN)
                     <button type="submit">Submit</button>
                 </form>
@@ -31,6 +60,7 @@
         </div>
     </div>
 </body>
+-->
 
 @section Scripts {
     <!-- jQuery -->
@@ -39,8 +69,7 @@
     <script src="~/theme/plugins/moment/moment.min.js"></script>
     <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 
-    <script type="text/javascript">
-        jQuery(function ($) {
+    <script type="text/javascript">jQuery(function ($) {
             $("#patient-look-up-PHN").inputmask("9999-999-999");
         });</script>
 }

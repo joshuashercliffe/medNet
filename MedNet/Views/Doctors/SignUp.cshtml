@@ -14,36 +14,70 @@
 }
 
 <body>
-    <div class="login-page">
-        <div class="login-form">
-            <div class="login-header">
-                <h2>Doctor Sign Up</h2>
-                <p>Enter your details below to create an account</p>
+    <div class="content-full">
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Doctor Sign-Up</h3>
+                        <p>Enter your details below to create an account!</p>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="Doctors" asp-action="SignUp" method="post">
+                            <!-- name -->
+                            <div class="form-group">
+                                <label for="patientName">Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- email-->
+                            <div class="form-group">
+                                <label for="patientEmail">Email</label>
+                                @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required", @class = "form-control" })
+                            </div>
+
+                            <!-- MINC -->
+                            <div class="form-group">
+                                <label for="patientPhone">Doctor MINC</label>
+                                @Html.TextBoxFor(n => n.DoctorMINC, new { id = "signup-minc", placeholder = "CA##-####-####", title = "12-digit Medical Identification Number for Canada", @required = "required", @class = "form-control" })
+                                <small id="phoneHelp" class="form-text text-muted">12-digit Medical Identification Number for Canada</small>
+                            </div>
+
+                            <!-- Keyword -->
+                            <div class="form-group">
+                                <label for="patientPhone">Keyword</label>
+                                @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required", @class = "form-control" })
+                                <small id="phoneHelp" class="form-text text-muted">Identification Keyphrase</small>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label for="patientPhone">Password</label>
+                                @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required", @class = "form-control" })
+                            </div>
+
+                            <!-- Retype Password -->
+                            <div class="form-group">
+                                <label for="patientPhone">Retype Password</label>
+                                <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' />
+                                <span id='message'></span><br /><br />
+                            </div>
+
+                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Sign-Up</button>
+
+                        </form>
+                    </div>
+                </div>
             </div>
-            <form asp-controller="Doctors" asp-action="SignUp" method="post" style="text-align: left;">
-                <p>First Name:</p>
-                @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
-                <p>Last Name:</p>
-                @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
-                <p>Email:</p>
-                @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-                @Html.ValidationMessageFor(n => n.Email)
-                <p data-toggle="tooltip" data-placement="right" title="12-digit Medical Identification Number for Canada">Doctor MINC:</p>
-                @Html.TextBoxFor(n => n.DoctorMINC, new { id = "signup-minc", placeholder = "CAXX -XXXX-XXXX", title = "12-digit Medical Identification Number for Canada", @required = "required" })
-                <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">Doctor Keyword:</p>
-                @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Passphrase Here", @required = "required" })
-                <p>Password:</p>
-                @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
-                <p>Confirm Password:</p>
-                <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-                <span id='message'></span><br />
-                <button type="submit" id="submitButton">Register</button>
-            </form>
         </div>
     </div>
-
-
-
 </body>
 
 @section Scripts{
@@ -77,8 +111,7 @@
     <script src="~/theme/dist/js/demo.js"></script>
 
     <!-- Scripts -->
-    <script type="text/javascript">
-        jQuery(function ($) {
+    <script type="text/javascript">jQuery(function ($) {
             $("#signup-minc").inputmask("AA99-9999-9999");
         });
 
@@ -92,6 +125,5 @@
                 document.getElementById('message').innerHTML = 'Passwords do not match, please try again.';
                 document.getElementById('submitButton').disabled = true;
             }
-        }
-    </script>
+        }</script>
 }

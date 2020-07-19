@@ -137,7 +137,7 @@ body {
 }
 
 .card-header {
-    border-bottom-width: medium;
+    border-bottom: none;
     text-align: center;
 }
 

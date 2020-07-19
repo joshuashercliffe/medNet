@@ -8,14 +8,41 @@
 
 @section NavButtons {
     <!-- L to R -->
-    <a href="Home" class="active topnav-lbtn topnav-first">Home</a>
-    <a href="PatientLookUp" class="topnav-lbtn">Search Patient</a>
-    <a href="PatientSignUp" class="topnav-lbtn">Register Patient</a>
+    <a href="PatientLookUp" class="topnav-lbtn">Patient Look-Up</a>
+    <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
     <!-- R to L-->
     <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
 }
 <body>
-    <div class="content-full">
-        <h1>Doctor's Homepage</h1>
+    <div class="jumbotron text-center" style="background:transparent !important">
+        <br />
+        <h1>Welcome to MedNet Dr. @ViewBag.DoctorName</h1>
+        <br />
+        <p>To get started, please select an action.</p>
     </div>
-</body> 
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">Patient Look-Up</h2>
+                        <p class="card-text">Use this feature to view a patient's personal medical information and history during a medical appointment. To add/view a patient's medical information, please request their PHN. </p>
+                        <a href="PatientLookUp" class="btn btn-success">Patient Look-Up</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="card-title">New Patient Sign-Up</h2>
+                        <p class="card-text">To enrol a new patient onto MedNet, please continue to registration. Patients will need to provide their PHN to create a new account.</p>
+                        <a href="PatientSignUp" class="btn btn-success">New Patient Sign-Up</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Can add some documentation on how patient overview works, what adding records means/what types can u add, what requesting access means -->
+        </div>
+    </div>
+</body>
