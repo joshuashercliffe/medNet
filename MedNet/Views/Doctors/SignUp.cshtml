@@ -9,8 +9,8 @@
     <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
 
     <!-- R to L -->
-    <a href="SignUp" class="topnav-rbtn active">Sign Up</a>
-    <a href="Login" class="topnav-rbtn">Login</a>
+    <a href="SignUp" class="topnav-rbtn active">Sign-Up</a>
+    <a href="Login" class="topnav-rbtn">Log-In</a>
 }
 
 <body>
@@ -19,14 +19,14 @@
             <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Doctor Sign-Up</h3>
+                        <h2>Doctor Sign-Up</h2>
                         <p>Enter your details below to create an account!</p>
                     </div>
                     <div class="card-body">
                         <form asp-controller="Doctors" asp-action="SignUp" method="post">
                             <!-- name -->
                             <div class="form-group">
-                                <label for="patientName">Name</label>
+                                <label>Name</label>
                                 <div class="form-row">
                                     <div class="col">
                                         @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required", @class = "form-control" })
@@ -39,33 +39,33 @@
 
                             <!-- email-->
                             <div class="form-group">
-                                <label for="patientEmail">Email</label>
+                                <label>Email</label>
                                 @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required", @class = "form-control" })
                             </div>
 
                             <!-- MINC -->
                             <div class="form-group">
-                                <label for="patientPhone">Doctor MINC</label>
+                                <label>Doctor MINC</label>
                                 @Html.TextBoxFor(n => n.DoctorMINC, new { id = "signup-minc", placeholder = "CA##-####-####", title = "12-digit Medical Identification Number for Canada", @required = "required", @class = "form-control" })
-                                <small id="phoneHelp" class="form-text text-muted">12-digit Medical Identification Number for Canada</small>
+                                <small class="form-text text-muted">12-digit Medical Identification Number for Canada</small>
                             </div>
 
                             <!-- Keyword -->
                             <div class="form-group">
-                                <label for="patientPhone">Keyword</label>
-                                @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required", @class = "form-control" })
-                                <small id="phoneHelp" class="form-text text-muted">Identification Keyphrase</small>
+                                <label>Keyword</label>
+                                @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
+                            <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                             </div>
 
                             <!-- Password -->
                             <div class="form-group">
-                                <label for="patientPhone">Password</label>
+                                <label>Password</label>
                                 @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required", @class = "form-control" })
                             </div>
 
                             <!-- Retype Password -->
                             <div class="form-group">
-                                <label for="patientPhone">Retype Password</label>
+                                <label>Retype Password</label>
                                 <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' />
                                 <span id='message'></span><br /><br />
                             </div>

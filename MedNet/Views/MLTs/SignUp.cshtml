@@ -9,37 +9,74 @@
     <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
 
     <!-- R to L -->
-    <a href="SignUp" class="topnav-rbtn active">Sign Up</a>
-    <a href="Login" class="topnav-rbtn">Login</a>
+    <a href="SignUp" class="topnav-rbtn active">Sign-Up</a>
+    <a href="Login" class="topnav-rbtn">Log-In</a>
 }
 
 
 <body>
-    <div class="login-page">
-        <div class="login-form">
-            <div class="login-header">
-                <h2>Lab Technician Sign Up</h2>
-                <p>Enter your details below to create an account</p>
+    <div class="content-full">
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Lab Technician Sign-Up</h2>
+                        <p>Enter your details below to create an account!</p>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="SignUp" method="post">
+                            <!-- name -->
+                            <div class="form-group">
+                                <label>Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                    <div class="col">
+                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- email-->
+                            <div class="form-group">
+                                <label>Email</label>
+                                @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required", @class = "form-control" })
+                            </div>
+
+                            <!-- CSMLS ID -->
+                            <div class="form-group">
+                                <label>CSMLS ID</label>
+                                @Html.TextBoxFor(n => n.CSMLSID, new { id = "signup-csmlsid", placeholder = "####-###", title = "7-digit Canadian Society for Medical Labroratory Science ID", @required = "required", @class = "form-control" })
+                                <small class="form-text text-muted">7-digit Canadian Society for Medical Labroratory Science ID</small>
+                            </div>
+
+                            <!-- Keyword -->
+                            <div class="form-group">
+                                <label>Keyword</label>
+                                @Html.TextBoxFor(n => n.MLTKeyWord, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
+                                <small class="form-text text-muted">Identification keyphrase used for encryption</small>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="form-group">
+                                <label>Password</label>
+                                @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required", @class = "form-control" })
+                            </div>
+
+                            <!-- Retype Password -->
+                            <div class="form-group">
+                                <label>Retype Password</label>
+                                <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' />
+                                <span id='message'></span><br /><br />
+                            </div>
+
+                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Sign-Up</button>
+
+                        </form>
+                    </div>
+                </div>
             </div>
-            <form asp-action="SignUp" method="post" style="text-align: left;">
-                <p>First Name:</p>
-                @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required" })
-                <p>Last Name:</p>
-                @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required" })
-                <p>Email:</p>
-                @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @required = "required" })
-                @Html.ValidationMessageFor(n => n.Email)
-                <p data-toggle="tooltip" data-placement="right" title="7-digit Canadian Society for Medical Labroratory Science ID">CSLMS ID:</p>
-                @Html.TextBoxFor(n => n.CSMLSID, new { id = "signup-csmlsid", placeholder = "0000-000", title = "7-digit Canadian Society for Medical Labroratory Science ID", @required = "required" })
-                <p data-toggle="tooltip" data-placement="right" title="Identification Keyphrase">MLT Keyword:</p>
-                @Html.TextBoxFor(n => n.MLTKeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required" })
-                <p>Password:</p>
-                @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required" })
-                <p>Confirm Password:</p>
-                <input type="password" id="retype-password" name="retype-password" placeholder="Retype Password" onkeyup='check();' />
-                <span id='message'></span><br />
-                <button type="submit" id="submitButton">Register</button>
-            </form>
         </div>
     </div>
 </body>

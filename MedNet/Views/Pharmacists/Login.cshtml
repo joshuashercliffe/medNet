@@ -16,7 +16,7 @@
 <body>
     <div class="content-full">
         <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
                     <div class="card-header">
                         <h2>Pharmacist Log-In</h2>
@@ -37,8 +37,8 @@
                             <!-- Keyword -->
                             <div class="form-group">
                                 <label>Keyword</label>
-                                @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification Keyphrase", @class = "form-control" })
-                                <small class="form-text text-muted">Identification Keyphrase</small>
+                                @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
+                                <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                             </div>
 
                             <!-- Password -->
