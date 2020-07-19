@@ -15,11 +15,11 @@
     <div class="sidebar-body">
         <a href="PatientOverview" class="active">Overview</a>
         <a href="RequestAccess">Request Full Access</a>
+        <!-- UPDATE HREF TO RECORDS PAGE -->
+        <a href="PatientOverview">View Medical Records</a>
         <a href="AddNewPatientRecord">Add New Record</a>
 
-        <a href="PatientOverview">Doctor Appointments</a>
-        <a href="PatientOverview">Prescriptions</a>
-        <a href="PatientOverview">Test Results</a>
+
     </div>
     <div class="sidebar-footer">
         <a href="Home">Close</a>
@@ -27,6 +27,7 @@
 </div>
 
 <div class="content">
+    
     <div class="content-header">
         <h1>@Model.PatientName</h1>
         <p><strong>PHN: </strong>@Model.PatientPHN</p>
@@ -43,6 +44,7 @@
                         <p><strong>Date of Birth: </strong>@Model.PatientDOB.ToLongDateString()</p>
                         <p><strong>Address: </strong></p>
                         <p><strong>Email: </strong></p>
+                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                     </div>
                 </div>
             </div>
@@ -65,7 +67,7 @@
                         <h3>Allergies</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list of patient's allergies-->
+                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                     </div>
                 </div>
             </div>
@@ -75,7 +77,7 @@
                         <h3>Daily Medications</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in patient's daily medications-->
+                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                     </div>
                 </div>
             </div>
@@ -88,7 +90,103 @@
                         <h3>Medical History</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in patient's medical history-->
+                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TODO: Move this to a new cshtml page and create code in controller, also add code for test results -->
+        <div class="row">
+            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Medical Records</h3>
+                        <nav class="nav nav-pills nav-fill tab">
+                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
+                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
+                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">Test Results</button>
+                        </nav>
+                    </div>
+                    <div class="card-body" style="max-height: 75vh; overflow-y: scroll;">
+
+                        <div id="doc_notes" class="tabcontent">
+                            @if (Model != null && Model.DoctorNotes != null && Model.DoctorNotes.Any())
+                            {
+                                @foreach (var doctorNote in Model.DoctorNotes)
+                                {
+                                    <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
+                                        <h4>
+                                            Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                                        </h4>
+                                        <p>
+                                            <strong>Purpose of Visit:</strong> @doctorNote.PurposeOfVisit <br />
+                                            <strong>Description:</strong> @doctorNote.Description <br />
+                                            <strong>Final Diagnosis:</strong> @doctorNote.FinalDiagnosis <br />
+                                            <strong>Further Instructions and General Precautions:</strong> @doctorNote.FurtherInstructions   <br />
+                                            <strong>Doctor Visited:</strong> @doctorNote.DoctorName
+                                        </p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="record" align="left">
+                                    <h4>
+                                        No records shared.
+                                    </h4>
+                                    <p>
+                                        No medical records to show.
+                                    </p>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="prescriptions" class="tabcontent">
+                            @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
+                            {
+                                @foreach (var prescription in Model.Prescriptions)
+                                {
+                                    <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
+                                        <h4>
+                                            Date: @prescription.PrescribingDate.ToString("MMMM dd, yyyy")
+                                        </h4>
+                                        <p>
+                                            <strong>Drug Prescribed:</strong> @prescription.DrugName <br />
+                                            <strong>Concentration:</strong> @prescription.Concentration <br />
+                                            <strong>Prescription Valid From/To:</strong> @prescription.StartDate.ToString("MMMM dd, yyyy") - @prescription.EndDate.ToString("MMMM dd, yyyy") <br />
+                                            <strong>Total Number of Refills:</strong> @prescription.Refill <br />
+                                            <strong>Substitutions Allowed:</strong> @prescription.Substitution.ToString() <br />
+                                            <strong>Directions for Use:</strong> @prescription.DirectionForUse <br />
+                                            <strong>Prescribing Doctor:</strong> @prescription.DoctorName
+                                        </p>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="record" align="left">
+                                    <h4>
+                                        No records shared.
+                                    </h4>
+                                    <p>
+                                        No medical records to show.
+                                    </p>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- TO DO: Fill in for TEST RESULTS, display file as a viewable/downloadable link-->
+                        <div id="test_results" class="tabcontent">
+                            <div class="record" align="left">
+                                <h4>
+                                    No records shared.
+                                </h4>
+                                <p>
+                                    No medical records to show.
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -96,6 +194,21 @@
 
     </div>
 </div>
+
+<script>document.getElementById("defaultOpen").click();
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }</script>
 
 
 @*

@@ -15,11 +15,10 @@
     <div class="sidebar-body">
         <a href="PatientOverview">Overview</a>
         <a href="RequestAccess">Request Full Access</a>
+        <!-- UPDATE HREF TO RECORDS PAGE -->
+        <a href="PatientOverview">View Medical Records</a>
         <a href="AddNewPatientRecord" class="active">Add New Record</a>
 
-        <a href="PatientOverview">Doctor Appointments</a>
-        <a href="PatientOverview">Prescriptions</a>
-        <a href="PatientOverview">Test Results</a>
     </div>
     <div class="sidebar-footer">
         <a href="Home">Close</a>
@@ -178,7 +177,7 @@
                                 @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control" })
                             </div>
 
-                            <button type="submit" id="buttonSubmit" class="btn btn-success">Submit</button>
+                            <button type="submit" id="buttonSubmit" class="btn btn-success btn-block">Submit</button>
                         </form>
                     </div>
                 </div>
