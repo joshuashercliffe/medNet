@@ -10,12 +10,16 @@
 }
 
 <!--DEBUG:
-    - cannot find type Prov
-    - write javascript/jquery to enable/disable textbox with radio button check
+    - if patient already has info, fill in textbox with information from database
+
+
     - write javascript to fill in textboxes that the patient already filled in
-    - Model.Relationships not working for radio button
+    - Allergies, Daily Meds, Medical History, write javascript to delimit user's input text with comma
 
-
+    - Having troubles with:
+        - cannot find type Prov (for dropdown list)
+        - Model.Relationships not working for radio button
+        - write javascript/jquery to enable/disable textbox with radio button check
 -->
 <!-- Improvements
     - improve page layout with tabs instead of scrollable page
@@ -153,9 +157,9 @@
                                 <label>Relationship</label>
                                 <!-- DEBUG: Model.Relationships not working for radio button-->
                                 @*@foreach (var relationship in @Model.Relationships)
-                                {
-                                    @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
-                                }*@
+                                    {
+                                        @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
+                                    }*@
                             </div>
                         </form>
                     </div>
