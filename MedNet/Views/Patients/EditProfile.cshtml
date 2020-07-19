@@ -14,11 +14,22 @@
     - write javascript/jquery to enable/disable textbox with radio button check
     - write javascript to fill in textboxes that the patient already filled in
     - Model.Relationships not working for radio button
-    - Add user-input list for Allergies, Daily Medications, Medical History
+
+
+-->
+<!-- Improvements
+    - improve page layout with tabs instead of scrollable page
+    - improve Allergy, Daily Meds, and Medical History input with separate textboxes for each item in the list
 -->
 
 <body>
     <div class="content-full">
+        <!-- improve page layout with tabs instead of scrollable page
+            <ul class="nav nav-tabs">
+                <li class="active">
+
+                </li>
+            </ul> -->
         <div class="row">
             <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
                 <div class="card">
@@ -142,9 +153,9 @@
                                 <label>Relationship</label>
                                 <!-- DEBUG: Model.Relationships not working for radio button-->
                                 @*@foreach (var relationship in @Model.Relationships)
-                                    {
-                                        @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
-                                    }*@
+                                {
+                                    @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
+                                }*@
                             </div>
                         </form>
                     </div>
@@ -159,7 +170,10 @@
                         <h3>Allergies</h3>
                     </div>
                     <div class="card-body">
-                        <!-- Add single elements to list-->
+                        <!-- User will type out allergies and separate each item with a comma -->
+                        <!-- DEBUG: improve Allergy, Daily Meds, and Medical History input with separate textboxes for each item in the list-->
+                        @Html.TextBoxFor(n => n.Allergies, new { placeholder = "List your allergies and separate each with a comma", type = "text", @class = "form-control", })
+                        <small id="allergyHelp" class="form-text text-muted">Example: Hayfever, Peanuts, Bees</small>
                     </div>
                 </div>
             </div>
@@ -173,7 +187,9 @@
                     </div>
                     <div class="card-body">
                         <form>
-                            <!-- Add single elements to list -->
+                            <!-- User will type out their daily medications and separate each item with a comma -->
+                            @Html.TextBoxFor(n => n.Meds, new { placeholder = "List your daily medications and separate each with a comma", type = "text", @class = "form-control", })
+                            <small id="medsHelp" class="form-text text-muted">Example: Aspirin, Advil, Gravol</small>
                         </form>
                     </div>
                 </div>
@@ -188,17 +204,19 @@
                         <h3>Medical History</h3>
                     </div>
                     <div class="card-body">
-                        <!-- Add single elements to list-->
+                        <!-- User will type out their medical history and separate each item with a comma -->
+                        @Html.TextBoxFor(n => n.MedHist, new { placeholder = "List your medical history and separate each with a comma.", type = "text", @class = "form-control", })
+                        <small id="medsHelp" class="form-text text-muted">Example: Aspirin, Advil, Gravol</small>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+    <button type="submit" class="btn btn-success save-changes">Save</button>
 </body>
 
 @section Scripts {
-    <!-- Enable text box when radio is checked -->
+    <!-- DEBUG: Enable text box when radio is checked -->
     <script type="text/javascript">
         function toggleTextbox() {
             var btn = document.getElementById("patientOther");

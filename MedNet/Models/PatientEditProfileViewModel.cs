@@ -18,6 +18,13 @@ namespace MedNet.Models
         public Prov Province { get; set; }
         public string Postal { get; set; }
 
+        public string Allergies { get; set; }
+        public List<string> AllergyList { get; set; }
+        public string MedHist { get; set; }
+        public List<string> MedHistList { get; set; }
+        public string Meds { get; set; }
+        public List<string> MedList { get; set; }
+
         // Emergency contact info
         public string emerFirstName { get; set; }
         public string emerLastName { get; set; }
