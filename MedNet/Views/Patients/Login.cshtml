@@ -27,10 +27,10 @@
 
                             <!-- Personal Health Number -->
                             <div class="form-group">
-                                <label>Doctor MINC</label>
-                                @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Record Number", @class = "form-control" })
+                                <label>Personal Health Number</label>
+                                @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Number", @class = "form-control" })
                                 @Html.ValidationMessageFor(n => n.PatientPHN)
-                                <small class="form-text text-muted">10-digit Personal Health Record Number</small>
+                                <small class="form-text text-muted">10-digit Personal Health Number</small>
                             </div>
 
                             <!-- Keyword -->

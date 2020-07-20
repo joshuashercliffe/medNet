@@ -30,11 +30,9 @@
                                 <div class="form-row">
                                     <div class="col">
                                         @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @class = "form-control", @required = "required" })
-                                        <!-- <input type="text" class="form-control" placeholder="patientFirstName" readonly /> -->
                                     </div>
                                     <div class="col">
                                         @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @required = "required" })
-                                        <!-- <input type="text" class="form-control" placeholder="patientLastName" readonly /> -->
                                     </div>
                                 </div>
                             </div>
@@ -43,40 +41,37 @@
                             <div class="form-group">
                                 <label for="patientEmail">Email</label>
                                 @Html.TextBoxFor(n => n.Email, new { placeholder = "Email", @class = "form-control", @required = "required" })
-                                <!-- <input type="email" class="form-control" id="patientEmail" aria-describedby="emailHelp" pattern="[a-z0-9._%+-]+@@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="example@lifeblocks.com" /> -->
                             </div>
 
                             <!-- DOB -->
                             <div class="form-group">
                                 <label for="patientDOB">Date of Birth</label>
                                 @Html.TextBoxFor(n => n.DateOfBirth, new { id = "DateOfBirth", type = "date", max = "2020-04-01", @class = "form-control" })
-                                <!-- <input class="form-control" type="text" placeholder="patientDOB" readonly /> -->
                             </div>
 
                             <!-- PHN -->
                             <div class="form-group">
-                                <label for="patientPhone">Personal Health Number</label>
-                                @Html.TextBoxFor(n => n.PHN, new { id = "patient-signup-PHN", placeholder = "####-###-###", title = "10 digit Personal Health Record Number.", @required = "required", @class = "form-control" })
-                                <!-- <input type="tel" class="form-control" aria-describedby="phoneHelp" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="###-###-####" /> -->
-                                <small id="phoneHelp" class="form-text text-muted">10-digit Personal Health Number</small>
+                                <label>Personal Health Number</label>
+                                @Html.TextBoxFor(n => n.PHN, new { id = "patient-signup-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number.", @required = "required", @class = "form-control" })
+                                <small class="form-text text-muted">10-digit Personal Health Number</small>
                             </div>
 
                             <!-- Keyword -->
                             <div class="form-group">
-                                <label for="patientPhone">Keyword</label>
+                                <label>Keyword</label>
                                 @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required", @class = "form-control"  })
                                 <small id="phoneHelp" class="form-text text-muted">Identification Keyphrase</small>
                             </div>
 
                             <!-- Password -->
                             <div class="form-group">
-                                <label for="patientPhone">Password</label>
+                                <label>Password</label>
                                 @Html.TextBoxFor(n => n.Password, new { type = "password", id = "password", placeholder = "Password", onkeyup = "check()", @required = "required", @class = "form-control" })
                             </div>
 
                             <!-- Retype Password -->
                             <div class="form-group">
-                                <label for="patientPhone">Retype Password</label>
+                                <label>Retype Password</label>
                                 <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' />
                                 <span id='message'></span><br /><br />
                             </div>
