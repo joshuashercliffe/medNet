@@ -51,6 +51,11 @@ namespace MedNet.Models
         }
         public string Relationship { get; set; }
         public string[] Relationships = new[] { "Partner", "Parent", "Sibling", "Relative", "Friend", "Other" }; 
+    }
 
+    public class Province
+    {
+        public int ProvinceId { get; set; }
+        public string Name { get; set; }
     }
 }

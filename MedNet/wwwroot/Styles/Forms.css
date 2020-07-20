@@ -82,9 +82,13 @@
 }
 
 .save-changes {
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    margin-right: 50px;
-    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.cancel-changes {
+    margin-left: 10px;
+    margin-bottom: 30px;
+    position: relative;
 }
