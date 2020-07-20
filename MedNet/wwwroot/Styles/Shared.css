@@ -16,9 +16,13 @@ body {
     min-height: 100vh;
 }
 
+.main {
+    margin-top: 38px;
+    bottom: 2.5rem;
+}
+
 .sidebar {
     margin: 0;
-    margin-top: 38px;
     padding: 5px;
     width: 200px;
     background-color: #f1f1f1;
@@ -55,8 +59,6 @@ body {
 
 .content {
     margin-left: 200px;
-    margin-top: 38px;
-    /*margin-top: 63px;*/
     margin-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;

@@ -70,7 +70,7 @@ namespace MedNet.Controllers
                 HttpContext.Session.SetString(Globals.currentDAPriK, agreePrivateKey);
                 HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
-                return RedirectToAction("patientLookUp");
+                return RedirectToAction("Home");
             }
             else
             {
@@ -127,6 +127,17 @@ namespace MedNet.Controllers
 
             _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
             return RedirectToAction("Login");
+        }
+
+        public IActionResult Home()
+        {
+            // DEBUG: need to fix
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null
+                || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return RedirectToAction("Login");
+            else
+                return View();
         }
     }
 }
