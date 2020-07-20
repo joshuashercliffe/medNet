@@ -1,10 +1,11 @@
-﻿@*@model PatientLookupViewModel
+﻿@model PatientLookupViewModel
 @{
     ViewData["Title"] = "Patient Look-Up";
 }
 
 @section NavButtons {
     <a href="PatientLookUp" class="topnav-lbtn topnav-first active">Patient Look-Up</a>
+    <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
     <!-- <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a> -->
@@ -12,15 +13,7 @@
 
 <div class="content-full">
     <div class="row">
-        <div class="col-sm-6">
-            <div class="jumbotron text-center" style="background:transparent !important">
-                <br />
-                <h1>Welcome to MedNet MLT'sName</h1> <!-- debug: make this dynamic-->
-                <br />
-                <p>To get started, please search for a patient using their Personal Health Number.</p>
-            </div>
-        </div>
-        <div class="form-reg col-sm-6">
+        <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
             <div class="card">
                 <div class="card-header">
                     <h3>Patient Look-Up</h3>
@@ -53,7 +46,7 @@
     <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 
     <script type="text/javascript">
-        jQuery(function ($) {
+jQuery(function ($) {
             $("#patient-look-up-PHN").inputmask("9999-999-999");
         });</script>
-}*@
+}

@@ -20,6 +20,7 @@ body {
     margin-top: 53px;
     bottom: 2.5rem;
     padding-top: 10px;
+    min-height: 100%;
 }
 
 .sidebar {
@@ -66,10 +67,15 @@ body {
 }
 
 .content-full {
-    margin: 10px;
-    margin-top: 63px;
+    margin: 0;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.content-center {
+    margin: 0;
+    top: 50%;
+    left: 50%;
 }
 
 .content-header {

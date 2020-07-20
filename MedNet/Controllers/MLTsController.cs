@@ -70,7 +70,7 @@ namespace MedNet.Controllers
                 HttpContext.Session.SetString(Globals.currentDAPriK, agreePrivateKey);
                 HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
-                return RedirectToAction("Home");
+                return RedirectToAction("PatientLookUp");
             }
             else
             {
@@ -129,9 +129,19 @@ namespace MedNet.Controllers
             return RedirectToAction("Login");
         }
 
-        public IActionResult Home()
+        //public IActionResult Home()
+        //{
+        //    // DEBUG: need to fix
+        //    ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+        //    if (HttpContext.Session.GetString(Globals.currentDSPriK) == null
+        //        || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+        //        return RedirectToAction("Login");
+        //    else
+        //        return View();
+        //}
+
+        public IActionResult PatientLookUp()
         {
-            // DEBUG: need to fix
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             if (HttpContext.Session.GetString(Globals.currentDSPriK) == null
                 || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
@@ -139,5 +149,132 @@ namespace MedNet.Controllers
             else
                 return View();
         }
+
+        [HttpPost]
+        public IActionResult PatientLookUp(PatientLookupViewModel patientLookupViewModel)
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (!ModelState.IsValid)
+                return View(patientLookupViewModel);
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
+            if (userAsset == null)
+            {
+                ModelState.AddModelError("", "We could not find a matching user");
+                return View(patientLookupViewModel);
+            }
+            HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
+            HttpContext.Session.SetString(Globals.currentPAPubK, userAsset.data.Data.AgreePublicKey);
+            HttpContext.Session.SetString(Globals.currentPPHN, userAsset.data.Data.ID);
+            return RedirectToAction("PatientOverview");
+        }
+
+        public IActionResult PatientOverview()
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return RedirectToAction("Login");
+            else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
+                return RedirectToAction("PatientLookUp");
+            else
+            {
+                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
+
+                var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
+                var doctorNotes = new List<DoctorNote>();
+                var prescriptions = new List<Prescription>();
+                //foreach (var doctorNote in doctorNotesList)
+                //{
+                //    var hashedKey = doctorNote.metadata.data[doctorSignPublicKey];
+                //    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                //    var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
+                //    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
+                //}
+                //foreach (var prescription in prescriptionsList)
+                //{
+                //    var hashedKey = prescription.metadata.data[doctorSignPublicKey];
+                //    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                //    var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
+                //    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
+                //}
+                var patientInfo = userAsset.data.Data;
+                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
+                var patientOverviewViewModel = new PatientOverviewViewModel
+                {
+                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
+                    PatientPHN = patientInfo.ID,
+                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAge = patientInfo.DateOfBirth.CalculateAge(),
+                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                };
+
+                return View(patientOverviewViewModel);
+            }
+        }
+        public IActionResult PatientRecords()
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return RedirectToAction("Login");
+            else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
+                return RedirectToAction("PatientLookUp");
+            else
+            {
+                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
+
+                var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+                var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                    (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
+                var doctorNotes = new List<DoctorNote>();
+                var prescriptions = new List<Prescription>();
+                foreach (var doctorNote in doctorNotesList)
+                {
+                    var hashedKey = doctorNote.metadata.data[doctorSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
+                    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
+                }
+                foreach (var prescription in prescriptionsList)
+                {
+                    var hashedKey = prescription.metadata.data[doctorSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
+                    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
+                }
+                var patientInfo = userAsset.data.Data;
+                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
+                var patientOverviewViewModel = new PatientOverviewViewModel
+                {
+                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
+                    PatientPHN = patientInfo.ID,
+                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAge = patientInfo.DateOfBirth.CalculateAge(),
+                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                };
+
+                return View(patientOverviewViewModel);
+            }
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View();
+        }
+
     }
 }
