@@ -4,6 +4,10 @@
     ViewData["Title"] = "Patient Edit Profile";
 }
 
+@section StyleLinks {
+    <link rel="stylesheet" type="text/css" href="~/Styles/tagsinput.css" />
+}
+
 @section NavButtons {
     <a href="PatientOverview" class="topnav-lbtn topnav-first">Home</a>
     <a href="Logout" class="topnav-rbtn">Logout</a>
@@ -29,19 +33,20 @@
 <body>
     <div class="content-full">
         <!-- improve page layout with tabs instead of scrollable page
-            <ul class="nav nav-tabs">
-                <li class="active">
+        <ul class="nav nav-tabs">
+            <li class="active">
 
-                </li>
-            </ul> -->
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>General Information</h3>
-                    </div>
-                    <div class="card-body">
-                        <form>
+            </li>
+        </ul> -->
+
+        <form asp-action="EditProfile" method="post">
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>General Information</h3>
+                        </div>
+                        <div class="card-body">
                             <!-- name -->
                             <div class="form-group">
                                 <label for="patientName">Name</label>
@@ -98,20 +103,18 @@
                                     @Html.TextBoxFor(n => n.Postal, new { type = "text", @class = "form-control" })
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Emergency Contact</h3>
-                    </div>
-                    <div class="card-body">
-                        <form>
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Emergency Contact</h3>
+                        </div>
+                        <div class="card-body">
                             <div class="form-group">
                                 <label>Name</label>
                                 <!-- name -->
@@ -148,7 +151,7 @@
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Postal</label>
-                                    @Html.TextBoxFor(n => n.Postal, new { type = "text", @class = "form-control" })
+                                    @Html.TextBoxFor(n => n.emerPostal, new { type = "text", @class = "form-control" })
                                 </div>
                             </div>
                             <!-- Emergency relationship -->
@@ -157,71 +160,70 @@
                                 <label>Relationship</label>
                                 <!-- DEBUG: Model.Relationships not working for radio button-->
                                 @*@foreach (var relationship in @Model.Relationships)
-                                    {
-                                        @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
-                                    }*@
+                            {
+                                @Html.RadioButtonFor(model => model.Relationship, relationship) @relationship<br />
+                            }*@
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Allergies</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- User will type out allergies and separate each item with a comma -->
-                        <!-- DEBUG: improve Allergy, Daily Meds, and Medical History input with separate textboxes for each item in the list-->
-                        @Html.TextBoxFor(n => n.Allergies, new { placeholder = "List your allergies and separate each with a comma", type = "text", @class = "form-control", })
-                        <small id="allergyHelp" class="form-text text-muted">Example: Hayfever, Peanuts, Bees</small>
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Allergies</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- User will type out allergies and separate each item with a comma -->
+                            <!-- DEBUG: improve Allergy, Daily Meds, and Medical History input with separate textboxes for each item in the list-->
+                            @Html.TextBoxFor(n => n.Allergies, new { type = "text", @class = "form-control", data_role = "tagsinput" })
+                            <small id="allergyHelp" class="form-text text-muted">List your allergies and separate each with a comma</small>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Daily Medications</h3>
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Daily Medications</h3>
+                        </div>
+                        <div class="card-body">
+                                <!-- User will type out their daily medications and separate each item with a comma -->
+                                @Html.TextBoxFor(n => n.Meds, new { type = "text", @class = "form-control", data_role = "tagsinput" })
+                                <small id="medsHelp" class="form-text text-muted">List your daily medications and separate each with a comma</small>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form>
-                            <!-- User will type out their daily medications and separate each item with a comma -->
-                            @Html.TextBoxFor(n => n.Meds, new { placeholder = "List your daily medications and separate each with a comma", type = "text", @class = "form-control", })
-                            <small id="medsHelp" class="form-text text-muted">Example: Aspirin, Advil, Gravol</small>
-                        </form>
-                    </div>
+
                 </div>
-
             </div>
-        </div>
 
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Medical History</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- User will type out their medical history and separate each item with a comma -->
-                        @Html.TextBoxFor(n => n.MedHist, new { placeholder = "List your medical history and separate each with a comma.", type = "text", @class = "form-control", })
-                        <small id="medsHelp" class="form-text text-muted">Example: Aspirin, Advil, Gravol</small>
+            <div class="row">
+                <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Medical History</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- User will type out their medical history and separate each item with a comma -->
+                            @Html.TextBoxFor(n => n.MedHist, new { type = "text", @class = "form-control", data_role = "tagsinput" })
+                            <small id="medsHelp" class="form-text text-muted">List your medical history and separate each with a comma.</small>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <button type="submit" class="btn btn-success save-changes">Save</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-success save-changes">Save</button>
 </body>
 
 @section Scripts {
     <!-- DEBUG: Enable text box when radio is checked -->
     <script type="text/javascript">
+
         function toggleTextbox() {
             var btn = document.getElementById("patientOther");
             var txt = document.getElementById("emerOtherText");
@@ -231,4 +233,6 @@
             }
         }
     </script>
+
+    <script src="~/Scripts/tagsinput.js"></script>
 }

@@ -128,8 +128,22 @@ namespace MedNet.Controllers
         }
         public IActionResult EditProfile()
         {
-            //Description: page where patient can edit their basic personal information
-            return View();
+            ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
+                return RedirectToAction("Login");
+            else
+            {
+                //fill this element out to send data to edit profile
+                PatientEditProfileViewModel patientEditProfileViewModel = new PatientEditProfileViewModel();
+                //Description: page where patient can edit their basic personal information
+                return View(patientEditProfileViewModel);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EditProfile(PatientEditProfileViewModel patientEditProfileViewModel) 
+        {
+            return RedirectToAction("PatientOverview");
         }
 
         public IActionResult Logout()
