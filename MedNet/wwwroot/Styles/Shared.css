@@ -17,8 +17,9 @@ body {
 }
 
 .main {
-    margin-top: 38px;
+    margin-top: 53px;
     bottom: 2.5rem;
+    padding-top: 10px;
 }
 
 .sidebar {
@@ -227,6 +228,7 @@ body {
             float: none;
             display: block;
             text-align: left;
+
         }
 
     .topnav-rbtn {
