@@ -84,26 +84,7 @@
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Province</label>
-                                    @*@Html.DropDownListFor(n => n.Province, new SelectList(
-                                        new List<string> {
-                                            new { value = 0, text = "Alberta" },
-                                            new { value = 1, text = "British Columbia" },
-                                            new { value = 2, text = "Manitoba" },
-                                            new { value = 3, text = "New Brunswick" },
-                                            new { value = 4, text = "Newfoundland and Labrador" },
-                                            new { value = 5, text = "Nova Scotia" },
-                                            new { value = 6, text = "Ontario" },
-                                            new { value = 7, text = "Prince Edward Island" },
-                                            new { value = 8, text = "Saskatchewan" },
-                                            new { value = 9, text = "Quebec" },
-                                            new { value = 10, text = "North West Territories" },
-                                            new { value = 11, text = "Nunavut" },
-                                            new { value = 12, text = "Yukon" }
-                                        },
-                                        "value",
-                                        "text",
-                                        2))*@
-                                    @*@Html.DropDownListFor(n => n.Province, new SelectList(Enum.GetValues(typeof(Prov))), "Select Province")*@
+                                    @Html.DropDownListFor(n => n.Province, new SelectList(MedNet.Data.Services.Globals.provincesShort), new { @class = "form-control" })
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Postal</label>
@@ -153,8 +134,7 @@
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Province</label>
-                                    <!--DEBUG: cannot find type Prov-->
-                                    @*@Html.DropDownListFor(n => n.emerProvince, new SelectList(Enum.GetValues(typeof(Prov))), "Select Province")*@
+                                    @Html.DropDownListFor(n => n.emerProvince, new SelectList(MedNet.Data.Services.Globals.provincesShort), new { @class = "form-control" })
                                 </div>
                                 <div class="form-group col-sm-3">
                                     <label>Postal</label>
@@ -163,27 +143,9 @@
                             </div>
                             <!-- Emergency relationship -->
 
-                            <div class="form-group">
+                            <div class="form-row">
                                 <label>Relationship</label>
-                                <br />
-                                @Html.RadioButtonFor(n => n.Relationship, "Parent")
-                                <label>Parent/Guardian</label>
-                                <br />
-
-                                @Html.RadioButtonFor(n => n.Relationship, "Partner")
-                                <label>Partner</label>
-                                <br />
-
-                                @Html.RadioButtonFor(n => n.Relationship, "Relative")
-                                <label>Relative</label>
-                                <br />
-
-                                @Html.RadioButtonFor(n => n.Relationship, "Friend")
-                                <label>Friend</label>
-                                <br />
-
-                                @Html.RadioButtonFor(n => n.Relationship, "Other")
-                                <label>Other</label>
+                                @Html.DropDownListFor(n => n.Relationship, new SelectList(MedNet.Data.Services.Globals.relationships), new { @class = "form-control" })
                             </div>
                         </div>
                     </div>
