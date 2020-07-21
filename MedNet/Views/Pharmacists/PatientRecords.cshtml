@@ -1,6 +1,6 @@
 ﻿@model PatientOverviewViewModel
 @{
-    ViewData["Title"] = "Patient Records";
+    ViewData["Title"] = "Patient Prescriptions";
 }
 
 @section NavButtons {
@@ -14,7 +14,7 @@
     <div class="sidebar-body">
         <a href="PatientOverview">Overview</a>
         <!-- UPDATE HREF TO RECORDS PAGE -->
-        <a href="PatientRecords" class="active">View Lab Tests</a>
+        <a href="PatientRecords" class="active">View Prescriptions</a>
     </div>
     <div class="sidebar-footer">
         <a href="PatientLookUp">Close</a>
@@ -33,12 +33,12 @@
             <div class="form-reg col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Medical Records</h3>
+                        <h3>Prescriptions</h3>
                         <nav class="nav nav-pills nav-fill tab">
                             @*<button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
-                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'prescriptions')">Prescriptions</button>*@
-                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">New Test Requisitions</button>
-                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">Previous Test Results</button>
+                                <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'prescriptions')">Prescriptions</button>*@
+                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">Current</button>
+                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">Previous</button>
                         </nav>
                     </div>
                     <div class="card-body" style="max-height: 75vh; overflow-y: scroll;">
