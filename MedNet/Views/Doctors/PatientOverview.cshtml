@@ -45,9 +45,9 @@
                         <p><strong>Age: </strong>@Model.PatientAge</p>
                         <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
                         <p>
-                            <strong>Address: </strong>@(Model.PatientMetadata.Address + " " + Model.PatientMetadata.City +
-" " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)
+                            <strong>Address: </strong>@Model.PatientMetadata.Address
                         </p>
+                        <p>@(Model.PatientMetadata.City + " " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)</p>
                         <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                     </div>
@@ -62,9 +62,9 @@
                         <p><strong>Name: </strong>@(Model.PatientMetadata.emerFirstName + " " + Model.PatientMetadata.emerLastName)</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.emerPhone</p>
                         <p>
-                            <strong>Address: </strong>@(Model.PatientMetadata.emerAddress + " " + Model.PatientMetadata.emerCity +
-" " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)
+                            <strong>Address: </strong>@Model.PatientMetadata.emerAddress
                         </p>
+                        <p>@(Model.PatientMetadata.emerCity + " " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)</p>
                         <p><strong>Relationship: </strong>@Model.PatientMetadata.Relationship</p>
                     </div>
                 </div>

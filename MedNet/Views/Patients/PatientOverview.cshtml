@@ -40,10 +40,6 @@
                     <div class="card-body">
                         <p><strong>Age: </strong>@Model.PatientAge</p>
                         <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
-                        @*<p>
-                            <strong>Address: </strong>@(Model.PatientMetadata.Address + " " + Model.PatientMetadata.City +
-" " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)
-                        </p>*@
                         <p>
                             <strong>Address: </strong>@Model.PatientMetadata.Address
                         </p>
@@ -61,10 +57,6 @@
                     <div class="card-body">
                         <p><strong>Name: </strong>@(Model.PatientMetadata.emerFirstName + " " + Model.PatientMetadata.emerLastName)</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.emerPhone</p>
-                        @*<p>
-                                    <strong>Address: </strong>@(Model.PatientMetadata.emerAddress + " " + Model.PatientMetadata.emerCity +
-        " " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)
-                                </p>*@
                         <p>
                             <strong>Address: </strong>@Model.PatientMetadata.emerAddress
                         </p>
