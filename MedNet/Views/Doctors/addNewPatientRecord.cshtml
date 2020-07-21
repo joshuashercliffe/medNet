@@ -9,7 +9,7 @@
     <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a class="topnav-rbtn">@ViewBag.DoctorName</a>
+    <a class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
 }
 
 <div class="sidebar">
@@ -27,7 +27,6 @@
 </div>
 
 <div class="content">
-    <div class="row">
         <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
             <div class="card">
                 <div class="card-header">
@@ -46,7 +45,7 @@
                             </select>
                             <small id="phoneHelp" class="form-text text-muted">Please select the type of medical record you wish to add.</small>
                         </div>
-
+                        <!-- Doctor's Note -->
                         <div class="form-group" id="doctorsNote1">
                             <label>Purpose of Visit</label>
                             @Html.TextBoxFor(n => n.DoctorsNote.PurposeOfVisit, new { placeholder = "Main concern addressed in today's appointment", @class = "form-control" })
@@ -68,68 +67,54 @@
                             @Html.TextAreaFor(n => n.DoctorsNote.FurtherInstructions, new { @rows = 3, placeholder = "Physical/dietary precautions, restrictions and recommendations", @class = "form-control" })
                         </div>
 
+                        <!-- Prescription -->
                         <div class="form-group" id="prescription1">
                             <label>Date Prescribed</label>
                             @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new { type = "date", id = "PrescribingDate", @class = "form-control" })
                         </div>
 
                         <!-- NOT SURE IF WE NEED THIS FIELD -->
-                        <div class="form-group" id="prescription2">
+                        @*<div class="form-group" id="prescription2">
                             <label>Superscription (Rx Label)</label>
                             @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
-                        </div>
+                        </div>*@
 
-                        <div class="form-group" id="prescription3">
-                            <div class="form-row">
-                                <div class="col">
-                                    <label>Drug Name</label>
-                                </div>
-                                <div class="col">
-                                    <label>Concentration</label>
-                                </div>
+                        <div class="form-row form-group" id="prescription3">
+                            <div class="col-sm-8">
+                                <label>Drug Name</label>
+                                @Html.TextBoxFor(n => n.Prescription.DrugName, new { placeholder = "Drug name, strength", @class = "form-control" })
                             </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    @Html.TextBoxFor(n => n.Prescription.DrugName, new { placeholder = "Drug name, strength", @class = "form-control" })
-                                </div>
-                                <div class="col">
-                                    @Html.TextBoxFor(n => n.Prescription.Concentration, new
+
+                            <div class="col-sm-4">
+                                <label>Conc. (mg/mL)</label>
+                                @Html.TextBoxFor(n => n.Prescription.Concentration, new
                                     {
                                         placeholder = "00.00",
                                         onkeypress = "return isFloat(event)",
                                         @class = "form-control",
 
                                     })
-                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group" id="prescription4">
-                            <div class="form-row">
-                                <div class="col">
-                                    <label>Start Day</label>
-                                </div>
-                                <div class="col">
-                                    <label>End Day</label>
-                                </div>
+                        <div class="form-row form-group" id="prescription4">
+                            <div class="col-sm-6">
+                                <label>Start Date</label>
+                                @Html.TextBoxFor(n => n.Prescription.StartDate, new
+                                   {
+                                       type = "date",
+                                       id = "PrescribingStartDate",
+                                       @class = "form-control"
+                                   })
                             </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    @Html.TextBoxFor(n => n.Prescription.StartDate, new
-                                    {
-                                        type = "date",
-                                        id = "PrescribingStartDate",
-                                        @class = "form-control"
-                                    })
-                                </div>
-                                <div class="col">
-                                    @Html.TextBoxFor(n => n.Prescription.EndDate, new
+                            <div class="col-sm-6">
+                                <label>End Date</label>
+                                @Html.TextBoxFor(n => n.Prescription.EndDate, new
                                     {
                                         type = "date",
                                         id = "PrescribingEndDate",
                                         @class = "form-control"
                                     })
-                                </div>
                             </div>
                         </div>
 
@@ -143,16 +128,17 @@
                             })
                         </div>
 
-                        <!-- STYLE OF THE CHECKBOX NEEDS TO BE FIXED -->
                         <div class="form-group" id="prescription6">
+                            @Html.CheckBoxFor(n => n.Prescription.Substitution, new { @class = "form-control-inline" })
                             <label>Substitution Allowed (check for 'Yes')</label>
-                            @Html.CheckBoxFor(n => n.Prescription.Substitution, new { @class = "form-control" })
                         </div>
 
                         <div class="form-group" id="prescription7">
                             <label>Direction for Use or Special Instructions</label>
                             @Html.TextAreaFor(n => n.Prescription.DirectionForUse, new { @rows = 3, placeholder = "Restrictions and Recommendations", @class = "form-control" })
                         </div>
+
+                        <!-- Lab Test-->
 
                         <div class="form-group" id="test1">
                             <label for="selectTestType">Test Type</label>
@@ -181,7 +167,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 @section Scripts {
