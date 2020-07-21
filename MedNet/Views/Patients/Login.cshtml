@@ -12,50 +12,47 @@
     <a href="Login" class="topnav-rbtn active">Log-In</a>
 }
 
-<body>
-    <div class="content-full">
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Patient Log-In</h2>
+<div class="content-full">
+    <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Patient Log-In</h2>
+            </div>
+            <div class="card-body">
+                @Html.ValidationSummary(true)
+                <form asp-action="Login" method="post" style="text-align: left">
+
+
+                    <!-- Personal Health Number -->
+                    <div class="form-group">
+                        <label>Personal Health Number</label>
+                        @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Number", @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.PatientPHN)
+                        <small class="form-text text-muted">10-digit Personal Health Number</small>
                     </div>
-                    <div class="card-body">
-                        @Html.ValidationSummary(true)
-                        <form asp-action="Login" method="post" style="text-align: left">
 
-
-                            <!-- Personal Health Number -->
-                            <div class="form-group">
-                                <label>Personal Health Number</label>
-                                @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Number", @class = "form-control" })
-                                @Html.ValidationMessageFor(n => n.PatientPHN)
-                                <small class="form-text text-muted">10-digit Personal Health Number</small>
-                            </div>
-
-                            <!-- Keyword -->
-                            <div class="form-group">
-                                <label>Keyword</label>
-                                @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
-                                <small class="form-text text-muted">Identification keyphrase used for encryption</small>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="form-group">
-                                <label>Password</label>
-                                @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
-                                @Html.ValidationMessageFor(n => n.password)
-                            </div>
-
-                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Log-In</button>
-                        </form>
+                    <!-- Keyword -->
+                    <div class="form-group">
+                        <label>Keyword</label>
+                        @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
+                        <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                     </div>
-                </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label>Password</label>
+                        @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.password)
+                    </div>
+
+                    <button type="submit" id="submitButton" class="btn btn-success btn-block">Log-In</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-</body>
+
 
 @section Scripts{
     <!-- InputMask -->

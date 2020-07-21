@@ -13,54 +13,50 @@
     <a href="Login" class="topnav-rbtn active">Log-In</a>
 }
 
-<body>
-    <div class="content-full">
-        <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Pharmacist Log-In</h2>
+
+<div class="content-full">
+    <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Pharmacist Log-In</h2>
+            </div>
+            <div class="card-body">
+                @Html.ValidationSummary(true)
+                <form asp-action="Login" method="post" style="text-align: left">
+
+
+                    <!-- Pharmacist Registration Num -->
+                    <div class="form-group">
+                        <label>Registration Number</label>
+                        @Html.TextBoxFor(n => n.PharmaNum, new { id = "index-regnum", type = "text", placeholder = "####-####-####", title = "Registration Number issued by the College of Pharmacists of BC", @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.PharmaNum)
+                        <small class="form-text text-muted">Registration Number issued by the College of Pharmacists of BC</small>
                     </div>
-                    <div class="card-body">
-                        @Html.ValidationSummary(true)
-                        <form asp-action="Login" method="post" style="text-align: left">
 
-
-                            <!-- Pharmacist Registration Num -->
-                            <div class="form-group">
-                                <label>Registration Number</label>
-                                @Html.TextBoxFor(n => n.PharmaNum, new { id = "index-regnum", type = "text", placeholder = "####-####-####", title = "Registration Number issued by the College of Pharmacists of BC", @class = "form-control" })
-                                @Html.ValidationMessageFor(n => n.PharmaNum)
-                                <small class="form-text text-muted">Registration Number issued by the College of Pharmacists of BC</small>
-                            </div>
-
-                            <!-- Keyword -->
-                            <div class="form-group">
-                                <label>Keyword</label>
-                                @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
-                                <small class="form-text text-muted">Identification keyphrase used for encryption</small>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="form-group">
-                                <label>Password</label>
-                                @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
-                                @Html.ValidationMessageFor(n => n.password)
-                            </div>
-
-                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Log-In</button>
-                            <div class="form-group">
-                                <small class="message">Don't have a pharmacist's account? <a href="SignUp">Sign-Up here.</a></small>
-                            </div>
-
-                        </form>
+                    <!-- Keyword -->
+                    <div class="form-group">
+                        <label>Keyword</label>
+                        @Html.TextBoxFor(n => n.PharmaKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
+                        <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                     </div>
-                </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label>Password</label>
+                        @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.password)
+                    </div>
+
+                    <button type="submit" id="submitButton" class="btn btn-success btn-block">Log-In</button>
+                    <div class="form-group">
+                        <small class="message">Don't have a pharmacist's account? <a href="SignUp">Sign-Up here.</a></small>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
-
-</body>
+</div>
 
 @section Scripts{
    
