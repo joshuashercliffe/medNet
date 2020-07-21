@@ -20,7 +20,7 @@
 
 <div class="content">
     <div class="content-header">
-        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName).</h1>
+        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
         <div class="row">
             <div class="col-sm-8">
                 <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
@@ -40,10 +40,14 @@
                     <div class="card-body">
                         <p><strong>Age: </strong>@Model.PatientAge</p>
                         <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
-                        <p>
+                        @*<p>
                             <strong>Address: </strong>@(Model.PatientMetadata.Address + " " + Model.PatientMetadata.City +
 " " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)
+                        </p>*@
+                        <p>
+                            <strong>Address: </strong>@Model.PatientMetadata.Address
                         </p>
+                        <p>@(Model.PatientMetadata.City + " " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)</p>
                         <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                     </div>
@@ -57,10 +61,14 @@
                     <div class="card-body">
                         <p><strong>Name: </strong>@(Model.PatientMetadata.emerFirstName + " " + Model.PatientMetadata.emerLastName)</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.emerPhone</p>
+                        @*<p>
+                                    <strong>Address: </strong>@(Model.PatientMetadata.emerAddress + " " + Model.PatientMetadata.emerCity +
+        " " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)
+                                </p>*@
                         <p>
-                            <strong>Address: </strong>@(Model.PatientMetadata.emerAddress + " " + Model.PatientMetadata.emerCity +
-" " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)
+                            <strong>Address: </strong>@Model.PatientMetadata.emerAddress
                         </p>
+                        <p>@(Model.PatientMetadata.emerCity + " " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)</p>
                         <p><strong>Relationship: </strong>@Model.PatientMetadata.Relationship</p>
                     </div>
                 </div>
