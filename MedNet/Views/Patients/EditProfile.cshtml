@@ -1,5 +1,5 @@
 ﻿@using MedNet.Models
-@model PatientEditProfileViewModel
+@model MedNet.Data.Models.Models.PatientCredMetadata
 @{
     ViewData["Title"] = "Patient Edit Profile";
 }
@@ -46,18 +46,6 @@
                                     <div class="col">
                                         @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @readonly = "readonly" })
                                     </div>
-                                </div>
-                            </div>
-                            <!-- age -->
-                            <div class="form-row">
-                                <!-- date of birth-->
-                                <div class="form-group col-sm-9">
-                                    <label>Date of Birth</label>
-                                    @Html.TextBoxFor(n => n.DateOfBirth, new { id = "DateOfBirth", type = "date", max = "2020-04-01", @class = "form-control", @readonly = "readonly" })
-                                </div>
-                                <div class="form-group col-sm-3">
-                                    <label>Age</label>
-                                    @Html.TextBoxFor(n => n.Age, new { id = "Age", type = "number", @class = "form-control", @readonly = "readonly" })
                                 </div>
                             </div>
                             <!-- email-->

@@ -6,12 +6,8 @@ namespace MedNet.Models
 {
     public class PatientOverviewViewModel
     {
-        public string PatientName { get; set; }
-
-        public string PatientPHN { get; set; }
-
-        public DateTime PatientDOB { get; set; }
-
+        public PatientCredAssetData PatientAsset{ get; set;}
+        public PatientCredMetadata PatientMetadata { get; set; }
         public int PatientAge { get; set; }
 
         public List<DoctorNote> DoctorNotes { get; set; }

@@ -43,7 +43,7 @@ namespace MedNet.Controllers
             if (!ModelState.IsValid)
                 return View(indexViewModel);
             string signPrivateKey = null, agreePrivateKey = null;
-            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, indexViewModel.PatientPHN);
+            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID( indexViewModel.PatientPHN);
             if (userAsset == null)
             {
                 ModelState.AddModelError("", "We could not find a matching user");
@@ -59,7 +59,7 @@ namespace MedNet.Controllers
                 ModelState.AddModelError("", "Keyword may be incorrect");
                 return View(indexViewModel);
             }
-            UserCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<UserCredMetadata>(userAsset.id, EncryptionService.getSignPublicKeyStringFromPrivate(signPrivateKey));
+            PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, userAsset.data.Data.SignPublicKey);
             var password = indexViewModel.password;
             if (EncryptionService.verifyPassword(password, userMetadata.hashedPassword))
             {
@@ -67,7 +67,7 @@ namespace MedNet.Controllers
                 HttpContext.Session.SetString(Globals.currentPAPriK, agreePrivateKey);
                 HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
                 HttpContext.Session.SetString(Globals.currentPAPubK, userAsset.data.Data.AgreePublicKey);
-                HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
+                HttpContext.Session.SetString(Globals.currentUserName, $"{userMetadata.FirstName} {userMetadata.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
                 return RedirectToAction("PatientOverview");
             }
@@ -85,13 +85,15 @@ namespace MedNet.Controllers
                 return RedirectToAction("Login");
             else
             {
-                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentUserID));
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentUserID));
 
                 var patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
-                var patientAgreePrivateKey = HttpContext.Session.GetString(Globals.currentPAPriK);
+                //var patientAgreePrivateKey = HttpContext.Session.GetString(Globals.currentPAPriK);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
 
-                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
+
+                /*var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                     (AssetType.DoctorNote, patientSignPublicKey);
                 var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                     (AssetType.Prescription, patientSignPublicKey);
@@ -110,17 +112,15 @@ namespace MedNet.Controllers
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
                     prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
-                }
+                }*/
                 var patientInfo = userAsset.data.Data;
-                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
-                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
-                    PatientPHN = patientInfo.ID,
-                    PatientDOB = patientInfo.DateOfBirth,
-                    PatientAge = patientInfo.DateOfBirth.CalculateAge(),
-                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                    PatientAsset = patientInfo,
+                    PatientMetadata = userMetadata,
+                    PatientAge = patientInfo.DateOfBirth.CalculateAge()
+                    //DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    //Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
@@ -133,16 +133,31 @@ namespace MedNet.Controllers
                 return RedirectToAction("Login");
             else
             {
-                //fill this element out to send data to edit profile
-                PatientEditProfileViewModel patientEditProfileViewModel = new PatientEditProfileViewModel();
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentUserID));
+
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
+
                 //Description: page where patient can edit their basic personal information
-                return View(patientEditProfileViewModel);
+                return View(userMetadata);
             }
         }
 
         [HttpPost]
-        public IActionResult EditProfile(PatientEditProfileViewModel patientEditProfileViewModel) 
+        public IActionResult EditProfile(PatientCredMetadata patientCredMetadata) 
         {
+            
+            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentUserID));
+            var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+            var patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
+            var transaction = _bigChainDbService.GetMetadataIDFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
+            var transID = transaction.Id ?? userAsset.id;
+            patientCredMetadata.hashedPassword = transaction.Metadata.data.hashedPassword;
+            var newMetadata = new MetaDataSaved<PatientCredMetadata> { 
+                data = patientCredMetadata
+            };
+            _bigChainDbService.SendTransferTransactionToDataBase(userAsset.id, newMetadata,
+    patientSignPrivateKey, patientSignPublicKey, transID);
             return RedirectToAction("PatientOverview");
         }
 

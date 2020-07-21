@@ -233,8 +233,18 @@ namespace MedNet.Data.Services
 
         public Models.Assets<UserCredAssetData> GetUserAssetFromTypeID(AssetType assetType, string id)
         {
-            var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets");
-            var asset = from a in assets.AsQueryable() where a.data.Type == assetType && a.data.Data.ID == id select a;
+            var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets").AsQueryable();
+            var asset = from a in assets where a.data.Type == assetType && a.data.Data.ID == id select a;
+            if (asset.Any())
+                return asset.FirstOrDefault();
+            else
+                return null;
+        }
+
+        public Models.Assets<PatientCredAssetData> GetPatientAssetFromID( string id)
+        {
+            var assets = bigchainDatabase.GetCollection<Models.Assets<PatientCredAssetData>>("assets").AsQueryable();
+            var asset = from a in assets where a.data.Type == AssetType.Patient && a.data.Data.ID == id select a;
             if (asset.Any())
                 return asset.FirstOrDefault();
             else
@@ -252,6 +262,22 @@ namespace MedNet.Data.Services
                                      select b.MetaData.Metadata;
             MetaDataSaved<M> result = JsonConvert.DeserializeObject<MetaDataSaved<M>>(neededTransaction.FirstOrDefault().ToString());
             return result.data;
+        }
+
+        public MetaData<MetaDataSaved<M>> GetMetadataIDFromAssetPublicKey<M>(string assetID, string signPublicKey)
+        {
+            var rawPublicKey = EncryptionService.getRawBase58PublicKey(signPublicKey);
+            var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
+            var assetTransactions = TransactionsApi<object, MetaDataSaved<M>>.getTransactionsByAssetIdAsync(assetID).GetAwaiter().GetResult();
+            var neededTransaction = from a in unspentOutsList.AsQueryable()
+                                    join b in assetTransactions.AsQueryable()
+                                    on a.TransactionId equals b.Id
+                                    select new MetaData<MetaDataSaved<M>> { 
+                                    Id = b.Id,
+                                    Metadata = b.MetaData.Metadata
+                                    };
+            var result = neededTransaction.FirstOrDefault();
+            return result;
         }
 
         public List<AssetsMetadatas<A, Dictionary<string, string>>> GetAllTypeRecordsFromPPublicKey<A>

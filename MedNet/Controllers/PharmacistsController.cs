@@ -166,12 +166,14 @@ namespace MedNet.Controllers
                 return RedirectToAction("PatientLookUp");
             else
             {
-                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
 
                 var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
                 var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
                 var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
@@ -194,12 +196,10 @@ namespace MedNet.Controllers
                 //    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
                 //}
                 var patientInfo = userAsset.data.Data;
-                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
-                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
-                    PatientPHN = patientInfo.ID,
-                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAsset = patientInfo,
+                    PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()

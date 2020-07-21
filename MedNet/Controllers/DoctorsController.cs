@@ -147,7 +147,7 @@ namespace MedNet.Controllers
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             if (!ModelState.IsValid)
                 return View(patientLookupViewModel);
-            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
+            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientLookupViewModel.PHN);
             if (userAsset == null)
             {
                 ModelState.AddModelError("", "We could not find a matching user");
@@ -180,12 +180,14 @@ namespace MedNet.Controllers
                 return RedirectToAction("PatientLookUp");
             else
             {
-                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
 
                 var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
                 var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
                 var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
@@ -208,12 +210,10 @@ namespace MedNet.Controllers
                     prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
                 }
                 var patientInfo = userAsset.data.Data;
-                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
-                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
-                    PatientPHN = patientInfo.ID,
-                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAsset = patientInfo,
+                    PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
@@ -232,12 +232,14 @@ namespace MedNet.Controllers
                 return RedirectToAction("PatientLookUp");
             else
             {
-                Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, HttpContext.Session.GetString(Globals.currentPPHN));
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
 
                 var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
                 var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
                 var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
@@ -260,12 +262,10 @@ namespace MedNet.Controllers
                     prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
                 }
                 var patientInfo = userAsset.data.Data;
-                var patientAge = DateTime.Now.Year - patientInfo.DateOfBirth.Year;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
-                    PatientName = $"{patientInfo.FirstName} {patientInfo.LastName}",
-                    PatientPHN = patientInfo.ID,
-                    PatientDOB = patientInfo.DateOfBirth,
+                    PatientAsset = patientInfo,
+                    PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
@@ -485,7 +485,7 @@ namespace MedNet.Controllers
         {
             // Description: Registers a patient up for a MedNet account
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
-            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientSignUpViewModel.PHN);
+            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientSignUpViewModel.PHN);
 
             // Check if PHN is already in use
             if (userAsset != null)
@@ -521,12 +521,9 @@ namespace MedNet.Controllers
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
 
             // Create the user Asset 
-            var userAssetData = new UserCredAssetData
+            var userAssetData = new PatientCredAssetData
             {
-                FirstName = patientSignUpViewModel.FirstName,
-                LastName = patientSignUpViewModel.LastName,
                 ID = patientSignUpViewModel.PHN,
-                Email = patientSignUpViewModel.Email,
                 DateOfBirth = patientSignUpViewModel.DateOfBirth,
                 PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
                 DateOfRecord = DateTime.Now,
@@ -536,26 +533,29 @@ namespace MedNet.Controllers
             };
 
             // Encrypt the user's password in the metadata
-            var userMetadata = new UserCredMetadata
+            var userMetadata = new PatientCredMetadata
             {
+                FirstName = patientSignUpViewModel.FirstName,
+                LastName = patientSignUpViewModel.LastName,
+                Email = patientSignUpViewModel.Email,
                 hashedPassword = EncryptionService.hashPassword(password)
             };
 
             // Save the user Asset and Metadata
-            var asset = new AssetSaved<UserCredAssetData>
+            var asset = new AssetSaved<PatientCredAssetData>
             {
                 Type = AssetType.Patient,
                 Data = userAssetData,
                 RandomId = _random.Next(0, 100000)
             };
-            var metadata = new MetaDataSaved<UserCredMetadata>
+            var metadata = new MetaDataSaved<PatientCredMetadata>
             {
                 data = userMetadata
             };
 
             // Send the user's information to the Blockchain database
             _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
-            return RedirectToAction("Login");
+            return RedirectToAction("Home");
         }
 
         public IActionResult Logout()

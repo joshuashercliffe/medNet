@@ -24,8 +24,8 @@
 
 <div class="content">
     <div class="content-header">
-        <h1>@Model.PatientName</h1>
-        <p><strong>PHN: </strong>@Model.PatientPHN</p>
+        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
         <div class="row">
@@ -36,10 +36,13 @@
                     </div>
                     <div class="card-body">
                         <p><strong>Age: </strong>@Model.PatientAge</p>
-                        <p><strong>Date of Birth: </strong>@Model.PatientDOB.ToLongDateString()</p>
-                        <p><strong>Address: </strong></p>
-                        <p><strong>Email: </strong></p>
-                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
+                        <p>
+                            <strong>Address: </strong>@(Model.PatientMetadata.Address + " " + Model.PatientMetadata.City +
+" " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)
+                        </p>
+                        <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
+                        <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                     </div>
                 </div>
             </div>
@@ -49,7 +52,13 @@
                         <h3>Emergency Contact</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        <p><strong>Name: </strong>@(Model.PatientMetadata.emerFirstName + " " + Model.PatientMetadata.emerLastName)</p>
+                        <p><strong>Phone: </strong>@Model.PatientMetadata.emerPhone</p>
+                        <p>
+                            <strong>Address: </strong>@(Model.PatientMetadata.emerAddress + " " + Model.PatientMetadata.emerCity +
+" " + Model.PatientMetadata.emerProvince + " " + Model.PatientMetadata.emerPostal)
+                        </p>
+                        <p><strong>Relationship: </strong>@Model.PatientMetadata.Relationship</p>
                     </div>
                 </div>
             </div>
@@ -63,6 +72,15 @@
                     </div>
                     <div class="card-body">
                         <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Allergies != null)
+                            {
+                                string[] allergyArray = Model.PatientMetadata.Allergies.Split(',');
+                                foreach (var allergy in allergyArray)
+                                {
+                                    <span class="badge badge-success">@allergy</span>
+                                }
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -73,6 +91,15 @@
                     </div>
                     <div class="card-body">
                         <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Meds != null)
+                            {
+                                string[] medArray = Model.PatientMetadata.Meds.Split(',');
+                                foreach (var med in medArray)
+                                {
+                                    <span class="badge badge-success">@med</span>
+                                }
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -86,6 +113,15 @@
                     </div>
                     <div class="card-body">
                         <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
+                        @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.MedHist != null)
+                            {
+                                string[] medHistArray = Model.PatientMetadata.MedHist.Split(',');
+                                foreach (var item in medHistArray)
+                                {
+                                    <span class="badge badge-success">@item</span>
+                                }
+                            }
+                        }
                     </div>
                 </div>
             </div>
