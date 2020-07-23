@@ -30,10 +30,10 @@
                                 <label for="patientName">Name</label>
                                 <div class="form-row">
                                     <div class="col">
-                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @class = "form-control", @required = "required" })
+                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @class = "form-control", @required = "required" , pattern="[A-Za-z]+", title="Field may only contain alphabetical characters" })
                                     </div>
                                     <div class="col">
-                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @required = "required" })
+                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @required = "required", pattern="[A-Za-z]+", title="Field may only contain alphabetical characters"  })
                                     </div>
                                 </div>
                             </div>
