@@ -182,41 +182,46 @@ namespace MedNet.Controllers
             {
                 Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
 
-                var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
-                var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
-                var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                //var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+                //var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+                //var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
-                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+/*                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,double>
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
-                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
                 var doctorNotes = new List<DoctorNote>();
-                var prescriptions = new List<Prescription>();
+                var prescriptions = new List<PrescriptionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
-                    var hashedKey = doctorNote.metadata.data[doctorSignPublicKey];
+                    var hashedKey = doctorNote.metadata.AccessList[doctorSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
                     doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
                 }
                 foreach (var prescription in prescriptionsList)
                 {
-                    var hashedKey = prescription.metadata.data[doctorSignPublicKey];
+                    var hashedKey = prescription.metadata.AccessList[doctorSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
-                    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
-                }
+                    var newEntry = new PrescriptionFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<Prescription>(data),
+                        Metadata = prescription.metadata.data
+                    };
+                    prescriptions.Add(newEntry);
+                }*/
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
                     PatientAsset = patientInfo,
                     PatientMetadata = userMetadata,
-                    PatientAge = patientInfo.DateOfBirth.CalculateAge(),
-                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                    PatientAge = patientInfo.DateOfBirth.CalculateAge()
+                    //DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    //Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
@@ -241,25 +246,30 @@ namespace MedNet.Controllers
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
-                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,double>
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
-                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string>
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
                 var doctorNotes = new List<DoctorNote>();
-                var prescriptions = new List<Prescription>();
+                var prescriptions = new List<PrescriptionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
-                    var hashedKey = doctorNote.metadata.data[doctorSignPublicKey];
+                    var hashedKey = doctorNote.metadata.AccessList[doctorSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
                     doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
                 }
                 foreach (var prescription in prescriptionsList)
                 {
-                    var hashedKey = prescription.metadata.data[doctorSignPublicKey];
+                    var hashedKey = prescription.metadata.AccessList[doctorSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
-                    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
+                    var newEntry = new PrescriptionFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<Prescription>(data),
+                        Metadata = prescription.metadata.data
+                    };
+                    prescriptions.Add(newEntry);
                 }
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
@@ -268,7 +278,7 @@ namespace MedNet.Controllers
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
@@ -313,8 +323,8 @@ namespace MedNet.Controllers
                     Type = AssetType.DoctorNote
                 };
 
-                var metadata = new MetaDataSaved<Dictionary<string, string>>();
-                metadata.data = new Dictionary<string, string>();
+                var metadata = new MetaDataSaved<double>();
+                metadata.AccessList = new Dictionary<string, string>();
 
                 //store the data encryption key in metadata encrypted with sender and reciever agree key
                 var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
@@ -323,12 +333,12 @@ namespace MedNet.Controllers
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
-                metadata.data[doctorSignPublicKey] =
+                metadata.AccessList[doctorSignPublicKey] =
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, doctorAgreePublicKey);
-                metadata.data[patientSignPublicKey] =
+                metadata.AccessList[patientSignPublicKey] =
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
 
-                _bigChainDbService.SendCreateTransferTransactionToDataBase<string, Dictionary<string, string>>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
+                _bigChainDbService.SendCreateTransferTransactionToDataBase<string, double>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
             if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.Prescription.DrugName))
@@ -359,8 +369,15 @@ namespace MedNet.Controllers
                     Type = AssetType.Prescription
                 };
 
-                var metadata = new MetaDataSaved<Dictionary<string, string>>();
-                metadata.data = new Dictionary<string, string>();
+                var metadata = new MetaDataSaved<PrescriptionMetadata>
+                {
+                    AccessList = new Dictionary<string, string>(),
+                    data = new PrescriptionMetadata
+                    {
+                        RefillRemaining = prescription.Refill,
+                        LastIssueQty = -1
+                    }
+                };
 
                 //store the data encryption key in metadata encrypted with sender and reciever agree key
                 var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
@@ -369,12 +386,12 @@ namespace MedNet.Controllers
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
                 var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
-                metadata.data[doctorSignPublicKey] =
+                metadata.AccessList[doctorSignPublicKey] =
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, doctorAgreePublicKey);
-                metadata.data[patientSignPublicKey] =
+                metadata.AccessList[patientSignPublicKey] =
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
 
-                _bigChainDbService.SendCreateTransferTransactionToDataBase<string, Dictionary<string, string>>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
+                _bigChainDbService.SendCreateTransferTransactionToDataBase<string, PrescriptionMetadata>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
             return RedirectToAction("PatientOverview");
@@ -460,13 +477,13 @@ namespace MedNet.Controllers
                 (typeList, patientSignPublicKey);
             foreach (var record in recordList)
             {
-                MetaDataSaved<Dictionary<string, string>> metadata = record.metadata;
-                if (!metadata.data.Keys.Contains(doctorSignPublicKey))
+                MetaDataSaved<object> metadata = record.metadata;
+                if (!metadata.AccessList.Keys.Contains(doctorSignPublicKey))
                 {
-                    var hashedKey = metadata.data[patientSignPublicKey];
+                    var hashedKey = metadata.AccessList[patientSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var newHash = EncryptionService.getEncryptedEncryptionKey(dataDecryptionKey, patientAgreePrivateKey, doctorAgreePublicKey);
-                    metadata.data[doctorSignPublicKey] = newHash;
+                    metadata.AccessList[doctorSignPublicKey] = newHash;
                     _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata,
                         patientSignPrivateKey, patientSignPublicKey, record.transID);
                 }

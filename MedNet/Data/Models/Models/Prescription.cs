@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MedNet.Data.Models.Models
 {
@@ -25,5 +26,18 @@ namespace MedNet.Data.Models.Models
         public string DoctorName { get; set; }
 
         public string DoctorMinsc { get; set; }
+    }
+
+    public class PrescriptionMetadata
+    {
+        public double RefillRemaining { get; set; }
+        public DateTime LastIssueDate { get; set; }
+        public double LastIssueQty { get; set; }
+    }
+
+    public class PrescriptionFullData
+    {
+        public Prescription assetData { get; set; }
+        public PrescriptionMetadata Metadata { get; set; }
     }
 }

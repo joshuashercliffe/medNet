@@ -197,25 +197,30 @@ namespace MedNet.Controllers
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
-                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,double>
                     (AssetType.DoctorNote, patientSignPublicKey);
-                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, patientSignPublicKey);
                 var doctorNotes = new List<DoctorNote>();
-                var prescriptions = new List<Prescription>();
+                var prescriptions = new List<PrescriptionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
-                    var hashedKey = doctorNote.metadata.data[patientSignPublicKey];
+                    var hashedKey = doctorNote.metadata.AccessList[patientSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
                     doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
                 }
                 foreach (var prescription in prescriptionsList)
                 {
-                    var hashedKey = prescription.metadata.data[patientSignPublicKey];
+                    var hashedKey = prescription.metadata.AccessList[patientSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
-                    prescriptions.Add(JsonConvert.DeserializeObject<Prescription>(data));
+                    var newEntry = new PrescriptionFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<Prescription>(data),
+                        Metadata = prescription.metadata.data
+                    };
+                    prescriptions.Add(newEntry);
                 }
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
@@ -224,7 +229,7 @@ namespace MedNet.Controllers
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.PrescribingDate).ToList()
+                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
