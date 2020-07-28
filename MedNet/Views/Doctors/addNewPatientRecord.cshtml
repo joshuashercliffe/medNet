@@ -41,7 +41,7 @@
                                 <option value="" disabled selected hidden>Select Record Type</option>
                                 <option value="doctorsNote">Add New Doctor's Note</option>
                                 <option value="prescription">Add New Prescription</option>
-                                <option value="testResult">Add New Test Requests</option>
+                                <option value="testResult">Add New Test Requisition</option>
                             </select>
                             <small id="phoneHelp" class="form-text text-muted">Please select the type of medical record you wish to add.</small>
                         </div>
@@ -158,7 +158,7 @@
 
                         <div class="form-group" id="test3">
                             <label>Attach Complete Requisition Form</label>
-                            @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control" })
+                            @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control", style="border-style: none;" })
                         </div>
 
                         <button type="submit" id="buttonSubmit" class="btn btn-success btn-block">Submit</button>
