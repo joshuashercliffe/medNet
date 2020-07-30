@@ -84,7 +84,7 @@
                                             <strong>Substitutions Allowed:</strong> @prescription.assetData.Substitution.ToString() <br />
                                             <strong>Directions for Use:</strong> @prescription.assetData.DirectionForUse <br />
                                             <strong>Prescribing Doctor:</strong> @prescription.assetData.DoctorName <br />
-                                            <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining
+                                            <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining <br />
                                             @if (prescription.Metadata.LastIssueDate != default)
                                             {
                                                 <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToString("MMMM dd, yyyy") <br />
