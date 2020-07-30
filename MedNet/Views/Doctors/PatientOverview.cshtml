@@ -42,14 +42,16 @@
                         <h3>General Information</h3>
                     </div>
                     <div class="card-body">
-                        <p><strong>Age: </strong>@Model.PatientAge</p>
                         <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
+                        <p><strong>Age: </strong>@Model.PatientAge</p>
+                        <p><strong>Height: </strong>Model.PatientAsset.Height (cm)</p>
+                        <p><strong>Weight: </strong>Model.PatientAsset.Weight (kg)</p>
+                        <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
+                        <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                         <p>
                             <strong>Address: </strong>@Model.PatientMetadata.Address
                         </p>
                         <p>@(Model.PatientMetadata.City + " " + Model.PatientMetadata.Province + " " + Model.PatientMetadata.Postal)</p>
-                        <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
-                        <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                     </div>
                 </div>
             </div>

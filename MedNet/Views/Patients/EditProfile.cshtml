@@ -13,19 +13,6 @@
     <a href="Logout" class="topnav-rbtn">Logout</a>
 }
 
-<!--DEBUG:
-    - if patient already has info, fill in textbox with information from database
-    - write javascript to fill in textboxes that the patient already filled in
-
-    - Having troubles with:
-        - cannot find type Prov (for dropdown list)
-        - Model.Relationships not working for radio button
-        - write javascript/jquery to enable/disable textbox with radio button check
--->
-<!-- Improvements
-    - improve Allergy, Daily Meds, and Medical History input with separate textboxes for each item in the list
--->
-
 <body>
     <div class="content-full">
         <form asp-action="EditProfile" method="post">
@@ -48,6 +35,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- age -->
+                            <div class="form-group form-row">
+                                <div class="col-sm-9">
+                                    <label>Date of Birth</label>
+                                    @Html.TextBoxFor(n => n.DateOfBirth, new { placeholder = "Date of Birth", @class="form-control", @readonly="readonly"})
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Age</label>
+                                    @Html.TextBoxFor(n => n.Age, new { placeholder="Age", @class="form-control", @readonly="readonly"})
+                                </div>
+                            </div>
+                            <!-- height -->
+                            <div class="form-group form-row">
+                                <div class="col-sm-6">
+                                    <label>Height (cm)</label>
+                                    @Html.TextBoxFor(n => n.Height, new { placeholder="Height", @class="form-control"})
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Weight (kg)</label>
+                                    @Html.TextBoxFor(n => n.Weight, new { placeholder="Weight", @class="form-control"})
+                                </div>
+                            </div>
+                            <!-- weight -->
+
                             <!-- email-->
                             <div class="form-group">
                                 <label>Email</label>
