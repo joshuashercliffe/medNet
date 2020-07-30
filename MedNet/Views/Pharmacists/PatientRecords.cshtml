@@ -91,7 +91,7 @@
                             {
                                 @foreach (var prescription in Model.Prescriptions)
                                 {
-                                    @if (prescription.assetData.EndDate.CompareTo(DateTime.Now) <= 0 && prescription.Metadata.RefillRemaining <= 0)
+                                    @if (prescription.assetData.EndDate.CompareTo(DateTime.Now) <= 0 || prescription.Metadata.RefillRemaining <= 0)
                                     {
                                         <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
                                             <h4>
@@ -105,7 +105,7 @@
                                                 <strong>Substitutions Allowed:</strong> @prescription.assetData.Substitution.ToString() <br />
                                                 <strong>Directions for Use:</strong> @prescription.assetData.DirectionForUse <br />
                                                 <strong>Prescribing Doctor:</strong> @prescription.assetData.DoctorName <br />
-                                                <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining
+                                                <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining <br />
                                                 @if (prescription.Metadata.LastIssueDate != default)
                                                 {
                                                     <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToShortDateString() <br />
