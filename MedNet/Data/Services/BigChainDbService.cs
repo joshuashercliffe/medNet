@@ -279,6 +279,27 @@ namespace MedNet.Data.Services
                 return null;
         }
 
+        public List<string> GetAllPatientPHNs()
+        {
+            // Search for all patients in database
+            // get all assets
+            var assets = bigchainDatabase.GetCollection<Models.Assets<PatientCredAssetData>>("assets").AsQueryable();
+            var patients = from a in assets where a.data.Type == AssetType.Patient select a;
+            List<string> patient_phns = new List<string>();
+            // only get patient assets
+            foreach (var patient in patients)
+            {
+                // current patient phn
+                var phn = patient.data.Data.ID;
+                if (!patient_phns.Contains(phn))
+                {
+                    Console.WriteLine(phn);
+                    patient_phns.Add(phn);
+                }
+            }
+            return patient_phns;    
+        }
+
         public M GetMetadataFromAssetPublicKey<M>(string assetID, string signPublicKey)
         {
             var rawPublicKey = EncryptionService.getRawBase58PublicKey(signPublicKey);

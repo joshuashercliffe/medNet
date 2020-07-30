@@ -150,7 +150,25 @@ namespace MedNet.Controllers
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientLookupViewModel.PHN);
             if (userAsset == null)
             {
-                ModelState.AddModelError("", "We could not find a matching user");
+                // janky jacob: get all patient phn
+                var phns = _bigChainDbService.GetAllPatientPHNs();
+                var jw = new JaroWinkler();
+                // find the most similar one
+                int idx = 0;
+                double highest = 0;
+                for(int i = 0; i < phns.Count; i++)
+                {
+                    var sim = jw.Similarity(patientLookupViewModel.PHN, phns[i]);
+                    if (sim > highest)
+                    {
+                        highest = sim;
+                        idx = i;
+                    }
+                }
+                // get the cl
+                var sugg_phn = phns[idx];
+
+                ModelState.AddModelError("", "We could not find a matching user. Did you mean: " + sugg_phn + "?");
                 return View(patientLookupViewModel);
             }
             HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
