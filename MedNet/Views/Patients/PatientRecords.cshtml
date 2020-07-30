@@ -77,7 +77,7 @@
                                             Date: @prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
                                         </h4>
                                         <p>
-                                            <strong>Drug Prescribed:</strong> @prescription.assetData.DrugName <br />
+                                            <strong>Drug Prescribed:</strong> <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">@prescription.assetData.DrugName</a><br />
                                             <strong>Concentration:</strong> @prescription.assetData.Concentration <br />
                                             <strong>Prescription Valid From/To:</strong> @prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
                                             <strong>Total Number of Refills:</strong> @prescription.assetData.Refill <br />
