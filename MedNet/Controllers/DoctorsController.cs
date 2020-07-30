@@ -165,7 +165,7 @@ namespace MedNet.Controllers
                         idx = i;
                     }
                 }
-                // get the cl
+                // get the closet phn
                 var sugg_phn = phns[idx];
 
                 ModelState.AddModelError("", "We could not find a matching user. Did you mean: " + sugg_phn + "?");
