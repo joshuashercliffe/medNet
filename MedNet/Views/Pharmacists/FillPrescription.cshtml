@@ -1,0 +1,78 @@
+﻿@model FillPrescriptionViewModel
+@{
+    ViewData["Title"] = "Fill Prescription";
+}
+
+@section NavButtons {
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+}
+
+<div class="sidebar">
+    <div class="sidebar-body">
+        <a href="PatientOverview">Overview</a>
+        <a href="RequestAccess">Request Full Access</a>
+        <!-- UPDATE HREF TO RECORDS PAGE -->
+        <a href="PatientRecords">View Prescriptions</a>
+    </div>
+    <div class="sidebar-footer">
+        <a href="PatientLookUp">Close</a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="content-header">
+        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+    </div>
+    <div class="row">
+        <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Prescription Information</h3>
+                    <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
+                        <h4>
+                            Date: @Model.PrescriptionData.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
+                        </h4>
+                        <p>
+                            <strong>Drug Prescribed:</strong> @Model.PrescriptionData.assetData.DrugName <br />
+                            <strong>Concentration:</strong> @Model.PrescriptionData.assetData.Concentration <br />
+                            <strong>Prescription Valid From/To:</strong> @Model.PrescriptionData.assetData.StartDate.ToString("MMMM dd, yyyy") - @Model.PrescriptionData.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
+                            <strong>Total Number of Refills:</strong> @Model.PrescriptionData.assetData.Refill <br />
+                            <strong>Substitutions Allowed:</strong> @Model.PrescriptionData.assetData.Substitution.ToString() <br />
+                            <strong>Directions for Use:</strong> @Model.PrescriptionData.assetData.DirectionForUse <br />
+                            <strong>Prescribing Doctor:</strong> @Model.PrescriptionData.assetData.DoctorName <br />
+                            <strong>Remaining Refills:</strong> @Model.PrescriptionData.Metadata.RefillRemaining <br />
+                            @if (Model.PrescriptionData.Metadata.LastIssueDate != default)
+                            {
+                                <strong>Previous Refill Date:</strong> @Model.PrescriptionData.Metadata.LastIssueDate.ToString("MMMM dd, yyyy") <br />
+                                <strong>Previous Refill Quantity:</strong> @Model.PrescriptionData.Metadata.LastIssueQty.ToString() <br />
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @Html.ValidationSummary(true)
+                    <form class="text-form" asp-action="FillPrescription" method="post">
+
+                        <!-- Keyword -->
+                        <div class="form-group">
+                            <label for="patientPhone">Issues Quantity</label>
+                            @Html.TextBoxFor(n => n.QtyFilled, new { placeholder = "Number of refills issued", @required = "required", @class = "form-control", @type = "number", @min = "0", @max = Model.PrescriptionData.Metadata.RefillRemaining })
+                            @Html.ValidationMessageFor(n => n.QtyFilled)
+                            <small class="form-text text-muted">Quantity of the prescription issued</small>
+                            <label for="patientPhone">Patient Keyword</label>
+                            @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
+                            @Html.ValidationMessageFor(n => n.PatientKeyword)
+                            <small class="form-text text-muted">Patient's keyphrase used for encryption</small>
+                        </div>
+                        <button type="submit" id="submitButton" class="btn btn-success btn-block">Authorize with Fingerprint</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

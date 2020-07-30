@@ -37,6 +37,9 @@ namespace MedNet.Data.Models.Models
 
     public class PrescriptionFullData
     {
+        public string transID { get; set; }
+
+        public string assetID { get; set; }
         public Prescription assetData { get; set; }
         public PrescriptionMetadata Metadata { get; set; }
     }

@@ -87,7 +87,7 @@
                                             <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining
                                             @if (prescription.Metadata.LastIssueDate != default)
                                             {
-                                                <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToShortDateString() <br />
+                                                <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToString("MMMM dd, yyyy") <br />
                                                 <strong>Previous Refill Quantity:</strong> @prescription.Metadata.LastIssueQty.ToString()
                                             }
                                         </p>

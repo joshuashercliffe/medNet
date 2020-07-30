@@ -1,9 +1,13 @@
 ﻿namespace MedNet.Data.Models
 {
-    public class TransactionInformation
+    public class TransactionInformation<A,M>
     {
-        public string Asset { get; set; }
+        public A Asset { get; set; }
 
-        public string MetaData { get; set; }
+        public M MetaData { get; set; }
+
+        public string transID { get; set; }
+        
+        public string assetID { get; set; }
     }
 }

@@ -76,15 +76,34 @@ namespace MedNet.Data.Services
             return;
         }
 
-        public TransactionInformation GetMetaDataAndAssetFromTransactionId(string transactionId)
+        public AssetsMetadatas<A,M> GetMetaDataAndAssetFromTransactionId<A,M>(string transactionId)
         {
-            var transactionInformation = new TransactionInformation();
-            var result = TransactionsApi<object, object>.getTransactionByIdAsync(transactionId).Result;
+            var assets = bigchainDatabase.GetCollection<Assets<object>>("assets").AsQueryable().ToList();
 
-            transactionInformation.Asset = result.Asset.Data.ToString();
-            transactionInformation.MetaData = result.MetaData.Metadata.ToString();
+            var metadata = bigchainDatabase.GetCollection<Metadatas<object>>("metadata").AsQueryable();
+            var metadataReduced = metadata.Where(x => x.id == transactionId).ToList();
 
-            return transactionInformation;
+            var transaction = (bigchainDatabase.GetCollection<Transactions<object>>("transactions").AsQueryable());
+            var transactionsReduced = transaction.Where(x => x.id == transactionId);
+            transactionsReduced = transactionsReduced.Select(r => new Transactions<object> { id = r.id, asset = r.asset, _id = r._id });
+
+            var r = from t1 in metadataReduced
+                    join t2 in transactionsReduced on t1.id equals t2.id
+                    join t3 in assets on 1 equals 1
+                    where (t2.id == t3.id || (t2.asset != null && t2.asset.id == t3.id))
+                    select new AssetsMetadatas<A, M>()
+                    {
+                        id = t3.id,
+                        data = JsonConvert.DeserializeObject<AssetSaved<A>>(JsonConvert.SerializeObject(t3.data)),
+                        metadata = new MetaDataSaved<M>
+                        {
+                            AccessList = new Dictionary<string, string>(t1.metadata.metadata.AccessList),
+                            data = JsonConvert.DeserializeObject<M>(JsonConvert.SerializeObject(t1.metadata.metadata.data))
+                        },
+                        transID = t2.id
+                    };
+            var result = r.FirstOrDefault();
+            return result;
         }
 
         // This function is similar to 
@@ -174,7 +193,7 @@ namespace MedNet.Data.Services
             }
 
             var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
-            var transactionsReduced = transaction.AsQueryable().Where(x => transactionIDs.Contains(x.id));
+            var transactionsReduced = transaction.Where(x => transactionIDs.Contains(x.id));
             transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id});
             var r = from t1 in metadataList
                     join t2 in transactionsReduced on t1.id equals t2.id
@@ -220,7 +239,7 @@ namespace MedNet.Data.Services
             }
 
             var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
-            var transactionsReduced = transaction.AsQueryable().Where(x => transactionIDs.Contains(x.id));
+            var transactionsReduced = transaction.Where(x => transactionIDs.Contains(x.id));
             transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id });
             var r = from t1 in metadataList
                     join t2 in transactionsReduced on t1.id equals t2.id
@@ -308,7 +327,8 @@ namespace MedNet.Data.Services
             List<Metadatas<object>> metadataList = new List<Metadatas<object>>();
             foreach (var a in metadataReduced)
             {
-                if (a.metadata.metadata.AccessList.Keys.ToList().Contains(patientSignPublicKey))
+                if (a.metadata.metadata.AccessList != null
+                    && a.metadata.metadata.AccessList.Keys.ToList().Contains(patientSignPublicKey))
                 {
                     metadataList.Add(a);
                 }
