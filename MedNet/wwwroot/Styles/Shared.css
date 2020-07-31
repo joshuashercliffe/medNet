@@ -1,6 +1,5 @@
 ﻿/* Shared Layout */
 @import url(https://fonts.googleapis.com/css?family=Roboto); /*previously font weight was 300*/
-@import url(https://fonts.googleapis.com/css?family=Muli);
 @import url(https://fonts.googleapis.com/css?family=Helvetica);
 
 
@@ -11,21 +10,26 @@ html {
 
 .big-text {
     font-family: "Franklin Gothic";
-    font-size: 60px;
+    font-size: 72px;
+}
+
+h1 h2 h3 h4 h5 h6 {
+    font-family: "Helvetica";
 }
 
 h1 {
-    font-family: "Helvetica";
     font-size: 42px;
 }
 
 h2 {
-    font-family: "Helvetica";
-    font-size: 30px;
+    font-size: 36px;
 }
 
 h3 {
-    font-family: "Helvetica";
+    font-size: 30px;
+}
+
+h4 {
     font-size: 20px;
 }
 
