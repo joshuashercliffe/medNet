@@ -38,8 +38,8 @@
                     <div class="card-body">
                         <p><strong>Date of Birth: </strong>@Model.PatientAsset.DateOfBirth.ToLongDateString()</p>
                         <p><strong>Age: </strong>@Model.PatientAge</p>
-                        <p><strong>Height: </strong>Model.PatientAsset.Height (cm)</p>
-                        <p><strong>Weight: </strong>Model.PatientAsset.Weight (kg)</p>
+                        <p><strong>Height: </strong>@Model.PatientMetadata.Height (cm)</p>
+                        <p><strong>Weight: </strong>@Model.PatientMetadata.Weight (kg)</p>
                         <p><strong>Email: </strong>@Model.PatientMetadata.Email</p>
                         <p><strong>Phone: </strong>@Model.PatientMetadata.Phone</p>
                         <p>

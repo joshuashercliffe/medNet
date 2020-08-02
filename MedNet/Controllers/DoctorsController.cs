@@ -150,25 +150,26 @@ namespace MedNet.Controllers
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientLookupViewModel.PHN);
             if (userAsset == null)
             {
-                // janky jacob: get all patient phn
-                var phns = _bigChainDbService.GetAllPatientPHNs();
-                var jw = new JaroWinkler();
-                // find the most similar one
-                int idx = 0;
-                double highest = 0;
-                for(int i = 0; i < phns.Count; i++)
-                {
-                    var sim = jw.Similarity(patientLookupViewModel.PHN, phns[i]);
-                    if (sim > highest)
-                    {
-                        highest = sim;
-                        idx = i;
-                    }
-                }
-                // get the closet phn
-                var sugg_phn = phns[idx];
+                /*                // janky jacob: get all patient phn
+                                var phns = _bigChainDbService.GetAllPatientPHNs();
+                                var jw = new JaroWinkler();
+                                // find the most similar one
+                                int idx = 0;
+                                double highest = 0;
+                                for(int i = 0; i < phns.Count; i++)
+                                {
+                                    var sim = jw.Similarity(patientLookupViewModel.PHN, phns[i]);
+                                    if (sim > highest)
+                                    {
+                                        highest = sim;
+                                        idx = i;
+                                    }
+                                }
+                                // get the closet phn
+                                var sugg_phn = phns[idx];
 
-                ModelState.AddModelError("", "We could not find a matching user. Did you mean: " + sugg_phn + "?");
+                                ModelState.AddModelError("", "We could not find a matching user. Did you mean: " + sugg_phn + "?");*/
+                ModelState.AddModelError("", "We could not find a matching user.");
                 return View(patientLookupViewModel);
             }
             HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
@@ -207,39 +208,12 @@ namespace MedNet.Controllers
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
-/*                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,double>
-                    (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
-                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,PrescriptionMetadata>
-                    (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
-                var doctorNotes = new List<DoctorNote>();
-                var prescriptions = new List<PrescriptionFullData>();
-                foreach (var doctorNote in doctorNotesList)
-                {
-                    var hashedKey = doctorNote.metadata.AccessList[doctorSignPublicKey];
-                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
-                    var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
-                    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
-                }
-                foreach (var prescription in prescriptionsList)
-                {
-                    var hashedKey = prescription.metadata.AccessList[doctorSignPublicKey];
-                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
-                    var data = EncryptionService.getDecryptedAssetData(prescription.data.Data, dataDecryptionKey);
-                    var newEntry = new PrescriptionFullData
-                    {
-                        assetData = JsonConvert.DeserializeObject<Prescription>(data),
-                        Metadata = prescription.metadata.data
-                    };
-                    prescriptions.Add(newEntry);
-                }*/
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
                     PatientAsset = patientInfo,
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge()
-                    //DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
-                    //Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 
                 return View(patientOverviewViewModel);
@@ -597,6 +571,18 @@ namespace MedNet.Controllers
         {
             HttpContext.Session.Clear();
             return View();
+        }
+
+        public JsonResult GetAllPatientIDs()
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return Json("{}");
+            else
+            {
+                var phns = _bigChainDbService.GetAllPatientPHNs();
+                return Json(phns);
+            }
         }
     }
 }

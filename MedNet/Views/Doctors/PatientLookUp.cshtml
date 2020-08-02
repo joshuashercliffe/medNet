@@ -27,7 +27,7 @@
                         <!-- PHN -->
                         <div class="form-group">
                             <label for="patientPhone">Personal Health Number</label>
-                            @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "form-control" })
+                            @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "typeahead form-control", autocomplete = "off" })
                             @Html.ValidationMessageFor(n => n.PHN)
                             <small id="phoneHelp" class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
                         </div>
@@ -45,9 +45,37 @@
     <!-- InputMask -->
     <script src="~/theme/plugins/moment/moment.min.js"></script>
     <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-
+    <script src="~/Scripts/bloodhound.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <script type="text/javascript">
-jQuery(function ($) {
+        jQuery(function ($) {
             $("#patient-look-up-PHN").inputmask("9999-999-999");
         });</script>
+
+    <script>
+        $(document).ready(function () {
+            // Constructs the suggestion engine
+            var patientIDs = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.ngram,
+                queryTokenizer: Bloodhound.tokenizers.ngram,
+                matchAnyQueryToken: true,
+                // The url points to a json file that contains an array of country names
+                prefetch: 'getAllPatientIDs'
+            });
+
+            // Initializing the typeahead with remote dataset without highlighting
+            $('.typeahead').typeahead({
+                items: 4,
+                source: patientIDs.ttAdapter(),
+                matcher: function (item) {
+                    var it = this.displayText(item).toLowerCase();
+                    var query = this.query.toLowerCase();
+                    it=it.replace(/-/g, '');
+                    query = query.replace(/-/g, '');
+                    query = query.replace(/_/g, '');
+                    return ~it.indexOf(query)
+                }
+                });
+        });
+    </script>
 }
