@@ -1,0 +1,176 @@
+﻿@model MedNet.ViewModels.EditAccessViewModel
+@{
+    ViewData["Title"] = "Edit Access";
+}
+
+@section NavButtons {
+    <a href="Logout" class="topnav-rbtn topnav-first">Logout</a>
+    @*<a href="PatientOverview" class="topnav-rbtn">@Model.PatientName</a>*@
+}
+
+<div class="sidebar">
+    <div class="sidebar-body">
+        <a href="PatientOverview">Overview</a>
+        <a href="PatientRecords">Medical Records</a>
+        <a href="EditAccess" class="active">Edit access</a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="content-header">
+        <h1>@ViewBag.UserName</h1>
+        <div class="row">
+            <div class="col-sm-8">
+                <p><strong>PHN: </strong>@ViewBag.UserID</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Edit Access</h3>
+                </div>
+                <div id="message">
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        @Html.LabelFor(n => n.UserType, "Select User Type")
+                        <select id="selectUserType" class="form-control">
+                            <option value="" selected>Select User Type</option>
+                            <option value="Doctor">Doctor</option>
+                            <option value="Pharmacist">Pharmacist</option>
+                            <option value="MLT">Medical Lab Technologist</option>
+                        </select>
+                        <small id="phoneHelp" class="form-text text-muted">Please select the type of user you want to grant/revoke access from</small>
+                    </div>
+                    <!-- Doctor's Note -->
+                    <div class="form-group" id="userID">
+                        @Html.LabelFor(n => n.UserID, "")
+                        @Html.TextBoxFor(n => n.UserID, new { @class = "form-control typeahead", @id = "userIDInput" })
+                        <div class="text-center mt-3">
+                            <button id="grantAccessBtn" class="btn btn-success">Grant Access</button>
+                            <button id="revokeAccessBtn" class="btn btn-danger">Revoke Access</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- InputMask -->
+    <script src="~/theme/plugins/moment/moment.min.js"></script>
+    <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+
+    <script type="text/javascript">
+        $("#selectUserType").change(function () {
+            var MakeTypeahead = function (data) {
+                $('.typeahead').typeahead({
+                    items: 4,
+                    fitToElement: true,
+                    source: data,
+                    matcher: function (item) {
+                        var it = this.displayText(item).toLowerCase();
+                        var query = this.query.toLowerCase();
+                        it = it.replace(/-/g, '');
+                        query = query.replace(/-/g, '');
+                        query = query.replace(/_/g, '');
+                        return ~it.indexOf(query)
+                    }
+                });
+            }
+
+            $('.typeahead').typeahead('destroy');
+            $.get("GetAllTypeIDs?type=" + $(this).val(), function (data) {
+                MakeTypeahead(data);
+            }, 'json');
+
+            if ($(this).val() == "") {
+                $('#userID').hide();
+            }
+            else if ($(this).val() == "Doctor") {
+                $('#userID').show();
+                $("label[for='UserID']").text("Enter the MINC of the Doctor");
+                $("#userIDInput").inputmask("AA99-9999-9999");
+                $("#userIDInput").attr("placeholder", "CA##-####-####");
+            }
+            else if ($(this).val() == "Pharmacist") {
+                $('#userID').show();
+                $("label[for='UserID']").text("Enter the Registration number of the Pharmacist");
+                $("#userIDInput").inputmask("9999-9999-9999");
+                $("#userIDInput").attr("placeholder", "####-####-####");
+            }
+            else {
+                $('#userID').show();
+                $("label[for='UserID']").text("Enter the CSMLS ID of the MLT");
+                $("#userIDInput").inputmask("9999-999");
+                $("#userIDInput").attr("placeholder", "####-###");
+            }
+        });
+        $("#selectUserType").trigger("change");
+
+        $(function () {
+            $("#grantAccessBtn").click(function (e) {
+
+                var dataToPost = {
+                    UserType: $("#selectUserType").val(),
+                    UserID: $("#userIDInput").val()
+                };
+
+                $.post("GrantAccessToUser", dataToPost)
+                    .done(function (response, status, jqxhr) {
+                        // this is the "success" callback
+                        $("#message").html(
+                            '<div class="alert alert-warning alert-dismissible fade show mb-0 mt-2" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            response.message +
+                            '</div>')
+                    })
+                    .fail(function (jqxhr, status, error) {
+                        // this is the ""error"" callback
+                        $("#message").html(
+                            '<div class="alert alert-warning alert-dismissible fade show mb-0 mt-2" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            'There was an internal error while processing the request.' +
+                            '</div>')
+                    });
+            });
+            $("#revokeAccessBtn").click(function (e) {
+
+                var dataToPost = {
+                    UserType: $("#selectUserType").val(),
+                    UserID: $("#userIDInput").val()
+                };
+
+                $.post("RevokeAccessFromUser", dataToPost)
+                    .done(function (response, status, jqxhr) {
+                        // this is the "success" callback
+                        $("#message").html(
+                            '<div class="alert alert-warning alert-dismissible fade show mb-0 mt-2" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            response.message +
+                            '</div>')
+                    })
+                    .fail(function (jqxhr, status, error) {
+                        // this is the ""error"" callback
+                        $("#message").html(
+                            '<div class="alert alert-warning alert-dismissible fade show mb-0 mt-2" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            'There was an internal error while processing the request.' +
+                            '</div>')
+                    });
+            });
+        });
+    </script>
+}

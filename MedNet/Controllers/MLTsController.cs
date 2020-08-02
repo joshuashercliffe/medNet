@@ -281,5 +281,17 @@ namespace MedNet.Controllers
             return View();
         }
 
+        public JsonResult GetAllPatientIDs()
+        {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
+            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+                return Json("{}");
+            else
+            {
+                var phns = _bigChainDbService.GetAllTypeIDs(AssetType.Patient);
+                return Json(phns);
+            }
+        }
+
     }
 }

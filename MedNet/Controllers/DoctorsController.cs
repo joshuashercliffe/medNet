@@ -580,7 +580,7 @@ namespace MedNet.Controllers
                 return Json("{}");
             else
             {
-                var phns = _bigChainDbService.GetAllPatientPHNs();
+                var phns = _bigChainDbService.GetAllTypeIDs(AssetType.Patient);
                 return Json(phns);
             }
         }

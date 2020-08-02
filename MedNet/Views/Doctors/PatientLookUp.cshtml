@@ -66,6 +66,7 @@
             // Initializing the typeahead with remote dataset without highlighting
             $('.typeahead').typeahead({
                 items: 4,
+                fitToElement: true,
                 source: patientIDs.ttAdapter(),
                 matcher: function (item) {
                     var it = this.displayText(item).toLowerCase();

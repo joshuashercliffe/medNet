@@ -10,6 +10,10 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
+using MedNet.ViewModels;
+using Microsoft.CodeAnalysis.Differencing;
+using System.Threading.Tasks.Dataflow;
+using Omnibasis.BigchainCSharp.Model;
 
 namespace MedNet.Controllers
 {
@@ -142,26 +146,11 @@ namespace MedNet.Controllers
             return View();
         }
 
-        public IActionResult PreviousAppointments()
-        {
-            return View();
-        }
-
-        public IActionResult PrescriptionList()
-        {
-            return View();
-        }
-
-        public IActionResult TestResultList()
-        {
-            return View();
-        }
-
         public IActionResult PatientRecords()
         {
             ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
             if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
-                return RedirectToAction("PatientOverview");
+                return RedirectToAction("Login");
             else
             {
                 Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentUserID));
@@ -211,14 +200,126 @@ namespace MedNet.Controllers
             }
         }
 
-        public JsonResult GetAllPatientIDs()
+        public IActionResult EditAccess()
         {
-            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
-            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
+            if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
+                return RedirectToAction("Login");
+            else
+            {
+                ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
+                ViewBag.UserID = HttpContext.Session.GetString(Globals.currentUserID);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GrantAccessToUser(EditAccessViewModel editAccessViewModel)
+        {
+            if (editAccessViewModel.UserType == null || editAccessViewModel.UserType == "")
+                return Json(new { message = "Please select a user type."});
+            // Searches for a patient with the specified PHN
+            AssetType type = editAccessViewModel.UserType == "Doctor" ? AssetType.Doctor :
+                editAccessViewModel.UserType == "Pharmacist" ? AssetType.Pharmacist : AssetType.MLT;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(type, editAccessViewModel.UserID);
+            if (userAsset == null)
+            {
+                return Json(new { message = ("We could not find a " + editAccessViewModel.UserType + " with ID: " + editAccessViewModel.UserID) });
+            }
+
+            string patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+            string patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
+            string patientAgreePrivateKey = HttpContext.Session.GetString(Globals.currentPAPriK);
+            string doctorSignPublicKey = userAsset.data.Data.SignPublicKey;
+            string doctorAgreePublicKey = userAsset.data.Data.AgreePublicKey;
+            string userName = userAsset.data.Data.FirstName + " " + userAsset.data.Data.LastName;
+
+            // Choose the types of records we want to get
+            List<AssetType> typeList = new List<AssetType>();
+            if(type == AssetType.Doctor)
+                typeList.AddRange( new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+            else if(type == AssetType.Pharmacist)
+                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+            else
+                typeList.AddRange(new List<AssetType> { });
+
+            var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                (typeList.ToArray(), patientSignPublicKey);
+            int counter = 0;
+            foreach (var record in recordList)
+            {
+                MetaDataSaved<object> metadata = record.metadata;
+                if (!metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+                {
+                    var hashedKey = metadata.AccessList[patientSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                    var newHash = EncryptionService.getEncryptedEncryptionKey(dataDecryptionKey, patientAgreePrivateKey, doctorAgreePublicKey);
+                    metadata.AccessList[doctorSignPublicKey] = newHash;
+                    _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata,
+                        patientSignPrivateKey, patientSignPublicKey, record.transID);
+                    counter++;
+                }
+            }
+
+            return Json(new { message = (userName + " ("+ editAccessViewModel.UserID +") was added to " +counter.ToString()+ " records.")});
+        }
+
+        [HttpPost]
+        public JsonResult RevokeAccessFromUser(EditAccessViewModel editAccessViewModel)
+        {
+            if (editAccessViewModel.UserType == null || editAccessViewModel.UserType == "")
+                return Json(new { message = "Please select a user type." });
+            // Searches for a patient with the specified PHN
+            AssetType type = editAccessViewModel.UserType == "Doctor" ? AssetType.Doctor :
+                editAccessViewModel.UserType == "Pharmacist" ? AssetType.Pharmacist : AssetType.MLT;
+            Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(type, editAccessViewModel.UserID);
+            if (userAsset == null)
+            {
+                return Json(new { message = ("We could not find a " + editAccessViewModel.UserType + " with ID: " + editAccessViewModel.UserID) });
+            }
+
+            string patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+            string patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
+            string doctorSignPublicKey = userAsset.data.Data.SignPublicKey;
+            string userName = userAsset.data.Data.FirstName + " " + userAsset.data.Data.LastName;
+
+            // Choose the types of records we want to get
+            List<AssetType> typeList = new List<AssetType>();
+            if (type == AssetType.Doctor)
+                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+            else if (type == AssetType.Pharmacist)
+                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+            else
+                typeList.AddRange(new List<AssetType> { });
+
+            var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
+                (typeList.ToArray(), patientSignPublicKey);
+            int counter = 0;
+            foreach (var record in recordList)
+            {
+                MetaDataSaved<object> metadata = record.metadata;
+                if (metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+                {
+                    metadata.AccessList.Remove(doctorSignPublicKey);
+                    _bigChainDbService.SendTransferTransactionToDataBase(record.id, metadata,
+                        patientSignPrivateKey, patientSignPublicKey, record.transID);
+                    counter++;
+                }
+            }
+
+            return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was removed from " + counter.ToString() + " records.") });
+        }
+
+        public JsonResult GetAllTypeIDs(string type) 
+        {
+            if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
                 return Json("{}");
             else
             {
-                var phns = _bigChainDbService.GetAllPatientPHNs();
+                if (type == null || type == "")
+                    return Json("{}");
+                AssetType assetType = type == "Doctor" ? AssetType.Doctor :
+                                type == "Pharmacist" ? AssetType.Pharmacist : AssetType.MLT;
+                var phns = _bigChainDbService.GetAllTypeIDs(assetType);
                 return Json(phns);
             }
         }
