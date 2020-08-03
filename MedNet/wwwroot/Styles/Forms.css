@@ -77,9 +77,8 @@
 
 /* End Index */
 .form-reg {
-    margin: 0 auto;
+    margin: 20px auto;
     width: 100%;
-    transform: translate(0, 25%);
 }
 
 .save-changes {

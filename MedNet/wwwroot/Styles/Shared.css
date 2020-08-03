@@ -189,7 +189,7 @@ body {
 
 .card-header {
     border-bottom-style: solid;
-    border-bottom-width: thin;
+    border-bottom-width: medium;
     border-bottom-color: gainsboro;
     background-color: white;
     text-align: center;
