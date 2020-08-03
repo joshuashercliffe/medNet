@@ -15,10 +15,10 @@
 
 
 <div class="content-full">
-    <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+    <div class="form-reg col-sm-8 col-md-7 col-lg-6 col-xl-5">
         <div class="card">
             <div class="card-header">
-                <h2>Doctor Log-In</h2>
+                <h1>Doctor Log-In</h1>
             </div>
             <div class="card-body">
                 @Html.ValidationSummary(true)
@@ -47,11 +47,9 @@
                         @Html.ValidationMessageFor(n => n.password)
                     </div>
 
-                    <button type="submit" id="submitButton" class="btn btn-success btn-block">Log-In</button>
-                    <div class="form-group">
-                        <small class="message">Don't have a doctor's account? <a href="SignUp">Sign-Up here.</a></small>
-                    </div>
+                    <button type="submit" class="btn btn-reg btn-block">Log-In</button>
 
+                    <small class="message">Don't have a doctor's account? <a href="SignUp">Sign-Up here.</a></small>
                 </form>
             </div>
         </div>

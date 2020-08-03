@@ -188,7 +188,10 @@ body {
 }
 
 .card-header {
-    border-bottom: none;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+    border-bottom-color: gainsboro;
+    background-color: white;
     text-align: center;
 }
 
@@ -263,6 +266,11 @@ body {
     background-color: #4CAF50;
     color: white;
 }
+
+    .btn-reg:hover {
+        background-color: #449d48;
+        color: black;
+    }
 
 @media screen and (max-width: 1000px) {
     .topnav a:not(:first-child) {
