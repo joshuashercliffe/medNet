@@ -43,11 +43,20 @@ body {
     font-family: "Roboto";
 }
 
+.row {
+    margin-bottom: 20px;
+}
+
+.small-row {
+    margin-bottom: 0px;
+}
+
 .main {
     margin-top: 53px;
     bottom: 2.5rem;
     padding-top: 10px;
     min-height: 100vh;
+    background-color: #E5E8E8;
 }
 
 .sidebar {
@@ -61,6 +70,7 @@ body {
     border-right-width: thin;
     border-right-color: gainsboro;
     border-right-style: solid;
+    background-color: #E5E8E8;
 }
 
 .sidebar a {
@@ -173,6 +183,8 @@ body {
     padding: 20px;
     border-style: none;
     margin-top: 5px;
+    border-radius: 10px;
+    height: 100%;
 }
 
 .card-header {
@@ -228,18 +240,28 @@ body {
 }
 
 .mednet-logo {
-    height: 53px;
-    width: 53px;
+    height: 53px;    
     max-height: 100%;
     padding: 5px;
 }
 
-.col-sm-6 {
+.col-sm-6{
     margin: 0 auto;
 }
 
 .badge {
     font-size: 100%
+}
+
+.btn-edit {
+    bottom: 0;
+    right: 20px;
+    position: absolute;
+}
+
+.btn-reg {
+    background-color: #4CAF50;
+    color: white;
 }
 
 @media screen and (max-width: 1000px) {
