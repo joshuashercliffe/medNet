@@ -242,14 +242,19 @@ namespace MedNet.Controllers
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
                 var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
-                var doctorNotes = new List<DoctorNote>();
+                var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
                     var hashedKey = doctorNote.metadata.AccessList[doctorSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
-                    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
+                    var newEntry = new DoctorNoteFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<DoctorNote>(data),
+                        Metadata = doctorNote.metadata.data
+                    };
+                    doctorNotes.Add(newEntry);
                 }
                 foreach (var prescription in prescriptionsList)
                 {
@@ -269,7 +274,7 @@ namespace MedNet.Controllers
                     PatientAsset = patientInfo,
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
-                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    DoctorNotes = doctorNotes.OrderByDescending(d => d.assetData.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 

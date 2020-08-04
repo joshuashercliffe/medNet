@@ -165,14 +165,21 @@ namespace MedNet.Controllers
                     (AssetType.DoctorNote, patientSignPublicKey);
                 var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, patientSignPublicKey);
-                var doctorNotes = new List<DoctorNote>();
+                var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
                     var hashedKey = doctorNote.metadata.AccessList[patientSignPublicKey];
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(doctorNote.data.Data, dataDecryptionKey);
-                    doctorNotes.Add(JsonConvert.DeserializeObject<DoctorNote>(data));
+                    var newEntry = new DoctorNoteFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<DoctorNote>(data),
+                        Metadata = doctorNote.metadata.data,
+                        assetID = doctorNote.id,
+                        transID = doctorNote.transID
+                    };
+                    doctorNotes.Add(newEntry);
                 }
                 foreach (var prescription in prescriptionsList)
                 {
@@ -182,7 +189,9 @@ namespace MedNet.Controllers
                     var newEntry = new PrescriptionFullData
                     {
                         assetData = JsonConvert.DeserializeObject<Prescription>(data),
-                        Metadata = prescription.metadata.data
+                        Metadata = prescription.metadata.data,
+                        assetID = prescription.id,
+                        transID = prescription.transID
                     };
                     prescriptions.Add(newEntry);
                 }
@@ -192,7 +201,7 @@ namespace MedNet.Controllers
                     PatientAsset = patientInfo,
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
-                    DoctorNotes = doctorNotes.OrderByDescending(d => d.DateOfRecord).ToList(),
+                    DoctorNotes = doctorNotes.OrderByDescending(d => d.assetData.DateOfRecord).ToList(),
                     Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
                 };
 
@@ -200,7 +209,7 @@ namespace MedNet.Controllers
             }
         }
 
-        public IActionResult EditAccess()
+        public IActionResult EditAccess(string? transID)
         {
             if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
                 return RedirectToAction("Login");
@@ -208,8 +217,24 @@ namespace MedNet.Controllers
             {
                 ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
                 ViewBag.UserID = HttpContext.Session.GetString(Globals.currentUserID);
-                return View();
+                var viewModel = new EditAccessViewModel();
+                if (transID != null && transID != "")
+                {
+                    var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, object>(transID);
+                    viewModel.reportType = result.data.Type;
+                }
+                return View(viewModel);
             }
+        }
+
+        public JsonResult GetAccessListTransID(string transID)
+        {
+            var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, object>(transID);
+            var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+            var accessList = result.metadata.AccessList.Keys.ToList();
+            accessList.Remove(patientSignPublicKey);
+            List<UserInfo> userInfoList = _bigChainDbService.GetUserInfoList(accessList.ToArray());
+            return Json(userInfoList);
         }
 
         [HttpPost]
@@ -232,6 +257,26 @@ namespace MedNet.Controllers
             string doctorSignPublicKey = userAsset.data.Data.SignPublicKey;
             string doctorAgreePublicKey = userAsset.data.Data.AgreePublicKey;
             string userName = userAsset.data.Data.FirstName + " " + userAsset.data.Data.LastName;
+
+            if(editAccessViewModel.TransID != null && editAccessViewModel.TransID != "")
+            {
+                var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string,object>(editAccessViewModel.TransID);
+                MetaDataSaved<object> metadata = result.metadata;
+                if (!metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+                {
+                    var hashedKey = metadata.AccessList[patientSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                    var newHash = EncryptionService.getEncryptedEncryptionKey(dataDecryptionKey, patientAgreePrivateKey, doctorAgreePublicKey);
+                    metadata.AccessList[doctorSignPublicKey] = newHash;
+                    var newTransID = _bigChainDbService.SendTransferTransactionToDataBase(result.id, metadata,
+                        patientSignPrivateKey, patientSignPublicKey, result.transID);
+                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was added to the record."), newtransid = newTransID });
+                }
+                else 
+                {
+                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") is already added to the record.") });
+                }
+            }
 
             // Choose the types of records we want to get
             List<AssetType> typeList = new List<AssetType>();
@@ -281,6 +326,23 @@ namespace MedNet.Controllers
             string patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
             string doctorSignPublicKey = userAsset.data.Data.SignPublicKey;
             string userName = userAsset.data.Data.FirstName + " " + userAsset.data.Data.LastName;
+
+            if (editAccessViewModel.TransID != null && editAccessViewModel.TransID != "")
+            {
+                var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, object>(editAccessViewModel.TransID);
+                MetaDataSaved<object> metadata = result.metadata;
+                if (metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+                {
+                    metadata.AccessList.Remove(doctorSignPublicKey);
+                    var newTransID = _bigChainDbService.SendTransferTransactionToDataBase(result.id, metadata,
+                        patientSignPrivateKey, patientSignPublicKey, result.transID);
+                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was removed from the record."), newtransid = newTransID });
+                }
+                else
+                {
+                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was already removed from the record.")});
+                }
+            }
 
             // Choose the types of records we want to get
             List<AssetType> typeList = new List<AssetType>();

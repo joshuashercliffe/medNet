@@ -50,14 +50,14 @@
                                 {
                                     <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
                                         <h4>
-                                            Date: @doctorNote.DateOfRecord.ToString("MMMM dd, yyyy")
+                                            Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
                                         </h4>
                                         <p>
-                                            <strong>Purpose of Visit:</strong> @doctorNote.PurposeOfVisit <br />
-                                            <strong>Description:</strong> @doctorNote.Description <br />
-                                            <strong>Final Diagnosis:</strong> @doctorNote.FinalDiagnosis <br />
-                                            <strong>Further Instructions and General Precautions:</strong> @doctorNote.FurtherInstructions   <br />
-                                            <strong>Doctor Visited:</strong> @doctorNote.DoctorName
+                                            <strong>Purpose of Visit:</strong> @doctorNote.assetData.PurposeOfVisit <br />
+                                            <strong>Description:</strong> @doctorNote.assetData.Description <br />
+                                            <strong>Final Diagnosis:</strong> @doctorNote.assetData.FinalDiagnosis <br />
+                                            <strong>Further Instructions and General Precautions:</strong> @doctorNote.assetData.FurtherInstructions   <br />
+                                            <strong>Doctor Visited:</strong> @doctorNote.assetData.DoctorName
                                         </p>
                                     </div>
                                 }

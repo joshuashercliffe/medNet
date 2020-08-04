@@ -10,7 +10,7 @@ namespace MedNet.Models
         public PatientCredMetadata PatientMetadata { get; set; }
         public int PatientAge { get; set; }
 
-        public List<DoctorNote> DoctorNotes { get; set; }
+        public List<DoctorNoteFullData> DoctorNotes { get; set; }
 
         public List<PrescriptionFullData> Prescriptions { get; set; }
     }
