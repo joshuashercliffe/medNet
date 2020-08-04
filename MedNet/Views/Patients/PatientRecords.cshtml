@@ -32,7 +32,54 @@
             </div>
             <div class="card-body">
                 <div id="doc_notes" class="tabcontent">
-                    <p>Doctor's Notes</p>
+                    @if (Model != null && Model.DoctorNotes != null && Model.DoctorNotes.Any())
+                    {
+                        @for (var i = 0; i < Model.DoctorNotes.Count; i++)
+                        {
+                            var doctorNote = Model.DoctorNotes[i];
+                            var html_id = "doc_note" + i.ToString();
+                            <div class="medical-card card">
+                                <div class="medical-header">
+                                    <div class="row no-bot-margin">
+                                        <div class="col-sm-6">
+                                            <h3>Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")</h3>
+                                        </div>
+                                        <div class="col-sm-6 right">
+                                            <p>Doctor: @doctorNote.assetData.DoctorName</p>
+                                        </div>
+                                    </div>
+                                    <div class="row no-bot-margin">
+                                        <div class="col-sm-9">
+                                            <p class="no-bot-margin"><strong>Purpose: </strong>@doctorNote.assetData.PurposeOfVisit</p>
+                                            <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
+                                        </div>
+                                        <div class="col-sm-3 right">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                                Show more
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="collapse medical-body" id="@html_id">
+                                    <p class="no-bot-margin"><strong>Description: </strong>@doctorNote.assetData.Description</p>
+                                    <p class="no-bot-margin"><strong>Further Instructions: </strong>@doctorNote.assetData.FurtherInstructions</p>
+                                    <a href="@("EditAccess?transID="+doctorNote.transID)" class="btn btn-success">Edit Access</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <h4>
+                                No records shared.
+                            </h4>
+                            <p>
+                                No medical records to show.
+                            </p>
+                        </div>
+                    }
                 </div>
 
                 <div id="prescriptions" class="tabcontent">
@@ -49,12 +96,12 @@
                                             <h3>@prescription.assetData.DrugName</h3>
                                         </div>
                                         <div class="col-sm-6 right">
-                                            <p>Remaining Refills: @prescription.Metadata.RefillRemaining</p>
+                                            <p><strong>Remaining Refills: </strong>@prescription.Metadata.RefillRemaining</p>
                                         </div>
                                     </div>
                                     <div class="row no-bot-margin">
                                         <div class="col-sm-9">
-                                            <p class="no-bot-margin">Directions: @prescription.assetData.DirectionForUse</p>
+                                            <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
                                         </div>
                                         <div class="col-sm-3 right">
                                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
@@ -94,7 +141,7 @@
                 </div>
 
                 <div id="test_results" class="tabcontent">
-                    <p>Test Results</p>
+                    <p>Test Results are not implemented yet</p>
                 </div>
             </div>
         </div>
