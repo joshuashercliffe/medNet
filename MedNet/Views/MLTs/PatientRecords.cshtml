@@ -80,7 +80,7 @@
                             {
                                 @foreach (var prescription in Model.Prescriptions)
                                 {
-                                    <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
+                                    @*<div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
                                         <h4>
                                             Date: @prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
                                         </h4>
@@ -99,6 +99,15 @@
                                                 <strong>Previous Refill Quantity:</strong> @prescription.Metadata.LastIssueQty.ToString()
                                             }
                                         </p>
+                                    </div>*@
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h1>@prescription.assetData.DrugName</h1>
+                                            <p>Refills: @prescription.assetData.Refill</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Directions: @prescription.assetData.DirectionForUse</p>
+                                        </div>
                                     </div>
                                 }
                             }

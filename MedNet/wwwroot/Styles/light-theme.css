@@ -71,11 +71,11 @@ body {
     margin-bottom: 20px;
 }
 
-.small-row {
+.no-bot-margin {
     margin-bottom: 0px;
 }
 
-.col-sm-6 {
+.center {
     margin: 0 auto;
 }
 
@@ -215,7 +215,38 @@ body {
     text-align: center;
 }
 
-.green-buttons-top {
+.medical-card {
+    border-style: solid;
+    border-color: gainsboro;
+    border-width: medium;
+}
+
+.medical-header {
+    background-color: white;
+    text-align: left;
+}
+
+.medical-body {
+    border-top-style:solid;
+    border-top-width:thin;
+    border-top-color:gainsboro;
+    padding-top: 10px;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.bottom {
+    bottom: 50px;
+    position:absolute;
+}
+
+/*.green-buttons-top {
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
@@ -230,7 +261,7 @@ body {
 
     .green-buttons-top:hover {
         opacity: 0.8;
-    }
+    }*/
 
 .topnav-lbtn {
     float: left;
@@ -259,9 +290,9 @@ body {
         color: #7B7D7D;
     }
 
-.green-buttons-top:hover {
+/*.green-buttons-top:hover {
     opacity: 0.8;
-}
+}*/
 
 .mednet-logo {
     height: 53px;
@@ -282,6 +313,11 @@ body {
 
 .btn-edit:hover {
     color: black;
+}
+
+.mednet-link.active {
+    background-color: #4CAF50;
+    color: white;
 }
 
 @media screen and (max-width: 1000px) {
