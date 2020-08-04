@@ -42,24 +42,18 @@
                                 <div class="medical-header">
                                     <div class="row no-bot-margin">
                                         <div class="col-sm-6">
-                                            <h3>Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")</h3>
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                                <h3>
+                                                    Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
+                                                </h3>
+                                            </button>
                                         </div>
                                         <div class="col-sm-6 right">
                                             <p>Doctor: @doctorNote.assetData.DoctorName</p>
                                         </div>
                                     </div>
-                                    <div class="row no-bot-margin">
-                                        <div class="col-sm-9">
-                                            <p class="no-bot-margin"><strong>Purpose: </strong>@doctorNote.assetData.PurposeOfVisit</p>
-                                            <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
-                                        </div>
-                                        <div class="col-sm-3 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
-                                                Show more
-                                            </button>
-                                        </div>
-                                    </div>
-
+                                    <p class="no-bot-margin"><strong>Purpose: </strong>@doctorNote.assetData.PurposeOfVisit</p>
+                                    <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin"><strong>Description: </strong>@doctorNote.assetData.Description</p>
@@ -93,20 +87,28 @@
                                 <div class="medical-header">
                                     <div class="row no-bot-margin">
                                         <div class="col-sm-6">
-                                            <h3>@prescription.assetData.DrugName</h3>
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                                <h3>
+                                                    @prescription.assetData.DrugName
+                                                </h3>
+                                            </button>
+                                            @*<a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)"><h3>@prescription.assetData.DrugName</h3></a>*@
                                         </div>
                                         <div class="col-sm-6 right">
                                             <p><strong>Remaining Refills: </strong>@prescription.Metadata.RefillRemaining</p>
                                         </div>
                                     </div>
                                     <div class="row no-bot-margin">
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-8">
                                             <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
                                         </div>
-                                        <div class="col-sm-3 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
-                                                Show more
-                                            </button>
+                                        <div class="col-sm-4 right">
+                                            @*<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                                About @prescription.assetData.DrugName
+                                            </button>*@
+                                            <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">
+                                                About @prescription.assetData.DrugName
+                                            </a>
                                         </div>
                                     </div>
 
