@@ -284,16 +284,6 @@ body {
     color: black;
 }
 
-.btn-reg {
-    background-color: #4CAF50;
-    color: white;
-}
-
-    .btn-reg:hover {
-        background-color: #449d48;
-        color: black;
-    }
-
 @media screen and (max-width: 1000px) {
     .topnav a:not(:first-child) {
         display: none;

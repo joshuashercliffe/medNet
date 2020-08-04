@@ -262,12 +262,12 @@ body {
     position: absolute;
 }
 
-.btn-reg {
+.btn-success {
     background-color: #4CAF50;
     color: white;
 }
 
-    .btn-reg:hover {
+    .btn-success:hover {
         background-color: #449d48;
         color: black;
     }
