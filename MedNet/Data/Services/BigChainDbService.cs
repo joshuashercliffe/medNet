@@ -108,7 +108,7 @@ namespace MedNet.Data.Services
 
         // This function is similar to 
 
-        public void SendCreateTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
+        public string SendCreateTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
         {
             var signPrivateKey = EncryptionService.getSignKeyFromPrivate(privateSignKey);
 
@@ -120,9 +120,10 @@ namespace MedNet.Data.Services
                 .buildAndSignOnly(signPrivateKey.PublicKey, signPrivateKey);
 
             var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
+            return createTransaction.Data.Id;
         }
 
-        public void SendCreateTransferTransactionToDataBase<A, M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string senderPrivateSignKey, string recieverPublicSignKey)
+        public string SendCreateTransferTransactionToDataBase<A, M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string senderPrivateSignKey, string recieverPublicSignKey)
         {
             var senderSignPrivateKey = EncryptionService.getSignKeyFromPrivate(senderPrivateSignKey);
             var recieverSignPublicKey = EncryptionService.getSignPublicKeyFromString(recieverPublicSignKey);
@@ -136,9 +137,10 @@ namespace MedNet.Data.Services
                 .buildAndSignOnly(senderSignPrivateKey.PublicKey, senderSignPrivateKey);
 
             var createTransaction = TransactionsApi<AssetSaved<A>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
+            return createTransaction.Data.Id;
         }
 
-        public void SendTransferTransactionToDataBase<M>(string assetID, MetaDataSaved<M> metaData, 
+        public string SendTransferTransactionToDataBase<M>(string assetID, MetaDataSaved<M> metaData, 
             string senderPrivateSignKey, string recieverPublicSignKey, string inputTransID)
         {
             var senderSignPrivateKey = EncryptionService.getSignKeyFromPrivate(senderPrivateSignKey);
@@ -163,6 +165,7 @@ namespace MedNet.Data.Services
                 .buildAndSignOnly(senderSignPrivateKey.PublicKey, senderSignPrivateKey);
 
             var createTransaction = TransactionsApi<Asset<string>, MetaDataSaved<M>>.sendTransactionAsync(transaction).GetAwaiter().GetResult();
+            return createTransaction.Data.Id;
         }
 
         public List<AssetsMetadatas<A,M>> GetAllTypeRecordsFromDPublicPPublicKey<A,M>
@@ -315,6 +318,26 @@ namespace MedNet.Data.Services
                                     };
             var result = neededTransaction.FirstOrDefault();
             return result;
+        }
+
+        public List<UserInfo> GetUserInfoList(string[] userSignPublicKeyList)
+        {
+            // Search for all users in database
+            // get all assets
+            var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets").AsQueryable();
+            var patients = assets.Where(a => userSignPublicKeyList.Contains(a.data.Data.SignPublicKey));
+            List<UserInfo> userInfoList = new List<UserInfo>();
+            foreach ( var patient in patients)
+            {
+                UserInfo user = new UserInfo()
+                {
+                    UserID = patient.data.Data.ID,
+                    UserName = patient.data.Data.FirstName + " " + patient.data.Data.LastName
+                };
+                user.UserType = patient.data.Type == AssetType.Doctor ? "Doctor" : patient.data.Type == AssetType.Pharmacist ? "Pharmacist" : "MLT";
+                userInfoList.Add(user);
+            }
+            return userInfoList;
         }
 
         public List<AssetsMetadatas<A, object>> GetAllTypeRecordsFromPPublicKey<A>

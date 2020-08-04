@@ -18,4 +18,13 @@ namespace MedNet.Data.Models.Models
 
         public string DoctorMinsc { get; set; }
     }
+
+    public class DoctorNoteFullData
+    {
+        public string transID { get; set; }
+
+        public string assetID { get; set; }
+        public DoctorNote assetData { get; set; }
+        public double Metadata { get; set; }
+    }
 }
