@@ -26,20 +26,19 @@
             <div class="card-header">
                 <h1>Edit Access</h1>
             </div>
-            <div id="message">
-            </div>
-            <div id="accessList" class="text-center">
-            </div>
             <div class="card-body">
-                <div class="form-reg">
-                    <div class="form-group">
-                        @Html.LabelFor(n => n.UserType, "Select User Type")
-                        <select id="selectUserType" class="form-control">
-                            <option value="" selected>Select User Type</option>
-                            @if (Model.reportType == MedNet.Data.Models.AssetType.DoctorNote)
+                <div id="message">
+                </div>
+                <div id="accessList" class="text-center">
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.UserType, "Select User Type")
+                    <select id="selectUserType" class="form-control">
+                        <option value="" selected>Select User Type</option>
+                        @if (Model.reportType == MedNet.Data.Models.AssetType.DoctorNote)
                         {
                             <option value="Doctor" selected>Doctor</option>
-                            }
+                        }
                         else if (Model.reportType == MedNet.Data.Models.AssetType.Prescription)
                         {
                             <option value="Doctor">Doctor</option>
@@ -51,11 +50,11 @@
                             <option value="Pharmacist">Pharmacist</option>
                             <option value="MLT">Medical Lab Technologist</option>
                         }
-                        </select>
-                        <small class="form-text text-muted">Please select the type of user you want to grant/revoke access from</small>
-                    </div>
-                    <!-- Doctor's Note -->
-                    <div class="form-group" id="userID">
+                    </select>
+                    <small class="form-text text-muted">Please select the type of user you want to grant/revoke access from</small>
+                </div>
+                <div class="form-group no-bot-margin">
+                    <div id="userID">
                         @Html.LabelFor(n => n.UserID, "")
                         @Html.TextBoxFor(n => n.UserID, new { @class = "form-control typeahead", @id = "userIDInput" })
                         <div class="text-center mt-3">
