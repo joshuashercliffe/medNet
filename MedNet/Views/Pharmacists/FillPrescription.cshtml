@@ -23,54 +23,79 @@
 </div>
 
 <div class="content">
-    <div class="content-header">
+    <div class="content-header card">
         <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
-        <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+        <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
-    <div class="row">
-        <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Prescription Information</h3>
-                    <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
-                        <h4>
-                            Date: @Model.PrescriptionData.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
-                        </h4>
-                        <p>
-                            <strong>Drug Prescribed:</strong> @Model.PrescriptionData.assetData.DrugName <br />
-                            <strong>Concentration:</strong> @Model.PrescriptionData.assetData.Concentration <br />
-                            <strong>Valid Until:</strong> @Model.PrescriptionData.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
-                            <strong>Total Number of Refills:</strong> @Model.PrescriptionData.assetData.Refill <br />
-                            <strong>Substitutions Allowed:</strong> @Model.PrescriptionData.assetData.Substitution.ToString() <br />
-                            <strong>Directions for Use:</strong> @Model.PrescriptionData.assetData.DirectionForUse <br />
-                            <strong>Prescribing Doctor:</strong> @Model.PrescriptionData.assetData.DoctorName <br />
-                            <strong>Remaining Refills:</strong> @Model.PrescriptionData.Metadata.RefillRemaining <br />
-                            @if (Model.PrescriptionData.Metadata.LastIssueDate != default)
-                            {
-                                <strong>Previous Refill Date:</strong> @Model.PrescriptionData.Metadata.LastIssueDate.ToString("MMMM dd, yyyy") <br />
-                                <strong>Previous Refill Quantity:</strong> @Model.PrescriptionData.Metadata.LastIssueQty.ToString() <br />
-                            }
-                        </p>
+    <div class="content-body">
+        <div class="card col-sm-12 col-md-11 col-lg-10 col-xl-8 center">
+            <div class="card-header">
+                <h1>Prescription Information</h1>
+            </div>
+            <div class="card-body">
+                <div class="medical-card card">
+                    <div class="medical-header">
+                        <div class="row no-bot-margin">
+                            <div class="col-sm-6">
+                                <h3>
+                                    @Model.PrescriptionData.assetData.DrugName
+                                </h3>
+                            </div>
+                            <div class="col-sm-6 right">
+                                <p><strong>Remaining Refills: </strong>@Model.PrescriptionData.Metadata.RefillRemaining</p>
+                            </div>
+                        </div>
+                        <p class="no-bot-margin"><strong>Directions: </strong>@Model.PrescriptionData.assetData.DirectionForUse</p>
+                    </div>
+                    <div class="medical-body">
+                        @if (Model.PrescriptionData.Metadata.LastIssueDate != default)
+                        {
+                            <div class="row no-bot-margin">
+                                <div class="col-sm-6">
+                                    <p class="no-bot-margin"><strong>Date: </strong>@Model.PrescriptionData.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                </div>
+                                <div class="col-sm-6 right">
+                                    <p class="no-bot-margin"><strong>Previous Refill Date: </strong>@Model.PrescriptionData.Metadata.LastIssueDate.ToString("MMMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                            <div class="row no-bot-margin">
+                                <div class="col-sm-6">
+                                    <p class="no-bot-margin"><strong>Doctor: </strong>@Model.PrescriptionData.assetData.DoctorName</p>
+                                </div>
+                                <div class="col-sm-6 right">
+                                    <p class="no-bot-margin"><strong>Previous Refill Quantity: </strong>@Model.PrescriptionData.Metadata.LastIssueQty.ToString()</p>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="no-bot-margin"><strong>Date: </strong>@Model.PrescriptionData.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                            <p class="no-bot-margin"><strong>Doctor: </strong>@Model.PrescriptionData.assetData.DoctorName</p>
+                        }
+                        <p class="no-bot-margin"><strong>Total Refills: </strong>@Model.PrescriptionData.assetData.Refill</p>
+                        <p class="no-bot-margin"><strong>Concentration: </strong>@Model.PrescriptionData.assetData.Concentration</p>
+                        <p class="no-bot-margin"><strong>Valid Until: </strong>@Model.PrescriptionData.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
+                        <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@Model.PrescriptionData.assetData.Substitution.ToString()</p>
                     </div>
                 </div>
-                <div class="card-body">
-                    @Html.ValidationSummary(true)
-                    <form class="text-form" asp-action="FillPrescription" method="post">
+                
+                @Html.ValidationSummary(true)
+                <form class="form-reg no-bot-margin" asp-action="FillPrescription" method="post">
+                    <div class="form-group">
+                        <label>Issues Quantity</label>
+                        @Html.TextBoxFor(n => n.QtyFilled, new { placeholder = "Number of refills issued", @required = "required", @class = "form-control", @type = "number", @min = "0", @max = Model.PrescriptionData.Metadata.RefillRemaining })
+                        @Html.ValidationMessageFor(n => n.QtyFilled)
+                        <small class="form-text text-muted">Quantity of the prescription issued</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Patient Keyword</label>
+                        @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.PatientKeyword)
+                        <small class="form-text text-muted">Patient's keyphrase used for encryption</small>
+                    </div>
+                    <button type="submit" id="submitButton" class="btn btn-success btn-block">Authorize with Fingerprint</button>
+                </form>
 
-                        <!-- Keyword -->
-                        <div class="form-group">
-                            <label for="patientPhone">Issues Quantity</label>
-                            @Html.TextBoxFor(n => n.QtyFilled, new { placeholder = "Number of refills issued", @required = "required", @class = "form-control", @type = "number", @min = "0", @max = Model.PrescriptionData.Metadata.RefillRemaining })
-                            @Html.ValidationMessageFor(n => n.QtyFilled)
-                            <small class="form-text text-muted">Quantity of the prescription issued</small>
-                            <label for="patientPhone">Patient Keyword</label>
-                            @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
-                            @Html.ValidationMessageFor(n => n.PatientKeyword)
-                            <small class="form-text text-muted">Patient's keyphrase used for encryption</small>
-                        </div>
-                        <button type="submit" id="submitButton" class="btn btn-success btn-block">Authorize with Fingerprint</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
