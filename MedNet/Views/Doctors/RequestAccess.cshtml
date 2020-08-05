@@ -14,43 +14,13 @@
     }
 
 <body>
-    <!-- without sidebar -->
-    @*
-        <div class="content-full">
-            <div class="row">
-                <div class="form-reg col-sm-10 col-md-6 col-lg-5 col-xl-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>Request Access</h3>
-                            <p>Enter details below retrieve patient information.</p>
-                        </div>
-                        <div class="card-body">
-                            @Html.ValidationSummary(true)
-                            <form class="text-form" asp-action="RequestAccess" method="post">
-
-                                <!-- Keyword -->
-                                <div class="form-group">
-                                    <label for="patientPhone">Patient Keyword</label>
-                                    @Html.TextBoxFor(n => n.keyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
-                                    @Html.ValidationMessageFor(n => n.keyword)
-                                    <small class="form-text text-muted">Patient's keyphrase used for encryption</small>
-                                </div>
-                                <button type="submit" id="submitButton" class="btn btn-success btn-block">Authorize with Fingerprint</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    *@
-
     <!-- with sidebar -->
     <div class="sidebar">
         <div class="sidebar-body">
             <a href="PatientOverview">Overview</a>
             <a href="RequestAccess" class="active">Request Full Access</a>
             <!-- UPDATE HREF TO RECORDS PAGE -->
-            <a href="PatientRecords">View Medical Records</a>
+            <a href="PatientRecords">View Records</a>
             <a href="AddNewPatientRecord">Add New Record</a>
         </div>
         <div class="sidebar-footer">
@@ -60,10 +30,10 @@
 
     <div class="content">
         <div class="row">
-            <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
+            <div class="form-reg col-sm-8 col-md-7 col-lg-6 col-xl-5">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Request Access</h3>
+                        <h1>Request Access</h1>
                         <p>Enter details below retrieve patient information.</p>
                     </div>
                     <div class="card-body">

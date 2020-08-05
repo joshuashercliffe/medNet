@@ -21,7 +21,7 @@
         <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
-        <div class="card">
+        <div class="card col-sm-10 col-md-9 col-lg-8 col-xl-7 center">
             <div class="card-header">
                 <h2>Medical Records</h2>
                 <nav class="nav nav-pills nav-fill tab">
@@ -41,19 +41,28 @@
                             <div class="medical-card card">
                                 <div class="medical-header">
                                     <div class="row no-bot-margin">
-                                        <div class="col-sm-6">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
-                                                <h3>
-                                                    Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
-                                                </h3>
-                                            </button>
+                                        <div class="col-sm-8">
+                                            <h3>
+                                                @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
+                                            </h3>
+                                            
                                         </div>
-                                        <div class="col-sm-6 right">
+                                        <div class="col-sm-4 right">
                                             <p>Doctor: @doctorNote.assetData.DoctorName</p>
                                         </div>
                                     </div>
                                     <p class="no-bot-margin"><strong>Purpose: </strong>@doctorNote.assetData.PurposeOfVisit</p>
-                                    <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
+                                    <div class="row no-bot-margin">
+                                        <div class="col-sm-8">
+                                            <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
+                                        </div>
+                                        <div class="col-sm-4 right">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                                Show more
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin"><strong>Description: </strong>@doctorNote.assetData.Description</p>
@@ -87,12 +96,9 @@
                                 <div class="medical-header">
                                     <div class="row no-bot-margin">
                                         <div class="col-sm-6">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
-                                                <h3>
-                                                    @prescription.assetData.DrugName
-                                                </h3>
-                                            </button>
-                                            @*<a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)"><h3>@prescription.assetData.DrugName</h3></a>*@
+                                            <h3>
+                                                @prescription.assetData.DrugName
+                                            </h3>
                                         </div>
                                         <div class="col-sm-6 right">
                                             <p><strong>Remaining Refills: </strong>@prescription.Metadata.RefillRemaining</p>
@@ -103,28 +109,32 @@
                                             <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
                                         </div>
                                         <div class="col-sm-4 right">
-                                            @*<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
-                                                About @prescription.assetData.DrugName
-                                            </button>*@
-                                            <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">
-                                                About @prescription.assetData.DrugName
-                                            </a>
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                                Show more
+                                            </button>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
-                                        <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
-                                        <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
-                                        <p class="no-bot-margin"><strong>Total Refills: </strong>@prescription.assetData.Refill</p>
-                                        <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
-                                        <p class="no-bot-margin"><strong>Prescription Valid From/To: </strong>@prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
-                                        <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
-                                        @if (prescription.Metadata.LastIssueDate != default)
-                                        {
-                                            <p class="no-bot-margin"><strong>Previous Refill Date: </strong>@prescription.Metadata.LastIssueDate.ToShortDateString()</p>
-                                            <p class="no-bot-margin"><strong>Previous Refill Quantity: </strong>@prescription.Metadata.LastIssueQty.ToString()</p>
-                                        }
+                                    <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                    <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
+                                    <p class="no-bot-margin"><strong>Total Refills: </strong>@prescription.assetData.Refill</p>
+                                    <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
+                                    <p class="no-bot-margin"><strong>Prescription Valid From/To: </strong>@prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
+                                    @if (prescription.Metadata.LastIssueDate != default)
+                                    {
+                                        <p class="no-bot-margin"><strong>Previous Refill Date: </strong>@prescription.Metadata.LastIssueDate.ToShortDateString()</p>
+                                        <p class="no-bot-margin"><strong>Previous Refill Quantity: </strong>@prescription.Metadata.LastIssueQty.ToString()</p>
+                                    }
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
+                                        </div>
+                                        <div class="col-sm-4 right">
+                                            <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -147,122 +157,7 @@
                 </div>
             </div>
         </div>
-
-                @*
-                <!-- TODO: Move this to a new cshtml page and create code in controller, also add code for test results -->
-                    <div class="form-reg col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Medical Records</h3>
-                                <nav class="nav nav-pills nav-fill tab">
-                                    <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
-                                    <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
-                                    <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'test_results')">Test Results</button>
-                                </nav>
-                            </div>
-                            <div class="card-body" style="max-height: 75vh; overflow-y: scroll;">
-
-                                <div id="doc_notes" class="tabcontent">
-                                    @if (Model != null && Model.DoctorNotes != null && Model.DoctorNotes.Any())
-                                    {
-                                        @foreach (var doctorNote in Model.DoctorNotes)
-                                        {
-                                            <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
-                                                <h4>
-                                                    Date: @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
-                                                </h4>
-                                                <p>
-                                                    <strong>Purpose of Visit:</strong> @doctorNote.assetData.PurposeOfVisit <br />
-                                                    <strong>Description:</strong> @doctorNote.assetData.Description <br />
-                                                    <strong>Final Diagnosis:</strong> @doctorNote.assetData.FinalDiagnosis <br />
-                                                    <strong>Further Instructions and General Precautions:</strong> @doctorNote.assetData.FurtherInstructions   <br />
-                                                    <strong>Doctor Visited:</strong> @doctorNote.assetData.DoctorName <br />
-                                                    <a href="@("EditAccess?transID="+doctorNote.transID)" class="btn btn-success">Edit Access</a>
-                                                </p>
-                                            </div>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="record" align="left">
-                                            <h4>
-                                                No records shared.
-                                            </h4>
-                                            <p>
-                                                No medical records to show.
-                                            </p>
-                                        </div>
-                                    }
-                                </div>
-
-                                <div id="prescriptions" class="tabcontent">
-                                    @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
-                                    {
-                                        @foreach (var prescription in Model.Prescriptions)
-                                        {
-                                            @*<div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
-                                                <h4>
-                                                    Date: @prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
-                                                </h4>
-                                                <p>
-                                                    <strong>Drug Prescribed:</strong> @prescription.assetData.DrugName <br />
-                                                    <strong>Concentration:</strong> @prescription.assetData.Concentration <br />
-                                                    <strong>Prescription Valid From/To:</strong> @prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
-                                                    <strong>Total Number of Refills:</strong> @prescription.assetData.Refill <br />
-                                                    <strong>Substitutions Allowed:</strong> @prescription.assetData.Substitution.ToString() <br />
-                                                    <strong>Directions for Use:</strong> @prescription.assetData.DirectionForUse <br />
-                                                    <strong>Prescribing Doctor:</strong> @prescription.assetData.DoctorName <br />
-                                                    <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining
-                                                    @if (prescription.Metadata.LastIssueDate != default)
-                                                    {
-                                                        <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToShortDateString() <br />
-                                                        <strong>Previous Refill Quantity:</strong> @prescription.Metadata.LastIssueQty.ToString()
-                                                    }
-                                                </p>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-header" style="text-align:left;">
-                                                    <a data-toggle="collapse" href="#@prescription.transID" role="button" aria-expanded="false" aria-controls="@prescription.transID">@prescription.assetData.DrugName</a>
-                                                    <p>Refills: @prescription.Metadata.RefillRemaining</p>
-                                                </div>
-                                                <div class="collapse" id="@prescription.transID">
-                                                    <div class="card-body">
-                                                        <p>Directions: @prescription.assetData.DirectionForUse</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <div class="record" align="left">
-                                            <h4>
-                                                No records shared.
-                                            </h4>
-                                            <p>
-                                                No medical records to show.
-                                            </p>
-                                        </div>
-                                    }
-                                </div>
-
-                                <!-- TO DO: Fill in for TEST RESULTS, display file as a viewable/downloadable link-->
-                                <div id="test_results" class="tabcontent">
-                                    <div class="record" align="left">
-                                        <h4>
-                                            No records shared.
-                                        </h4>
-                                        <p>
-                                            No medical records to show.
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                            *@
-                        </div>
+    </div>
 
 </div>
 
@@ -282,6 +177,15 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }</script>
+
+    <script type="text/javascript">
+        function toggleShow(element) {
+            if (element.value === "Show more")
+                element.value = "Show less";
+            else
+                element.value = "Show more";
+        }
+    </script>
 }
 
 
