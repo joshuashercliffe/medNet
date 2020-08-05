@@ -12,7 +12,7 @@
     <div class="sidebar-body">
         <a href="PatientOverview">Overview</a>
         <a href="PatientRecords">Medical Records</a>
-        <a href="EditAccess" class="active">Edit access</a>
+        <a href="EditAccess" class="active">Edit Access</a>
     </div>
 </div>
 
@@ -21,35 +21,38 @@
         <h1>@ViewBag.UserName</h1>
         <p><strong>PHN: </strong>@ViewBag.UserID</p>
     </div>
-    <div class="row">
-        <div class="form-reg col-sm-10 col-md-8 col-lg-7 col-xl-6">
-            <div class="card">
-                <div class="card-header">
-                    <h1>Edit Access</h1>
-                </div>
-                <div id="message">
-                </div>
-                <div id="accessList" class="text-center">
-                </div>
-                <div class="card-body">
+    <div class="content-body">
+        <div class="card col-sm-12 col-md-11 col-lg-10 col-xl-8 center">
+            <div class="card-header">
+                <h1>Edit Access</h1>
+            </div>
+            <div id="message">
+            </div>
+            <div id="accessList" class="text-center">
+            </div>
+            <div class="card-body">
+                <div class="form-reg">
                     <div class="form-group">
                         @Html.LabelFor(n => n.UserType, "Select User Type")
                         <select id="selectUserType" class="form-control">
                             <option value="" selected>Select User Type</option>
-                            <option value="Doctor">Doctor</option>
                             @if (Model.reportType == MedNet.Data.Models.AssetType.DoctorNote)
-                            { }
-                            else if (Model.reportType == MedNet.Data.Models.AssetType.Prescription)
-                            {
-                                <option value="Pharmacist">Pharmacist</option>
+                        {
+                            <option value="Doctor" selected>Doctor</option>
                             }
-                            else
-                            {
-                                <option value="Pharmacist">Pharmacist</option>
-                                <option value="MLT">Medical Lab Technologist</option>
-                            }
+                        else if (Model.reportType == MedNet.Data.Models.AssetType.Prescription)
+                        {
+                            <option value="Doctor">Doctor</option>
+                            <option value="Pharmacist">Pharmacist</option>
+                        }
+                        else
+                        {
+                            <option value="Doctor">Doctor</option>
+                            <option value="Pharmacist">Pharmacist</option>
+                            <option value="MLT">Medical Lab Technologist</option>
+                        }
                         </select>
-                        <small id="phoneHelp" class="form-text text-muted">Please select the type of user you want to grant/revoke access from</small>
+                        <small class="form-text text-muted">Please select the type of user you want to grant/revoke access from</small>
                     </div>
                     <!-- Doctor's Note -->
                     <div class="form-group" id="userID">
