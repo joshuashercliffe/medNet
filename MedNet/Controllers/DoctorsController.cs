@@ -474,6 +474,7 @@ namespace MedNet.Controllers
         public IActionResult PatientSignUp(PatientSignUpViewModel patientSignUpViewModel)
         {
             // Description: Registers a patient up for a MedNet account
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             string signPrivateKey = null, agreePrivateKey = null, signPublicKey = null, agreePublicKey = null;
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientSignUpViewModel.PHN);
 
@@ -545,7 +546,7 @@ namespace MedNet.Controllers
 
             // Send the user's information to the Blockchain database
             _bigChainDbService.SendCreateTransactionToDataBase(asset, metadata, signPrivateKey);
-            return RedirectToAction("Home");
+            return RedirectToAction("PatientLookUp");
         }
 
         public IActionResult Logout()
