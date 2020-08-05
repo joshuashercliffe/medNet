@@ -4,13 +4,11 @@
 }
 
 @section NavButtons {
-    @*<a href="PatientOverview" class="topnav-lbtn topnav-first">Back to Patient Overview</a>*@
-    <a href="/Home" class="topnav-lbtn topnav-first">Home</a>
-    <a href="PatientLookUp" class="topnav-lbtn">Patient Look-Up</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Home</a>
     <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
+    <a href="PatientLookUp" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
     }
 
 <body>
@@ -24,13 +22,18 @@
             <a href="AddNewPatientRecord">Add New Record</a>
         </div>
         <div class="sidebar-footer">
-            <a href="Home">Close</a>
+            <a href="PatientLookUp">Close</a>
         </div>
     </div>
 
     <div class="content">
-        <div class="row">
-            <div class="form-reg col-sm-8 col-md-7 col-lg-6 col-xl-5">
+        <div class="content-header card">
+            <h1>First Last</h1>
+            @*<h1>@(Model.PatientMetadata.FirstName+" "+ Model.PatientMetadata.LastName)</h1>*@
+            <p class="no-bot-margin"><strong>PHN: </strong>Model.PatientAsset.ID</p>
+        </div>
+        <div class="content-body">
+            <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 center">
                 <div class="card">
                     <div class="card-header">
                         <h1>Request Access</h1>

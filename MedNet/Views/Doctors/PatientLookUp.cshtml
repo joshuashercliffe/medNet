@@ -1,26 +1,36 @@
 ﻿@model PatientLookupViewModel
 @{
-    ViewData["Title"] = "Patient Look-Up";
+    ViewData["Title"] = "Doctor's Home";
 }
 
 @section NavButtons {
-    <a href="Home" class="topnav-lbtn topnav-first">Home</a>
-    <a href="PatientLookUp" class="topnav-lbtn active">Patient Look-Up</a>
+    <a href="Home" class="topnav-lbtn topnav-first active">Home</a>
+    @*<a href="PatientLookUp" class="topnav-lbtn active">Patient Look-Up</a>*@
     <a href="PatientSignUp" class="topnav-lbtn">New Patient Sign-Up</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
-    <!-- <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a> -->
+    <a href="PatientLookUp" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
 }
 
-<div class="content-full">
-    <div class="row">
-        <div class="form-reg col-sm-8 col-md-7 col-lg-6 col-xl-5">
-            <div class="card">
-                <div class="card-header">
-                    <h1>Patient Look-Up</h1>
-                </div>
-                <div class="card-body">
 
+<div class="jumbotron text-center" style="background:transparent !important">
+    <br />
+    <div class="big-text">
+        Hello, Dr. @ViewBag.DoctorName
+    </div>
+    @*<h1>Welcome to MedNet Dr. @ViewBag.DoctorName</h1>*@
+    <br />
+    <p>To get started, please select an action.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 stack">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h1>Patient Look-Up</h1>
+                    </div>
                     @Html.ValidationSummary(true)
                     <form asp-action="PatientLookUp" method="post">
 
@@ -29,13 +39,23 @@
                             <label for="patientPhone">Personal Health Number</label>
                             @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "typeahead form-control", autocomplete = "off" })
                             @Html.ValidationMessageFor(n => n.PHN)
-                            <small id="phoneHelp" class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
+                            <small class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
                         </div>
-                        <button type="submit" id="submitButton" class="btn btn-success btn-block">Submit</button>
+                        <button type="submit" id="submitButton" class="btn btn-success">Search</button>
                     </form>
                 </div>
             </div>
         </div>
+        <div class="col-sm-6 stack">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h1 class="card-title">New Patient Sign-Up</h1>
+                    <p class="card-text">To enroll a new patient onto MedNet, please continue to registration. Patients will need to provide their PHN to create a new account.</p>
+                    <a href="PatientSignUp" class="btn btn-success">Register Patient</a>
+                </div>
+            </div>
+        </div>
+        <!-- Can add some documentation on how patient overview works, what adding records means/what types can u add, what requesting access means -->
     </div>
 </div>
 
@@ -71,12 +91,12 @@
                 matcher: function (item) {
                     var it = this.displayText(item).toLowerCase();
                     var query = this.query.toLowerCase();
-                    it=it.replace(/-/g, '');
+                    it = it.replace(/-/g, '');
                     query = query.replace(/-/g, '');
                     query = query.replace(/_/g, '');
                     return ~it.indexOf(query)
                 }
-                });
+            });
         });
     </script>
 }

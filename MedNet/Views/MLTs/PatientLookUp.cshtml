@@ -10,36 +10,34 @@
     <!-- <a href="/Doctors/Home" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a> -->
 }
 
-<div class="content-center">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="jumbotron text-center" style="background:transparent !important">
-                <br />
-                <h1>Welcome to MedNet MLT'sName</h1> <!-- debug: make this dynamic-->
-                <br />
-                <p>To get started, please search for a patient using their Personal Health Number.</p>
-            </div>
-        </div>
-        <div class="form-reg col-sm-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Patient Look-Up</h3>
-                </div>
-                <div class="card-body">
+<div class="jumbotron text-center" style="background:transparent !important">
+    <br />
+    <div class="big-text">
+        Hello, Dr. @ViewBag.DoctorName
+    </div>
+    <br />
+    <p>To get started, please search for a patient using their Personal Health Number.</p>
+</div>
 
-                    @Html.ValidationSummary(true)
-                    <form asp-action="PatientLookUp" method="post">
-
-                        <!-- PHN -->
-                        <div class="form-group">
-                            <label for="patientPhone">Personal Health Number</label>
-                            @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "typeahead form-control" })
-                            @Html.ValidationMessageFor(n => n.PHN)
-                            <small id="phoneHelp" class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
-                        </div>
-                        <button type="submit" id="submitButton" class="btn btn-success btn-block">Submit</button>
-                    </form>
+<div class="container">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h1>Patient Look-Up</h1>
                 </div>
+                @Html.ValidationSummary(true)
+                <form asp-action="PatientLookUp" method="post">
+
+                    <!-- PHN -->
+                    <div class="form-group">
+                        <label for="patientPhone">Personal Health Number</label>
+                        @Html.TextBoxFor(n => n.PHN, new { id = "patient-look-up-PHN", placeholder = "####-###-###", title = "10-digit Personal Health Number", @required = "required", @class = "typeahead form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(n => n.PHN)
+                        <small class="form-text text-muted">10-digit Personal Health Number can be found on the patient's CareCard/BC Services Card</small>
+                    </div>
+                    <button type="submit" id="submitButton" class="btn btn-success">Search</button>
+                </form>
             </div>
         </div>
     </div>

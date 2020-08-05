@@ -243,25 +243,13 @@ body {
 
 .bottom {
     bottom: 50px;
-    position:absolute;
+    position: absolute;
 }
 
-/*.green-buttons-top {
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    outline: 0;
-    background: #4CAF50;
-    width: 250px;
-    border: 0;
-    padding: 15px;
-    color: #FFFFFF;
-    font-size: 14px;
-    cursor: pointer;
+.stack {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-
-    .green-buttons-top:hover {
-        opacity: 0.8;
-    }*/
 
 .topnav-lbtn {
     float: left;
@@ -289,10 +277,6 @@ body {
     .footer a {
         color: #7B7D7D;
     }
-
-/*.green-buttons-top:hover {
-    opacity: 0.8;
-}*/
 
 .mednet-logo {
     height: 53px;

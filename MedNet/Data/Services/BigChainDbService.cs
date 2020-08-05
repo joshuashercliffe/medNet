@@ -282,6 +282,53 @@ namespace MedNet.Data.Services
                 return null;
         }
 
+        private List<string> GetAllPatientPHNs()
+        {
+            // Search for all patients in database
+            // get all assets
+            var assets = bigchainDatabase.GetCollection<Models.Assets<PatientCredAssetData>>("assets").AsQueryable();
+            var patients = from a in assets where a.data.Type == AssetType.Patient select a;
+            List<string> patient_phns = new List<string>();
+            // only get patient assets
+            foreach (var patient in patients)
+            {
+                // current patient phn
+                var phn = patient.data.Data.ID;
+                if (!patient_phns.Contains(phn))
+                {
+                    Console.WriteLine(phn);
+                    patient_phns.Add(phn);
+                }
+            }
+            return patient_phns;
+        }
+
+        public string GetSuggPatientPHN(string phn)
+        {
+            var phns = GetAllPatientPHNs();
+            var jw = new JaroWinkler();
+            // find the most similar one
+            int idx = -1;
+            double highest = 0;
+            for (int i = 0; i < phns.Count; i++)
+            {
+                var sim = jw.Similarity(phn, phns[i]);
+                if (sim > highest && sim >= 0.95)
+                {
+                    highest = sim;
+                    idx = i;
+                }
+            }
+            // get the closet phn
+            string sugg_phn = "";
+            if(idx > 0)
+            {
+                sugg_phn = phns[idx];
+            }
+
+            return sugg_phn;
+        }
+
         public List<string> GetAllTypeIDs(AssetType assetType)
         {
             // Search for all patients in database

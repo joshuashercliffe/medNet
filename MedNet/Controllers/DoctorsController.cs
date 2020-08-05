@@ -73,7 +73,7 @@ namespace MedNet.Controllers
                 HttpContext.Session.SetString(Globals.currentDAPriK, agreePrivateKey);
                 HttpContext.Session.SetString(Globals.currentUserName, $"{userAsset.data.Data.FirstName} {userAsset.data.Data.LastName}");
                 HttpContext.Session.SetString(Globals.currentUserID, userAsset.data.Data.ID);
-                return RedirectToAction("Home");
+                return RedirectToAction("PatientLookUp");
             }
             else
             {
@@ -150,43 +150,19 @@ namespace MedNet.Controllers
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(patientLookupViewModel.PHN);
             if (userAsset == null)
             {
-                /*                // janky jacob: get all patient phn
-                                var phns = _bigChainDbService.GetAllPatientPHNs();
-                                var jw = new JaroWinkler();
-                                // find the most similar one
-                                int idx = 0;
-                                double highest = 0;
-                                for(int i = 0; i < phns.Count; i++)
-                                {
-                                    var sim = jw.Similarity(patientLookupViewModel.PHN, phns[i]);
-                                    if (sim > highest)
-                                    {
-                                        highest = sim;
-                                        idx = i;
-                                    }
-                                }
-                                // get the closet phn
-                                var sugg_phn = phns[idx];
-
-                                ModelState.AddModelError("", "We could not find a matching user. Did you mean: " + sugg_phn + "?");*/
+                var sugg_phn = _bigChainDbService.GetSuggPatientPHN(patientLookupViewModel.PHN);
                 ModelState.AddModelError("", "We could not find a matching user.");
+                if (sugg_phn != "")
+                {
+                    ModelState.AddModelError("", "Did you mean: " + sugg_phn + "?");
+                }
+                
                 return View(patientLookupViewModel);
             }
             HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
             HttpContext.Session.SetString(Globals.currentPAPubK, userAsset.data.Data.AgreePublicKey);
             HttpContext.Session.SetString(Globals.currentPPHN, userAsset.data.Data.ID);
             return RedirectToAction("PatientOverview");
-        }
-
-        public IActionResult Home() 
-        {
-            // DEBUG: need to fix
-            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
-            if (HttpContext.Session.GetString(Globals.currentDSPriK) == null
-                || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
-                return RedirectToAction("Login");
-            else
-                return View();
         }
 
 
