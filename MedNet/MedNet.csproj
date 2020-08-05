@@ -8,6 +8,13 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Folder Include="wwwroot\theme\images\" />
 	<Foler Include="Styles\" />
@@ -19,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="BigchainDB" Version="1.0.0" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="MongoDB.Bson" Version="2.10.3" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.3" />

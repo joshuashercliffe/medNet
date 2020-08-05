@@ -46,7 +46,7 @@ namespace MedNet.Controllers
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID( indexViewModel.PatientPHN);
             if (userAsset == null)
             {
-                ModelState.AddModelError("", "We could not find a matching user");
+                ModelState.AddModelError("", "We could not fin-d a matching user");
                 return View(indexViewModel);
             }
             var hashedKeys = userAsset.data.Data.PrivateKeys;

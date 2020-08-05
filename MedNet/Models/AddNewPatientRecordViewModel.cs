@@ -1,4 +1,5 @@
 ﻿using MedNet.Data.Models.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace MedNet.Models
 {
@@ -13,5 +14,7 @@ namespace MedNet.Models
         public Prescription Prescription { get; set; }
 
         public TestResult TestResult { get; set; }
+
+        public IFormFile File { get; set; }
     }
 }

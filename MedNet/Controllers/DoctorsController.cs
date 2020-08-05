@@ -13,6 +13,11 @@ using System.Linq;
 using System.Drawing;
 using Microsoft.AspNetCore.Authentication;
 using System.Net.Sockets;
+using System.Text;
+using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using Image = System.Drawing.Image;
 
 namespace MedNet.Controllers
 {
@@ -392,6 +397,46 @@ namespace MedNet.Controllers
                     EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
 
                 _bigChainDbService.SendCreateTransferTransactionToDataBase<string, PrescriptionMetadata>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
+            }
+
+            //There is a test result that exists
+            if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.TestResult.ReasonForTest))
+            {
+                //File exists
+                if(addNewPatientRecordViewModel.File != null)
+                {
+                    var file = addNewPatientRecordViewModel.File;
+                    string base64FileString = "";
+
+                    // Convert "file" into base64 string "base64FileString" to save into database
+                    using (var ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        base64FileString = Convert.ToBase64String(fileBytes);
+                    }
+
+                    var testResult = new TestResult
+                    {
+                        File = base64FileString,
+                        ReasonForTest =addNewPatientRecordViewModel.TestResult.ReasonForTest,
+                        TestTypeId = addNewPatientRecordViewModel.TestResult.TestTypeId,
+                        FileType = file.ContentType,
+                        FileExtension = file.ContentType.Split('/').Last()
+                    };
+
+                    // Finished converting can now save this file to the database under the "TestResult" asset
+
+                    //This section from now on just shows how to convert the base 64 string back into a file and allows the user to download
+                    //Will have to move this code into a section to download the file as it doesnt belong here, its just for demonstration
+
+                    //Convert the retrieved file from database into a byte array
+                    byte[] newBytes = Convert.FromBase64String(testResult.File);
+
+                    //Return the file to the user to download 
+                    //Note it does it automatically after upload here
+                    return File(newBytes, testResult.FileType, $"DownloadName.{testResult.FileExtension}");
+                }
             }
 
             return RedirectToAction("PatientOverview");

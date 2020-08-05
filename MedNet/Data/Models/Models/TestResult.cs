@@ -1,4 +1,6 @@
-﻿namespace MedNet.Data.Models.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace MedNet.Data.Models.Models
 {
     public class TestResult
     {
@@ -6,6 +8,10 @@
 
         public string ReasonForTest { get; set; }
 
-        public byte[] AttachedFile { get; set; }
+        public string File { get; set; }
+
+        public string FileType { get; set; }
+
+        public string FileExtension { get; set; }
     }
 }

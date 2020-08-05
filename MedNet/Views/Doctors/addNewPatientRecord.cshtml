@@ -33,7 +33,7 @@
                     <h3>Add New Medical Record</h3>
                 </div>
                 <div class="card-body">
-                    <form asp-action="AddNewPatientRecord" method="post">
+                    <form asp-action="AddNewPatientRecord" method="post" enctype="multipart/form-data">
 
                         <div class="form-group">
                             <label for="selectRecordType">New Record Type</label>
@@ -75,9 +75,9 @@
 
                         <!-- NOT SURE IF WE NEED THIS FIELD -->
                         @*<div class="form-group" id="prescription2">
-                            <label>Superscription (Rx Label)</label>
-                            @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
-                        </div>*@
+            <label>Superscription (Rx Label)</label>
+            @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
+        </div>*@
 
                         <div class="form-row form-group" id="prescription3">
                             <div class="col-sm-8">
@@ -156,9 +156,8 @@
                             @Html.TextAreaFor(n => n.TestResult.ReasonForTest, new { @rows = 3, placeholder = "List any symptoms, suspected illness and reason for ordering the test.", @class = "form-control" })
                         </div>
 
-                        <div class="form-group" id="test3">
-                            <label>Attach Complete Requisition Form</label>
-                            @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control" })
+                        <div id="test3">
+                            <input asp-for="File" />
                         </div>
 
                         <button type="submit" id="buttonSubmit" class="btn btn-success btn-block">Submit</button>
