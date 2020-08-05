@@ -323,7 +323,7 @@ namespace MedNet.Controllers
                     Superscription = prescriptionViewModel.Superscription,
                     DrugName = prescriptionViewModel.DrugName,
                     Concentration = prescriptionViewModel.Concentration,
-                    StartDate = prescriptionViewModel.StartDate,
+                    //StartDate = prescriptionViewModel.StartDate,
                     EndDate = prescriptionViewModel.EndDate,
                     Refill = prescriptionViewModel.Refill,
                     Substitution = prescriptionViewModel.Substitution,

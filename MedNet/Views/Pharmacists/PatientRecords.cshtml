@@ -4,7 +4,7 @@
 }
 
 @section NavButtons {
-    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Home</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
     <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
@@ -23,51 +23,80 @@
 </div>
 
 <div class="content">
-    <div class="content-header">
+    <div class="content-header card">
         <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
-        <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+        <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
-
-        <div class="row">
-            <div class="form-reg col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Prescriptions</h3>
-                        <nav class="nav nav-pills nav-fill tab">
-                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'current')" id="defaultOpen">Current</button>
-                            <button class="nav-item nav-link tablinks btn btn-secondary" style="border-radius: 1.25rem; margin: 0.5em;" onclick="openTab(event, 'expired')">Previous</button>
-                        </nav>
-                    </div>
-                    <div class="card-body" style="max-height: 75vh; overflow-y: scroll;">
-
+            <div class="card col-sm-12 col-md-11 col-lg-10 col-xl-8 center">
+                <div class="card-header">
+                    <h1>Prescriptions</h1>
+                    <nav class="nav nav-pills nav-fill tab">
+                        <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'current')" id="defaultOpen">Current</button>
+                        <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'previous')">Previous</button>                        
+                    </nav>
+                </div>
+                    <div class="card-body">
                         <div id="current" class="tabcontent">
                             @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
                             {
-                                @foreach (var prescription in Model.Prescriptions)
+                                @foreach(var prescription in Model.Prescriptions)
                                 {
                                     @if (prescription.assetData.EndDate.CompareTo(DateTime.Now) > 0 && prescription.Metadata.RefillRemaining > 0)
                                     {
-                                        <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
-                                            <h4>
-                                                Date: @prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
-                                            </h4>
-                                            <p>
-                                                <strong>Drug Prescribed:</strong> @prescription.assetData.DrugName <br />
-                                                <strong>Concentration:</strong> @prescription.assetData.Concentration <br />
-                                                <strong>Prescription Valid From/To:</strong> @prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
-                                                <strong>Total Number of Refills:</strong> @prescription.assetData.Refill <br />
-                                                <strong>Substitutions Allowed:</strong> @prescription.assetData.Substitution.ToString() <br />
-                                                <strong>Directions for Use:</strong> @prescription.assetData.DirectionForUse <br />
-                                                <strong>Prescribing Doctor:</strong> @prescription.assetData.DoctorName <br />
-                                                <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining <br />
+                                        <div class="medical-card card">
+                                            <div class="medical-header">
+                                                <div class="row no-bot-margin">
+                                                    <div class="col-sm-6">
+                                                        <h3>
+                                                            @prescription.assetData.DrugName
+                                                        </h3>
+                                                    </div>
+                                                    <div class="col-sm-6 right">
+                                                        <p><strong>Remaining Refills: </strong>@prescription.Metadata.RefillRemaining</p>
+                                                    </div>
+                                                </div>
+                                                <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
+                                            </div>
+                                            <div class="medical-body">
                                                 @if (prescription.Metadata.LastIssueDate != default)
                                                 {
-                                                    <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToString("MMMM dd, yyyy") <br />
-                                                    <strong>Previous Refill Quantity:</strong> @prescription.Metadata.LastIssueQty.ToString() <br/>
+                                                    <div class="row no-bot-margin">
+                                                        <div class="col-sm-6">
+                                                            <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                                        </div>
+                                                        <div class="col-sm-6 right">
+                                                            <p class="no-bot-margin"><strong>Previous Refill Date: </strong>@prescription.Metadata.LastIssueDate.ToShortDateString()</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row no-bot-margin">
+                                                        <div class="col-sm-6">
+                                                            <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
+                                                        </div>
+                                                        <div class="col-sm-6 right">
+                                                            <p class="no-bot-margin"><strong>Previous Refill Quantity: </strong>@prescription.Metadata.LastIssueQty.ToString()</p>
+                                                        </div>
+                                                    </div>
                                                 }
-                                                <a href="@("FillPrescription?transID="+prescription.transID)" class="btn btn-success">Fill Prescription</a>
-                                            </p>
+                                                else {
+                                                    <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                                    <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
+                                                }
+
+                                                <p class="no-bot-margin"><strong>Total Refills: </strong>@prescription.assetData.Refill</p>
+                                                <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
+                                                <p class="no-bot-margin"><strong>Valid Until: </strong>@prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
+
+                                                <p><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
+                                                <div class="row no-bot-margin">
+                                                    <div class="col-sm-8">
+                                                        <a href="@("FillPrescription?transID="+prescription.transID)" class="btn btn-success">Fill Prescription</a>
+                                                    </div>
+                                                    <div class="col-sm-4 right">
+                                                        <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     }
                                 }
@@ -86,33 +115,66 @@
                         </div>
 
                         <!-- TO DO: Fill in for TEST RESULTS, display file as a viewable/downloadable link-->
-                        <div id="expired" class="tabcontent">
+                        <div id="previous" class="tabcontent">
                             @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
                             {
                                 @foreach (var prescription in Model.Prescriptions)
                                 {
                                     @if (prescription.assetData.EndDate.CompareTo(DateTime.Now) <= 0 || prescription.Metadata.RefillRemaining <= 0)
                                     {
-                                        <div class="record" align="left" style="border:2px; border-style:solid; border-color:#6c757d; padding-left: 1em; padding-right: 1em; padding-top: 1em; margin-bottom: 1em;">
-                                            <h4>
-                                                Date: @prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")
-                                            </h4>
-                                            <p>
-                                                <strong>Drug Prescribed:</strong> @prescription.assetData.DrugName <br />
-                                                <strong>Concentration:</strong> @prescription.assetData.Concentration <br />
-                                                <strong>Prescription Valid From/To:</strong> @prescription.assetData.StartDate.ToString("MMMM dd, yyyy") - @prescription.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
-                                                <strong>Total Number of Refills:</strong> @prescription.assetData.Refill <br />
-                                                <strong>Substitutions Allowed:</strong> @prescription.assetData.Substitution.ToString() <br />
-                                                <strong>Directions for Use:</strong> @prescription.assetData.DirectionForUse <br />
-                                                <strong>Prescribing Doctor:</strong> @prescription.assetData.DoctorName <br />
-                                                <strong>Remaining Refills:</strong> @prescription.Metadata.RefillRemaining <br />
+                                        <div class="medical-card card">
+                                            <div class="medical-header">
+                                                <div class="row no-bot-margin">
+                                                    <div class="col-sm-6">
+                                                        <h3>
+                                                            @prescription.assetData.DrugName
+                                                        </h3>
+                                                    </div>
+                                                    <div class="col-sm-6 right">
+                                                        <p><strong>Remaining Refills: </strong>@prescription.Metadata.RefillRemaining</p>
+                                                    </div>
+                                                </div>
+                                                <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
+                                            </div>
+                                            <div class="medical-body">
                                                 @if (prescription.Metadata.LastIssueDate != default)
                                                 {
-                                                    <strong>Previous Refill Date:</strong> @prescription.Metadata.LastIssueDate.ToShortDateString() <br />
-                                                    <strong>Previous Refill Quantity:</strong> @prescription.Metadata.LastIssueQty.ToString()
+                                                    <div class="row no-bot-margin">
+                                                        <div class="col-sm-6">
+                                                            <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                                        </div>
+                                                        <div class="col-sm-6 right">
+                                                            <p class="no-bot-margin"><strong>Previous Refill Date: </strong>@prescription.Metadata.LastIssueDate.ToShortDateString()</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row no-bot-margin">
+                                                        <div class="col-sm-6">
+                                                            <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
+                                                        </div>
+                                                        <div class="col-sm-6 right">
+                                                            <p class="no-bot-margin"><strong>Previous Refill Quantity: </strong>@prescription.Metadata.LastIssueQty.ToString()</p>
+                                                        </div>
+                                                    </div>
                                                 }
-                                            </p>
-                                        </div>
+                                                else
+                                                {
+                                                    <p class="no-bot-margin"><strong>Date: </strong>@prescription.assetData.PrescribingDate.ToString("MMMM dd, yyyy")</p>
+                                                    <p class="no-bot-margin"><strong>Doctor: </strong>@prescription.assetData.DoctorName</p>
+                                                }
+                                                <p class="no-bot-margin"><strong>Total Refills: </strong>@prescription.assetData.Refill</p>
+                                                <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
+                                                <p class="no-bot-margin"><strong>Valid Until: </strong>@prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
+
+                                                <div class="row no-bot-margin">
+                                                    <div class="col-sm-8">
+                                                        <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
+                                                    </div>
+                                                    <div class="col-sm-4 right">
+                                                        <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
                                     }
                                 }
                             }
@@ -128,12 +190,8 @@
                                 </div>
                             }
                         </div>
-
                     </div>
-                </div>
             </div>
-        </div>
-
     </div>
 </div>
 

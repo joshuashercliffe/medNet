@@ -39,7 +39,7 @@
                         <p>
                             <strong>Drug Prescribed:</strong> @Model.PrescriptionData.assetData.DrugName <br />
                             <strong>Concentration:</strong> @Model.PrescriptionData.assetData.Concentration <br />
-                            <strong>Prescription Valid From/To:</strong> @Model.PrescriptionData.assetData.StartDate.ToString("MMMM dd, yyyy") - @Model.PrescriptionData.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
+                            <strong>Valid Until:</strong> @Model.PrescriptionData.assetData.EndDate.ToString("MMMM dd, yyyy") <br />
                             <strong>Total Number of Refills:</strong> @Model.PrescriptionData.assetData.Refill <br />
                             <strong>Substitutions Allowed:</strong> @Model.PrescriptionData.assetData.Substitution.ToString() <br />
                             <strong>Directions for Use:</strong> @Model.PrescriptionData.assetData.DirectionForUse <br />
