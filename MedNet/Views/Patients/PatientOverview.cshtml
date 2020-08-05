@@ -18,13 +18,11 @@
 </div>
 
 <div class="content">
-    <div class="content-header">
+    <div class="content-header card">
         <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
-        <div class="no-bot-margin">
-            <div class="col-sm-12" style="padding: 0 0;">
-                <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
-                <a class="btn-edit" href="EditProfile">Edit Profile</a>
-            </div>
+        <div class="col-sm-12" style="padding: 0 0;">
+            <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+            <a class="btn-edit" href="EditProfile">Edit Profile</a>
         </div>
     </div>
     <div class="content-body">
