@@ -68,7 +68,7 @@
                                             <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
                                         </div>
                                         <div class="col-sm-4 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" onclick="return toggleShow(this)">
                                                 Show more
                                             </button>
                                         </div>
@@ -160,7 +160,7 @@
                                             <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
                                         </div>
                                         <div class="col-sm-6 right">
-                                            <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                            <a class="btn btn-outline-secondary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
                                         </div>
                                     </div>
                                 </div>
@@ -212,9 +212,10 @@
 
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
-                                    <p class="no-bot-margin"><strong>Attached File: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
-                                        @(requisitions.assetData.AttachedFile.Name+'.'+requisitions.assetData.AttachedFile.Extension)
-                                           </a>
+                                    <p class="no-bot-margin">
+                                        <strong>Attached File: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
+                                            @(requisitions.assetData.AttachedFile.Name+'.'+requisitions.assetData.AttachedFile.Extension)
+                                        </a>
                                     </p>
                                 </div>
                             </div>
@@ -253,6 +254,17 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }</script>
+
+    <script type="text/javascript">
+        function toggleShow(el) {
+            if (el.innerText === "Show more") {
+                el.innerText = "Show less";
+            }
+            else {
+                el.innerText = "Show more";
+            }
+        }
+    </script>
 }
 
 

@@ -57,7 +57,7 @@
                                             <p class="no-bot-margin"><strong>Diagnosis: </strong>@doctorNote.assetData.FinalDiagnosis</p>
                                         </div>
                                         <div class="col-sm-4 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" onclick="return toggleShow(this)">
                                                 Show more
                                             </button>
                                         </div>
@@ -109,7 +109,7 @@
                                             <p class="no-bot-margin"><strong>Directions: </strong>@prescription.assetData.DirectionForUse</p>
                                         </div>
                                         <div class="col-sm-4 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" onclick="return toggleShow(this)">
                                                 Show more
                                             </button>
                                         </div>
@@ -150,7 +150,7 @@
                                             <a class="btn btn-outline-success" href="@("EditAccess?transID="+prescription.transID)">Edit Access</a>
                                         </div>
                                         <div class="col-sm-6 right">
-                                            <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                            <a class="btn btn-outline-secondary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                             <p class="no-bot-margin"><strong>Reason: </strong>@requisitions.assetData.ReasonForTest</p>
                                         </div>
                                         <div class="col-sm-4 right">
-                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" onclick="return toggleShow(this)">
                                                 Show more
                                             </button>
                                         </div>
@@ -248,11 +248,13 @@
         }</script>
 
     <script type="text/javascript">
-        function toggleShow(element) {
-            if (element.value === "Show more")
-                element.value = "Show less";
-            else
-                element.value = "Show more";
+        function toggleShow(el) {
+            if (el.innerText === "Show more") {
+                el.innerText = "Show less";
+            }
+            else {
+                el.innerText = "Show more";
+            }
         }
     </script>
 }
