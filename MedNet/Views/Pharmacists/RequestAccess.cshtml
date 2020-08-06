@@ -25,9 +25,8 @@
 
     <div class="content">
         <div class="content-header card">
-            <h1>First Last</h1>
-            @*<h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>*@
-            <p class="no-bot-margin"><strong>PHN: </strong>Model.PatientAsset.ID</p>
+            <h1>@ViewBag.PatientName</h1>
+            <p class="no-bot-margin"><strong>PHN: </strong>@ViewBag.PatientID</p>
         </div>
         <div class="content-body">
             <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 center">

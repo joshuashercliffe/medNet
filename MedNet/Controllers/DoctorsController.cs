@@ -177,9 +177,6 @@ namespace MedNet.Controllers
             {
                 Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
 
-                //var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
-                //var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
-                //var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
@@ -266,7 +263,16 @@ namespace MedNet.Controllers
             else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
                 return RedirectToAction("PatientLookUp");
             else
+            {
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
+
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
+                ViewBag.PatientName = userMetadata.FirstName + " " + userMetadata.LastName;
+                ViewBag.PatientID = userAsset.data.Data.ID;
                 return View();
+            }
         }
 
         [HttpPost]
@@ -378,7 +384,16 @@ namespace MedNet.Controllers
             else if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
                 return RedirectToAction("PatientLookUp");
             else
+            {
+                Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentPPHN));
+
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+
+                PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
+                ViewBag.PatientName = userMetadata.FirstName + " " + userMetadata.LastName;
+                ViewBag.PatientID = userAsset.data.Data.ID;
                 return View();
+            }
         }
 
         [HttpPost]
@@ -466,6 +481,7 @@ namespace MedNet.Controllers
 
         public IActionResult PatientSignUp()
         {
+            ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             return View();
         }
 

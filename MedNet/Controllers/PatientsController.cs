@@ -11,9 +11,6 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using MedNet.ViewModels;
-using Microsoft.CodeAnalysis.Differencing;
-using System.Threading.Tasks.Dataflow;
-using Omnibasis.BigchainCSharp.Model;
 
 namespace MedNet.Controllers
 {
