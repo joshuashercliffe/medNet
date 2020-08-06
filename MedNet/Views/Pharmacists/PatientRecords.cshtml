@@ -89,11 +89,11 @@
 
                                                 <p><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
                                                 <div class="row no-bot-margin">
-                                                    <div class="col-sm-8">
-                                                        <a href="@("FillPrescription?transID="+prescription.transID)" class="btn btn-success">Fill Prescription</a>
+                                                    <div class="col-sm-6">
+                                                        <a href="@("FillPrescription?transID="+prescription.transID)" class="btn btn-outline-success">Fill Prescription</a>
                                                     </div>
-                                                    <div class="col-sm-4 right">
-                                                        <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                                    <div class="col-sm-6 right">
+                                                        <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,11 +166,11 @@
                                                 <p class="no-bot-margin"><strong>Valid Until: </strong>@prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
 
                                                 <div class="row no-bot-margin">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-6">
                                                         <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
                                                     </div>
-                                                    <div class="col-sm-4 right">
-                                                        <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                                    <div class="col-sm-6 right">
+                                                        <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
                                                     </div>
                                                 </div>
                                             </div>

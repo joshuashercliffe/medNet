@@ -67,7 +67,7 @@
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin"><strong>Description: </strong>@doctorNote.assetData.Description</p>
                                     <p class="no-bot-margin"><strong>Further Instructions: </strong>@doctorNote.assetData.FurtherInstructions</p>
-                                    <a href="@("EditAccess?transID="+doctorNote.transID)" class="btn btn-success">Edit Access</a>
+                                    <a href="@("EditAccess?transID="+doctorNote.transID)" class="btn btn-outline-success">Edit Access</a>
                                 </div>
                             </div>
                         }
@@ -145,11 +145,11 @@
                                     <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
                                     <p class="no-bot-margin"><strong>Valid Until: </strong>@prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
                                     <div class="row no-bot-margin">
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-6">
                                             <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
                                         </div>
-                                        <div class="col-sm-4 right">
-                                            <a href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
+                                        <div class="col-sm-6 right">
+                                            <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
                                         </div>
                                     </div>
                                 </div>
