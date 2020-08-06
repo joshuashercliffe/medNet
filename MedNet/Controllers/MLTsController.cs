@@ -159,7 +159,12 @@ namespace MedNet.Controllers
             Assets<UserCredAssetData> userAsset = _bigChainDbService.GetUserAssetFromTypeID(AssetType.Patient, patientLookupViewModel.PHN);
             if (userAsset == null)
             {
-                ModelState.AddModelError("", "We could not find a matching user");
+                var sugg_phn = _bigChainDbService.GetSuggPatientPHN(patientLookupViewModel.PHN);
+                ModelState.AddModelError("", "We could not find a matching user.");
+                if (sugg_phn != "")
+                {
+                    ModelState.AddModelError("", "Did you mean: " + sugg_phn + "?");
+                }
                 return View(patientLookupViewModel);
             }
             HttpContext.Session.SetString(Globals.currentPSPubK, userAsset.data.Data.SignPublicKey);
