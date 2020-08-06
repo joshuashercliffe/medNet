@@ -144,9 +144,10 @@
                                     <p class="no-bot-margin"><strong>Total Refills: </strong>@prescription.assetData.Refill</p>
                                     <p class="no-bot-margin"><strong>Concentration: </strong>@prescription.assetData.Concentration</p>
                                     <p class="no-bot-margin"><strong>Valid Until: </strong>@prescription.assetData.EndDate.ToString("MMMM dd, yyyy")</p>
+                                    <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
                                     <div class="row no-bot-margin">
                                         <div class="col-sm-6">
-                                            <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@prescription.assetData.Substitution.ToString()</p>
+                                            <a class="btn btn-outline-success" href="@("EditAccess?transID="+prescription.transID)">Edit Access</a>
                                         </div>
                                         <div class="col-sm-6 right">
                                             <a class="btn btn-outline-primary" href="https://www.drugs.com/search.php?searchterm=@(prescription.assetData.DrugName)" target="_blank">About @prescription.assetData.DrugName</a>
