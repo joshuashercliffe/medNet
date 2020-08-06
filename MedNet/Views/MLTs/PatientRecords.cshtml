@@ -4,7 +4,7 @@
 }
 
 @section NavButtons {
-    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Home</a>
 
     <a href="Logout" class="topnav-rbtn">Logout</a>
     <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
@@ -22,9 +22,9 @@
 </div>
 
 <div class="content">
-    <div class="content-header">
+    <div class="content-header card">
         <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
-        <p><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+        <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
 
