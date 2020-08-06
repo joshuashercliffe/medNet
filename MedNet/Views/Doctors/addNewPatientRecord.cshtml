@@ -37,7 +37,7 @@
                     <h1>Add New Medical Record</h1>
                 </div>
                 <div class="card-body">
-                    <form asp-action="AddNewPatientRecord" method="post">
+                    <form asp-action="AddNewPatientRecord" method="post" enctype="multipart/form-data">
 
                         <div class="form-group">
                             <label for="selectRecordType">New Record Type</label>
@@ -155,7 +155,7 @@
                         <!-- Lab Test-->
                         <div class="form-group" id="test1">
                             <label for="selectTestType">Test Type</label>
-                            <select name="TestResult.TestTypeId" class="form-control">
+                            <select name="TestRequisition.TestType" class="form-control">
                                 <option value="" disabled selected hidden>Select Test Type</option>
                                 <option>Hematology</option>
                                 <option>Urine Tests</option>
@@ -167,12 +167,12 @@
 
                         <div class="form-group" id="test2">
                             <label>Reason for Test</label>
-                            @Html.TextAreaFor(n => n.TestResult.ReasonForTest, new { @rows = 3, placeholder = "List any symptoms, suspected illness and reason for ordering the test.", @class = "form-control" })
+                            @Html.TextAreaFor(n => n.TestRequisition.ReasonForTest, new { @rows = 3, placeholder = "List any symptoms, suspected illness and reason for ordering the test.", @class = "form-control" })
                         </div>
 
                         <div class="form-group" id="test3">
                             <label>Attach Complete Requisition Form</label>
-                            @Html.TextBoxFor(n => n.TestResult.AttachedFile, new { type = "file", @class = "form-control", style = "border-style: none;" })
+                            @Html.TextBoxFor(n => n.TestRequisition.AttachedFile, new { type = "file", @class = "form-control", style = "border-style: none;" })
                         </div>
 
                         <button type="submit" id="buttonSubmit" class="btn btn-success btn-block">Submit</button>

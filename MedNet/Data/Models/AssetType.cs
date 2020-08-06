@@ -7,6 +7,7 @@
         DoctorNote = 2,
         Prescription = 3,
         MLT = 4,
-        Pharmacist = 5
+        Pharmacist = 5,
+        TestRequisition = 6
     };
 }

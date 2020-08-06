@@ -12,6 +12,6 @@ namespace MedNet.Models
 
         public Prescription Prescription { get; set; }
 
-        public TestResult TestResult { get; set; }
+        public TestRequisitionInput TestRequisition { get; set; }
     }
 }

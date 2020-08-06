@@ -38,7 +38,7 @@
                 <nav class="nav nav-pills nav-fill tab">
                     <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'doc_notes')" id="defaultOpen">Doctor's Notes</button>
                     <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'prescriptions')">Prescriptions</button>
-                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'test_results')">Test Results</button>
+                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'tests')">Lab Tests</button>
                 </nav>
             </div>
             <div class="card-body">
@@ -180,8 +180,57 @@
                     }
                 </div>
 
-                <div id="test_results" class="tabcontent">
-                    <p>Test Results are not implemented yet</p>
+                <div id="tests" class="tabcontent">
+                    @if (Model != null && Model.TestRequisitions != null && Model.TestRequisitions.Any())
+                    {
+                        @for (var i = 0; i < Model.TestRequisitions.Count; i++)
+                        {
+                            var requisitions = Model.TestRequisitions[i];
+                            var html_id = "requisitions" + i.ToString();
+                            <div class="medical-card card">
+                                <div class="medical-header">
+                                    <div class="row no-bot-margin">
+                                        <div class="col-sm-6">
+                                            <h3>
+                                                @requisitions.assetData.TestType
+                                            </h3>
+                                        </div>
+                                        <div class="col-sm-6 right">
+                                            <p><strong>Order Date: </strong>@requisitions.assetData.DateOrdered.ToString("MMMM dd, yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <div class="row no-bot-margin">
+                                        <div class="col-sm-8">
+                                            <p class="no-bot-margin"><strong>Reason: </strong>@requisitions.assetData.ReasonForTest</p>
+                                        </div>
+                                        <div class="col-sm-4 right">
+                                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                                Show more
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="collapse medical-body" id="@html_id">
+                                    <p class="no-bot-margin"><strong>Attached File: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
+                                        @(requisitions.assetData.AttachedFile.Name+'.'+requisitions.assetData.AttachedFile.Extension)
+                                           </a>
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <h4>
+                                No records shared.
+                            </h4>
+                            <p>
+                                No medical records to show.
+                            </p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Drawing;
 using Microsoft.AspNetCore.Authentication;
-using System.Net.Sockets;
+using System.IO;
 
 namespace MedNet.Controllers
 {
@@ -215,8 +215,11 @@ namespace MedNet.Controllers
                     (AssetType.DoctorNote, doctorSignPublicKey, patientSignPublicKey);
                 var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
+                var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string, double>
+                    (AssetType.TestRequisition, doctorSignPublicKey, patientSignPublicKey);
                 var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
+                var testRequisitions = new List<TestRequisitionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
                     var hashedKey = doctorNote.metadata.AccessList[doctorSignPublicKey];
@@ -241,6 +244,20 @@ namespace MedNet.Controllers
                     };
                     prescriptions.Add(newEntry);
                 }
+                foreach (var testrequisition in testRequisitionList)
+                {
+                    var hashedKey = testrequisition.metadata.AccessList[doctorSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(testrequisition.data.Data, dataDecryptionKey);
+                    var newEntry = new TestRequisitionFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<TestRequisitionAsset>(data),
+                        Metadata = testrequisition.metadata.data,
+                        assetID = testrequisition.id,
+                        transID = testrequisition.transID
+                    };
+                    testRequisitions.Add(newEntry);
+                }
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
@@ -248,11 +265,30 @@ namespace MedNet.Controllers
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.assetData.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
+                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList(),
+                    TestRequisitions = testRequisitions.OrderByDescending(p => p.assetData.DateOrdered).ToList()
                 };
 
                 return View(patientOverviewViewModel);
             }
+        }
+
+        public IActionResult GetRequisitionFile(string transID)
+        {
+            var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
+            var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+            var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+            var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+            if (result.metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+            {
+                var hashedKey = result.metadata.AccessList[doctorSignPublicKey];
+                var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                var data = EncryptionService.getDecryptedAssetData(result.data.Data, dataDecryptionKey);
+                var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
+                byte[] fileBytes = Convert.FromBase64String(asset.AttachedFile.Data);
+                return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name+'.'+asset.AttachedFile.Extension);
+            }
+            return new EmptyResult();
         }
 
         public IActionResult AddNewPatientRecord()
@@ -373,7 +409,66 @@ namespace MedNet.Controllers
                 _bigChainDbService.SendCreateTransferTransactionToDataBase<string, PrescriptionMetadata>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
             }
 
-            return RedirectToAction("PatientOverview");
+            //There is a test result that exists
+            if (!string.IsNullOrEmpty(addNewPatientRecordViewModel.TestRequisition.ReasonForTest))
+            {
+                //File exists
+                if (addNewPatientRecordViewModel.TestRequisition.AttachedFile != null)
+                {
+                    var file = addNewPatientRecordViewModel.TestRequisition.AttachedFile;
+                    string base64FileString = "";
+
+                    // Convert "file" into base64 string "base64FileString" to save into database
+                    using (var ms = new MemoryStream())
+                    {
+                        file.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        base64FileString = Convert.ToBase64String(fileBytes);
+                    }
+
+                    var testRequisition = new TestRequisitionAsset
+                    {
+                        AttachedFile = new FileData
+                        {
+                            Data = base64FileString,
+                            Type = file.ContentType,
+                            Extension = file.ContentType.Split('/').Last(),
+                            Name = file.FileName.Split('.').First()
+                        },
+                        ReasonForTest = addNewPatientRecordViewModel.TestRequisition.ReasonForTest,
+                        TestType = addNewPatientRecordViewModel.TestRequisition.TestType,
+                        DateOrdered = DateTime.Now
+                    };
+                    string encryptionKey;
+                    var encryptedData = EncryptionService.getEncryptedAssetData(JsonConvert.SerializeObject(testRequisition), out encryptionKey);
+
+                    var asset = new AssetSaved<string>
+                    {
+                        Data = encryptedData,
+                        RandomId = _random.Next(0, 100000),
+                        Type = AssetType.TestRequisition
+                    };
+
+                    var metadata = new MetaDataSaved<double>();
+                    metadata.AccessList = new Dictionary<string, string>();
+
+                    //store the data encryption key in metadata encrypted with sender and reciever agree key
+                    var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+                    var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+                    var patientAgreePublicKey = HttpContext.Session.GetString(Globals.currentPAPubK);
+                    var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+                    var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+                    var doctorAgreePublicKey = EncryptionService.getAgreePublicKeyStringFromPrivate(doctorAgreePrivateKey);
+                    metadata.AccessList[doctorSignPublicKey] =
+                        EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, doctorAgreePublicKey);
+                    metadata.AccessList[patientSignPublicKey] =
+                        EncryptionService.getEncryptedEncryptionKey(encryptionKey, doctorAgreePrivateKey, patientAgreePublicKey);
+
+                    _bigChainDbService.SendCreateTransferTransactionToDataBase<string, double>(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
+                }
+            }
+
+                return RedirectToAction("PatientOverview");
         }
 
         public IActionResult RequestAccess()

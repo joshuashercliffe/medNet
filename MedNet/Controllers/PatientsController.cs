@@ -162,8 +162,11 @@ namespace MedNet.Controllers
                     (AssetType.DoctorNote, patientSignPublicKey);
                 var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,PrescriptionMetadata>
                     (AssetType.Prescription, patientSignPublicKey);
+                var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string, double>
+                    (AssetType.TestRequisition, patientSignPublicKey);
                 var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
+                var testRequisitions = new List<TestRequisitionFullData>();
                 foreach (var doctorNote in doctorNotesList)
                 {
                     var hashedKey = doctorNote.metadata.AccessList[patientSignPublicKey];
@@ -192,6 +195,20 @@ namespace MedNet.Controllers
                     };
                     prescriptions.Add(newEntry);
                 }
+                foreach (var testrequisition in testRequisitionList)
+                {
+                    var hashedKey = testrequisition.metadata.AccessList[patientSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(testrequisition.data.Data, dataDecryptionKey);
+                    var newEntry = new TestRequisitionFullData
+                    {
+                        assetData = JsonConvert.DeserializeObject<TestRequisitionAsset>(data),
+                        Metadata = testrequisition.metadata.data,
+                        assetID = testrequisition.id,
+                        transID = testrequisition.transID
+                    };
+                    testRequisitions.Add(newEntry);
+                }
                 var patientInfo = userAsset.data.Data;
                 var patientOverviewViewModel = new PatientOverviewViewModel
                 {
@@ -199,10 +216,33 @@ namespace MedNet.Controllers
                     PatientMetadata = userMetadata,
                     PatientAge = patientInfo.DateOfBirth.CalculateAge(),
                     DoctorNotes = doctorNotes.OrderByDescending(d => d.assetData.DateOfRecord).ToList(),
-                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList()
+                    Prescriptions = prescriptions.OrderByDescending(p => p.assetData.PrescribingDate).ToList(),
+                    TestRequisitions = testRequisitions.OrderByDescending(p => p.assetData.DateOrdered).ToList()
                 };
 
                 return View(patientOverviewViewModel);
+            }
+        }
+
+        public IActionResult GetRequisitionFile(string transID)
+        {
+            if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
+                return RedirectToAction("Login");
+            else
+            {
+                var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
+                var patientAgreePrivateKey = HttpContext.Session.GetString(Globals.currentPAPriK);
+                var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+                if (result.metadata.AccessList.Keys.Contains(patientSignPublicKey))
+                {
+                    var hashedKey = result.metadata.AccessList[patientSignPublicKey];
+                    var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                    var data = EncryptionService.getDecryptedAssetData(result.data.Data, dataDecryptionKey);
+                    var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
+                    byte[] fileBytes = Convert.FromBase64String(asset.AttachedFile.Data);
+                    return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name + '.' + asset.AttachedFile.Extension);
+                }
+                return new EmptyResult();
             }
         }
 
@@ -278,11 +318,11 @@ namespace MedNet.Controllers
             // Choose the types of records we want to get
             List<AssetType> typeList = new List<AssetType>();
             if(type == AssetType.Doctor)
-                typeList.AddRange( new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+                typeList.AddRange( new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription, AssetType.TestRequisition});
             else if(type == AssetType.Pharmacist)
-                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+                typeList.AddRange(new List<AssetType> { AssetType.Prescription });
             else
-                typeList.AddRange(new List<AssetType> { });
+                typeList.AddRange(new List<AssetType> { AssetType.TestRequisition});
 
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList.ToArray(), patientSignPublicKey);
@@ -344,11 +384,11 @@ namespace MedNet.Controllers
             // Choose the types of records we want to get
             List<AssetType> typeList = new List<AssetType>();
             if (type == AssetType.Doctor)
-                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription, AssetType.TestRequisition });
             else if (type == AssetType.Pharmacist)
-                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription });
+                typeList.AddRange(new List<AssetType> { AssetType.Prescription });
             else
-                typeList.AddRange(new List<AssetType> { });
+                typeList.AddRange(new List<AssetType> { AssetType.TestRequisition });
 
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList.ToArray(), patientSignPublicKey);

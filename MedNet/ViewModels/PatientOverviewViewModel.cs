@@ -13,5 +13,6 @@ namespace MedNet.Models
         public List<DoctorNoteFullData> DoctorNotes { get; set; }
 
         public List<PrescriptionFullData> Prescriptions { get; set; }
+        public List<TestRequisitionFullData> TestRequisitions { get; set; }
     }
 }
