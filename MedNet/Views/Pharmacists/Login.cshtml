@@ -29,8 +29,8 @@
                     <div class="form-group">
                         <label>Registration Number</label>
                         @Html.TextBoxFor(n => n.PharmaNum, new { id = "index-regnum", type = "text", placeholder = "####-####-####", title = "Registration Number issued by the College of Pharmacists of BC", @class = "form-control" })
-                        @Html.ValidationMessageFor(n => n.PharmaNum)
                         <small class="form-text text-muted">Registration Number issued by the College of Pharmacists of BC</small>
+                        @Html.ValidationMessageFor(n => n.PharmaNum)
                     </div>
 
                     <!-- Keyword -->

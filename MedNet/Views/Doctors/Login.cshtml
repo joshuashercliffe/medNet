@@ -23,14 +23,12 @@
             <div class="card-body">
                 @Html.ValidationSummary(true)
                 <form asp-controller="Doctors" asp-action="Login" method="post" style="text-align: left">
-
-
                     <!-- MINC -->
                     <div class="form-group">
                         <label>Doctor MINC</label>
                         @Html.TextBoxFor(n => n.DoctorMINC, new { id = "index-minc", type = "text", placeholder = "CA##-####-####", title = "12-digit Medical Identification Number for Canada", @class = "form-control" })
-                        @Html.ValidationMessageFor(n => n.DoctorMINC)
                         <small class="form-text text-muted">12-digit Medical Identification Number for Canada</small>
+                        @Html.ValidationMessageFor(n => n.DoctorMINC)
                     </div>
 
                     <!-- Keyword -->
@@ -65,5 +63,6 @@
     <script type="text/javascript">
         jQuery(function ($) {
             $("#index-minc").inputmask("AA99-9999-9999");
-        });</script>
+        });
+    </script>
 }
