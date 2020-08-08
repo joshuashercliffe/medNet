@@ -1,0 +1,72 @@
+﻿@model UploadResultViewModel
+@{
+    ViewData["Title"] = "Upload Result";
+}
+
+@section NavButtons {
+    <a href="PatientLookUp" class="topnav-lbtn topnav-first">Patient Look-Up</a>
+
+    <a href="Logout" class="topnav-rbtn">Logout</a>
+    <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
+}
+
+<div class="sidebar">
+    <div class="sidebar-body">
+        <a href="PatientOverview">Overview</a>
+        <a href="RequestAccess">Request Full Access</a>
+        <!-- UPDATE HREF TO RECORDS PAGE -->
+        <a href="PatientRecords">View Prescriptions</a>
+    </div>
+    <div class="sidebar-footer">
+        <a href="PatientLookUp">Close</a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="content-header card">
+        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
+    </div>
+    <div class="content-body">
+        <div class="card col-sm-12 col-md-11 col-lg-10 col-xl-8 center">
+            <div class="card-header">
+                <h1>Prescription Information</h1>
+            </div>
+            <div class="card-body">
+                <div class="medical-card card">
+                    <div class="medical-header">
+                        <div class="row no-bot-margin">
+                            <div class="col-sm-6">
+                                <h3>
+                                    @Model.TestData.assetData.TestType
+                                </h3>
+                            </div>
+                            <div class="col-sm-6 right">
+                                <p><strong>Order Date: </strong>@Model.TestData.assetData.DateOrdered.ToString("MMMM dd, yyyy")</p>
+                            </div>
+                        </div>
+                        <p class="no-bot-margin"><strong>Reason: </strong>@Model.TestData.assetData.ReasonForTest</p>
+                    </div>
+                    <div class="medical-body">
+                        <p class="no-bot-margin">
+                            <strong>Requisition Form: </strong><a href="GetRequisitionFile?transID=@Model.TestData.transID" target="_blank">
+                                @(Model.TestData.assetData.AttachedFile.Name+'.'+ Model.TestData.assetData.AttachedFile.Extension)
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                @Html.ValidationSummary(true)
+            <form class="form-reg no-bot-margin" asp-action="UploadResult" method="post" enctype="multipart/form-data">
+                <div class="form-group" id="test3">
+                    <label>Attach Test Result</label>
+                    @Html.TextBoxFor(n => n.ResultFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = "image/*, .pdf, .zip" })
+                </div>
+                <button type="submit" id="submitButton" class="btn btn-success btn-block">Upload Result</button>
+            </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

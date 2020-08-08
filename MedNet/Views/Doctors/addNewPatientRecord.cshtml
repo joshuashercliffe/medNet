@@ -172,7 +172,7 @@
 
                         <div class="form-group" id="test3">
                             <label>Attach Complete Requisition Form</label>
-                            @Html.TextBoxFor(n => n.TestRequisition.AttachedFile, new { type = "file", @class = "form-control", style = "border-style: none;" })
+                            @Html.TextBoxFor(n => n.TestRequisition.AttachedFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = ".pdf" })
                         </div>
 
                         <button type="submit" id="buttonSubmit" class="btn btn-success btn-block">Submit</button>

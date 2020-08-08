@@ -217,6 +217,11 @@ namespace MedNet.Controllers
                     (AssetType.Prescription, doctorSignPublicKey, patientSignPublicKey);
                 var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string, double>
                     (AssetType.TestRequisition, doctorSignPublicKey, patientSignPublicKey);
+                Dictionary<string, string> testResults = null;
+                if (testRequisitionList.Any())
+                {
+                    testResults = _bigChainDbService.GetAssociatedTestResults(testRequisitionList);
+                }
                 var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
                 var testRequisitions = new List<TestRequisitionFullData>();
@@ -256,6 +261,11 @@ namespace MedNet.Controllers
                         assetID = testrequisition.id,
                         transID = testrequisition.transID
                     };
+                    if (testResults != null && testResults.Keys.Contains(testrequisition.id))
+                    {
+                        var decryptedResultFile = EncryptionService.getDecryptedAssetData(testResults[testrequisition.id], dataDecryptionKey);
+                        newEntry.ResultFile = JsonConvert.DeserializeObject<FileData>(decryptedResultFile);
+                    }
                     testRequisitions.Add(newEntry);
                 }
                 var patientInfo = userAsset.data.Data;
@@ -285,8 +295,38 @@ namespace MedNet.Controllers
                 var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
                 var data = EncryptionService.getDecryptedAssetData(result.data.Data, dataDecryptionKey);
                 var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
-                byte[] fileBytes = Convert.FromBase64String(asset.AttachedFile.Data);
-                return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name+'.'+asset.AttachedFile.Extension);
+                //get encrypted file from ipfs
+                string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.AttachedFile.Data).GetAwaiter().GetResult();
+                string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
+
+                byte[] fileBytes = Convert.FromBase64String(fileData);
+                return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name);
+            }
+            return new EmptyResult();
+        }
+
+        public IActionResult GetResultFile(string transID)
+        {
+            var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
+            var doctorSignPrivateKey = HttpContext.Session.GetString(Globals.currentDSPriK);
+            var doctorAgreePrivateKey = HttpContext.Session.GetString(Globals.currentDAPriK);
+            var doctorSignPublicKey = EncryptionService.getSignPublicKeyStringFromPrivate(doctorSignPrivateKey);
+            if (result.metadata.AccessList.Keys.Contains(doctorSignPublicKey))
+            {
+                var hashedKey = result.metadata.AccessList[doctorSignPublicKey];
+                var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, doctorAgreePrivateKey);
+                var encryptedFile = _bigChainDbService.GetAssociatedTestResultFile(result.id);
+                if (encryptedFile != "")
+                {
+                    var data = EncryptionService.getDecryptedAssetData(encryptedFile, dataDecryptionKey);
+                    var asset = JsonConvert.DeserializeObject<FileData>(data);
+                    //get encrypted file from ipfs
+                    string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.Data).GetAwaiter().GetResult();
+                    string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
+
+                    byte[] fileBytes = Convert.FromBase64String(fileData);
+                    return File(fileBytes, asset.Type, asset.Name);
+                }
             }
             return new EmptyResult();
         }
@@ -425,22 +465,25 @@ namespace MedNet.Controllers
                         var fileBytes = ms.ToArray();
                         base64FileString = Convert.ToBase64String(fileBytes);
                     }
+                    //encrypt file and store in ipfs
+                    var encryptionKey = EncryptionService.getNewAESEncryptionKey();
+                    var encryptedFile = EncryptionService.getEncryptedAssetDataKey(base64FileString, encryptionKey);
+                    var fsn = Globals.ipfs.FileSystem.AddTextAsync(encryptedFile).GetAwaiter().GetResult();
 
                     var testRequisition = new TestRequisitionAsset
                     {
                         AttachedFile = new FileData
                         {
-                            Data = base64FileString,
+                            Data = fsn.Id,
                             Type = file.ContentType,
                             Extension = file.ContentType.Split('/').Last(),
-                            Name = file.FileName.Split('.').First()
+                            Name = file.FileName
                         },
                         ReasonForTest = addNewPatientRecordViewModel.TestRequisition.ReasonForTest,
                         TestType = addNewPatientRecordViewModel.TestRequisition.TestType,
                         DateOrdered = DateTime.Now
                     };
-                    string encryptionKey;
-                    var encryptedData = EncryptionService.getEncryptedAssetData(JsonConvert.SerializeObject(testRequisition), out encryptionKey);
+                    var encryptedData = EncryptionService.getEncryptedAssetDataKey(JsonConvert.SerializeObject(testRequisition), encryptionKey);
 
                     var asset = new AssetSaved<string>
                     {
@@ -596,7 +639,7 @@ namespace MedNet.Controllers
                 return View(patientSignUpViewModel);
             }
 
-            // Register fingerprint information 
+/*            // Register fingerprint information 
             int numScans = 5;
             List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans);
             List<byte[]> fpdb = new List<byte[]>();
@@ -605,19 +648,19 @@ namespace MedNet.Controllers
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
-            }
+            }*/
 
             // Parse the input data for user registration 
             var passphrase = patientSignUpViewModel.KeyWord;
             var password = patientSignUpViewModel.Password;
 
-            // Encrypt fingerprint data
+/*            // Encrypt fingerprint data
             List<string> encrList = new List<string>();
             foreach (byte[] fp in fpdb)
             {
                 string encrStr = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fp);
                 encrList.Add(encrStr);
-            }
+            }*/
 
             // Create a user for the Blockchain 
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
@@ -630,8 +673,8 @@ namespace MedNet.Controllers
                 PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
                 DateOfRecord = DateTime.Now,
                 SignPublicKey = signPublicKey,
-                AgreePublicKey = agreePublicKey,
-                FingerprintData = encrList,
+                AgreePublicKey = agreePublicKey/*,
+                FingerprintData = encrList,*/
             };
 
             // Encrypt the user's password in the metadata

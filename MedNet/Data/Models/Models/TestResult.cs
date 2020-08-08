@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace MedNet.Data.Models.Models
 {
@@ -26,6 +27,12 @@ namespace MedNet.Data.Models.Models
         public DateTime DateOrdered { get; set; }
     }
 
+    public class TestResultAsset
+    {
+        public string RequisitionAssetID { get; set; }
+        public string EncryptedResult { get; set; }
+    }
+
     public class TestRequisitionFullData
     {
         public string transID { get; set; }
@@ -33,5 +40,6 @@ namespace MedNet.Data.Models.Models
         public string assetID { get; set; }
         public TestRequisitionAsset assetData { get; set; }
         public double Metadata { get; set; }
+        public FileData ResultFile { get; set; }
     }
 }

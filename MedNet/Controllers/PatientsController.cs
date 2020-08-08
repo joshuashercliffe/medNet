@@ -164,6 +164,11 @@ namespace MedNet.Controllers
                     (AssetType.Prescription, patientSignPublicKey);
                 var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string, double>
                     (AssetType.TestRequisition, patientSignPublicKey);
+                Dictionary<string, string> testResults = null;
+                if (testRequisitionList.Any())
+                {
+                    testResults = _bigChainDbService.GetAssociatedTestResults(testRequisitionList);
+                }
                 var doctorNotes = new List<DoctorNoteFullData>();
                 var prescriptions = new List<PrescriptionFullData>();
                 var testRequisitions = new List<TestRequisitionFullData>();
@@ -207,6 +212,11 @@ namespace MedNet.Controllers
                         assetID = testrequisition.id,
                         transID = testrequisition.transID
                     };
+                    if (testResults != null && testResults.Keys.Contains(testrequisition.id))
+                    {
+                        var decryptedResultFile = EncryptionService.getDecryptedAssetData(testResults[testrequisition.id], dataDecryptionKey);
+                        newEntry.ResultFile = JsonConvert.DeserializeObject<FileData>(decryptedResultFile);
+                    }
                     testRequisitions.Add(newEntry);
                 }
                 var patientInfo = userAsset.data.Data;
@@ -239,11 +249,40 @@ namespace MedNet.Controllers
                     var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
                     var data = EncryptionService.getDecryptedAssetData(result.data.Data, dataDecryptionKey);
                     var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
-                    byte[] fileBytes = Convert.FromBase64String(asset.AttachedFile.Data);
-                    return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name + '.' + asset.AttachedFile.Extension);
+                    //get encrypted file from ipfs
+                    string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.AttachedFile.Data).GetAwaiter().GetResult();
+                    string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
+
+                    byte[] fileBytes = Convert.FromBase64String(fileData);
+                    return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name);
                 }
                 return new EmptyResult();
             }
+        }
+
+        public IActionResult GetResultFile(string transID)
+        {
+            var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
+            var patientAgreePrivateKey = HttpContext.Session.GetString(Globals.currentPAPriK);
+            var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
+            if (result.metadata.AccessList.Keys.Contains(patientSignPublicKey))
+            {
+                var hashedKey = result.metadata.AccessList[patientSignPublicKey];
+                var dataDecryptionKey = EncryptionService.getDecryptedEncryptionKey(hashedKey, patientAgreePrivateKey);
+                var encryptedFile = _bigChainDbService.GetAssociatedTestResultFile(result.id);
+                if (encryptedFile != "")
+                {
+                    var data = EncryptionService.getDecryptedAssetData(encryptedFile, dataDecryptionKey);
+                    var asset = JsonConvert.DeserializeObject<FileData>(data);
+                    //get encrypted file from ipfs
+                    string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.Data).GetAwaiter().GetResult();
+                    string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
+
+                    byte[] fileBytes = Convert.FromBase64String(fileData);
+                    return File(fileBytes, asset.Type, asset.Name);
+                }
+            }
+            return new EmptyResult();
         }
 
         public IActionResult EditAccess(string? transID)

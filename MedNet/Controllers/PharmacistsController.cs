@@ -349,7 +349,6 @@ namespace MedNet.Controllers
         [HttpPost]
         public IActionResult FillPrescription(FillPrescriptionViewModel fillPrescriptionViewModel)
         {
-            // Description: Authenticates a patient's identity when a Doctor requests access to their medical information
             // Get's the Doctor's information for current session
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             var oldViewModel = JsonConvert.DeserializeObject<FillPrescriptionViewModel>(TempData["viewModel"] as string);

@@ -203,10 +203,18 @@
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin">
-                                        <strong>Attached File: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
-                                            @(requisitions.assetData.AttachedFile.Name+'.'+requisitions.assetData.AttachedFile.Extension)
+                                        <strong>Requisition Form: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
+                                            @requisitions.assetData.AttachedFile.Name
                                         </a>
                                     </p>
+                                    @if (requisitions.ResultFile != null)
+                                    {
+                                        <p class="no-bot-margin">
+                                            <strong>Result: </strong><a href="GetResultFile?transID=@requisitions.transID" target="_blank">
+                                                @requisitions.ResultFile.Name
+                                            </a>
+                                        </p>
+                                    }
                                     <a href="@("EditAccess?transID="+requisitions.transID)" class="btn btn-outline-success">Edit Access</a>
                                 </div>
                             </div>
