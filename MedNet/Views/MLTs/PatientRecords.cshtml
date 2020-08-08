@@ -32,49 +32,129 @@
             <div class="card-header">
                 <h1>Lab Tests</h1>
                 <nav class="nav nav-pills nav-fill tab">
-                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'req')" id="defaultOpen">Requitions</button>
-                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'res')">Results</button>
+                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'new_req')" id="defaultOpen">Incomplete</button>
+                    <button class="nav-item mednet-link tablinks btn btn-flat" onclick="openTab(event, 'completed')">Completed</button>
                 </nav>
             </div>
             <div class="card-body">
-                <div id="req" class="tabcontent">
-                    <div class="medical-card card">
-                        <div class="medical-header">
-                            <div class="row no-bot-margin">
-                                <div class="col-sm-6">
-                                    <h3>
-                                        Test Name
-                                    </h3>
+                <div id="new_req" class="tabcontent">
+                    @if (Model != null && Model.TestRequisitions != null && Model.TestRequisitions.Any())
+                    {
+                        @for (var i = 0; i < Model.TestRequisitions.Count; i++)
+                        {
+                            var requisitions = Model.TestRequisitions[i];
+                            @if (requisitions.ResultFile == null)
+                            {
+                                var html_id = "requisitions" + i.ToString();
+                                <div class="medical-card card">
+                                    <div class="medical-header">
+                                        <div class="row no-bot-margin">
+                                            <div class="col-sm-6">
+                                                <h3>
+                                                    @requisitions.assetData.TestType
+                                                </h3>
+                                            </div>
+                                            <div class="col-sm-6 right">
+                                                <p><strong>Order Date: </strong>@requisitions.assetData.DateOrdered.ToString("MMMM dd, yyyy")</p>
+                                            </div>
+                                        </div>
+                                        <div class="row no-bot-margin">
+                                            <div class="col-sm-8">
+                                                <p class="no-bot-margin"><strong>Reason: </strong>@requisitions.assetData.ReasonForTest</p>
+                                            </div>
+                                            <div class="col-sm-4 right">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                                    Show more
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="collapse medical-body" id="@html_id">
+                                        <p class="no-bot-margin">
+                                            <strong>Requisition Form: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
+                                                @requisitions.assetData.AttachedFile.Name
+                                            </a>
+                                        </p>
+                                        <a class="btn btn-outline-success" href="UploadResult?transID=@requisitions.transID">Upload Result</a>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 right">
-                                    <a class="btn btn-light">Download Requisition</a>
-                                </div>
-                            </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <h4>
+                                No records shared.
+                            </h4>
+                            <p>
+                                No medical records to show.
+                            </p>
                         </div>
-                        <div class="medical-body">
-                           <p>Put test details here</p>
-                           <a class="btn btn-outline-success">Upload Result</a>
-                        </div>
-                    </div>
+                    }
                 </div>
-                <div id="res" class="tabcontent">
-                    <div class="medical-card card">
-                        <div class="medical-header">
-                            <div class="row no-bot-margin">
-                                <div class="col-sm-6">
-                                    <h3>
-                                        Test Name
-                                    </h3>
+
+                <div id="completed" class="tabcontent">
+                    @if (Model != null && Model.TestRequisitions != null && Model.TestRequisitions.Any())
+                    {
+                        @for (var i = 0; i < Model.TestRequisitions.Count; i++)
+                        {
+                            var requisitions = Model.TestRequisitions[i];
+                            @if (requisitions.ResultFile != null)
+                            {
+                                var html_id = "requisitions" + i.ToString();
+                                <div class="medical-card card">
+                                    <div class="medical-header">
+                                        <div class="row no-bot-margin">
+                                            <div class="col-sm-6">
+                                                <h3>
+                                                    @requisitions.assetData.TestType
+                                                </h3>
+                                            </div>
+                                            <div class="col-sm-6 right">
+                                                <p><strong>Order Date: </strong>@requisitions.assetData.DateOrdered.ToString("MMMM dd, yyyy")</p>
+                                            </div>
+                                        </div>
+                                        <div class="row no-bot-margin">
+                                            <div class="col-sm-8">
+                                                <p class="no-bot-margin"><strong>Reason: </strong>@requisitions.assetData.ReasonForTest</p>
+                                            </div>
+                                            <div class="col-sm-4 right">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@html_id" aria-expanded="false" aria-controls="#@html_id" value="Show more" onclick="return toggleShow(this)">
+                                                    Show more
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="collapse medical-body" id="@html_id">
+                                        <p class="no-bot-margin">
+                                            <strong>Requisition Form: </strong><a href="GetRequisitionFile?transID=@requisitions.transID" target="_blank">
+                                                @requisitions.assetData.AttachedFile.Name
+                                            </a>
+                                        </p>
+                                        <p class="no-bot-margin">
+                                            <strong>Result: </strong><a href="GetResultFile?transID=@requisitions.transID" target="_blank">
+                                                @requisitions.ResultFile.Name
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 right">
-                                    <a class="btn btn-light">Download Result</a>
-                                </div>
-                            </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <div class="record" align="left">
+                            <h4>
+                                No records shared.
+                            </h4>
+                            <p>
+                                No medical records to show.
+                            </p>
                         </div>
-                        <div class="medical-body">
-                            <p>Put test details here</p>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -97,4 +177,15 @@
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }</script>
+
+    <script type="text/javascript">
+        function toggleShow(el) {
+            if (el.innerText === "Show more") {
+                el.innerText = "Show less";
+            }
+            else {
+                el.innerText = "Show more";
+            }
+        }
+    </script>
 }

@@ -168,6 +168,28 @@ namespace MedNet.Data.Services
             return createTransaction.Data.Id;
         }
 
+        public Dictionary<string, string> GetAssociatedTestResults(List<AssetsMetadatas<string, double>> requisitionList)
+        {
+            var requisitionAssetIDs = requisitionList.Select(n => n.id);
+            var assets = bigchainDatabase.GetCollection<Assets<TestResultAsset>>("assets").AsQueryable().Where(n => n.data != null && n.data.Type == AssetType.TestResult
+            && n.data.Data != null && n.data.Data.RequisitionAssetID != null);
+            var testResults = assets.Where(n => requisitionAssetIDs.Contains(n.data.Data.RequisitionAssetID));
+            var resultDictionary = new Dictionary<string, string>();
+            foreach(var result in testResults)
+            {
+                resultDictionary[result.data.Data.RequisitionAssetID] = result.data.Data.EncryptedResult;
+            }
+            return resultDictionary;
+        }
+
+        public string GetAssociatedTestResultFile(string requisitionAssetID)
+        {
+            var assets = bigchainDatabase.GetCollection<Assets<TestResultAsset>>("assets").AsQueryable().Where(n => n.data != null && n.data.Type == AssetType.TestResult
+            && n.data.Data != null && n.data.Data.RequisitionAssetID != null && n.data.Data.RequisitionAssetID == requisitionAssetID);
+            var testResults = assets.Any()? assets.FirstOrDefault(): null;
+            return testResults != null ? testResults.data.Data.EncryptedResult : "" ;
+        }
+
         public List<AssetsMetadatas<A,M>> GetAllTypeRecordsFromDPublicPPublicKey<A,M>
             (AssetType type, string doctorSignPublicKey, string patientSignPublicKey)
         {

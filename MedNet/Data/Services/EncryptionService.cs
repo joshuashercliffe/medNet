@@ -177,6 +177,18 @@ namespace MedNet.Data.Services
             agreePrivateKey = keyParts[1];
         }
 
+        public static string getNewAESEncryptionKey()
+        {
+            string result;
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.GenerateKey();
+                result = Convert.ToBase64String(aes.Key);
+            }
+            return result;
+        }
+
         public static string getEncryptedAssetData(string data, out string encryptionKey)
         {
             string result = null;
@@ -201,6 +213,33 @@ namespace MedNet.Data.Services
                 }
                 result = Convert.ToBase64String(encrypted);
                 result = result + "|"  + Convert.ToBase64String(aes.IV);
+            }
+            return result;
+        }
+
+        public static string getEncryptedAssetDataKey(string data, string encryptionKey)
+        {
+            string result = null;
+            byte[] encrypted;
+            using (var aes = new AesCryptoServiceProvider())
+            {
+                aes.KeySize = 256;
+                aes.Key = Convert.FromBase64String(encryptionKey);
+                aes.GenerateIV();
+                var enc = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (var msEncrypt = new MemoryStream())
+                {
+                    using (var cryptoStream = new CryptoStream(msEncrypt, enc, CryptoStreamMode.Write))
+                    {
+                        using (var swEncrypt = new StreamWriter(cryptoStream))
+                        {
+                            swEncrypt.Write(data);
+                        }
+                    }
+                    encrypted = msEncrypt.ToArray();
+                }
+                result = Convert.ToBase64String(encrypted);
+                result = result + "|" + Convert.ToBase64String(aes.IV);
             }
             return result;
         }
