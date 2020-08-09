@@ -5,7 +5,7 @@ namespace MedNet.Models
     public class doctorSignUpViewModel
     {
         [Required]
-        public string FirstName  { get; set; }
+        public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }

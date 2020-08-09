@@ -1,12 +1,12 @@
 //! moment.js locale configuration
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
-   factory(global.moment)
-}(this, (function (moment) { 'use strict';
-
+; (function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined'
+        && typeof require === 'function' ? factory(require('../moment')) :
+        typeof define === 'function' && define.amd ? define(['../moment'], factory) :
+            factory(global.moment)
+}(this, (function (moment) {
+    'use strict';
 
     function plural(word, num) {
         var forms = word.split('_');
@@ -59,23 +59,23 @@
     }
 
     var uk = moment.defineLocale('uk', {
-        months : {
+        months: {
             'format': 'січня_лютого_березня_квітня_травня_червня_липня_серпня_вересня_жовтня_листопада_грудня'.split('_'),
             'standalone': 'січень_лютий_березень_квітень_травень_червень_липень_серпень_вересень_жовтень_листопад_грудень'.split('_')
         },
-        monthsShort : 'січ_лют_бер_квіт_трав_черв_лип_серп_вер_жовт_лист_груд'.split('_'),
-        weekdays : weekdaysCaseReplace,
-        weekdaysShort : 'нд_пн_вт_ср_чт_пт_сб'.split('_'),
-        weekdaysMin : 'нд_пн_вт_ср_чт_пт_сб'.split('_'),
-        longDateFormat : {
-            LT : 'HH:mm',
-            LTS : 'HH:mm:ss',
-            L : 'DD.MM.YYYY',
-            LL : 'D MMMM YYYY р.',
-            LLL : 'D MMMM YYYY р., HH:mm',
-            LLLL : 'dddd, D MMMM YYYY р., HH:mm'
+        monthsShort: 'січ_лют_бер_квіт_трав_черв_лип_серп_вер_жовт_лист_груд'.split('_'),
+        weekdays: weekdaysCaseReplace,
+        weekdaysShort: 'нд_пн_вт_ср_чт_пт_сб'.split('_'),
+        weekdaysMin: 'нд_пн_вт_ср_чт_пт_сб'.split('_'),
+        longDateFormat: {
+            LT: 'HH:mm',
+            LTS: 'HH:mm:ss',
+            L: 'DD.MM.YYYY',
+            LL: 'D MMMM YYYY р.',
+            LLL: 'D MMMM YYYY р., HH:mm',
+            LLLL: 'dddd, D MMMM YYYY р., HH:mm'
         },
-        calendar : {
+        calendar: {
             sameDay: processHoursFunction('[Сьогодні '),
             nextDay: processHoursFunction('[Завтра '),
             lastDay: processHoursFunction('[Вчора '),
@@ -95,28 +95,28 @@
             },
             sameElse: 'L'
         },
-        relativeTime : {
-            future : 'за %s',
-            past : '%s тому',
-            s : 'декілька секунд',
-            ss : relativeTimeWithPlural,
-            m : relativeTimeWithPlural,
-            mm : relativeTimeWithPlural,
-            h : 'годину',
-            hh : relativeTimeWithPlural,
-            d : 'день',
-            dd : relativeTimeWithPlural,
-            M : 'місяць',
-            MM : relativeTimeWithPlural,
-            y : 'рік',
-            yy : relativeTimeWithPlural
+        relativeTime: {
+            future: 'за %s',
+            past: '%s тому',
+            s: 'декілька секунд',
+            ss: relativeTimeWithPlural,
+            m: relativeTimeWithPlural,
+            mm: relativeTimeWithPlural,
+            h: 'годину',
+            hh: relativeTimeWithPlural,
+            d: 'день',
+            dd: relativeTimeWithPlural,
+            M: 'місяць',
+            MM: relativeTimeWithPlural,
+            y: 'рік',
+            yy: relativeTimeWithPlural
         },
         // M. E.: those two are virtually unused but a user might want to implement them for his/her website for some reason
         meridiemParse: /ночі|ранку|дня|вечора/,
         isPM: function (input) {
             return /^(дня|вечора)$/.test(input);
         },
-        meridiem : function (hour, minute, isLower) {
+        meridiem: function (hour, minute, isLower) {
             if (hour < 4) {
                 return 'ночі';
             } else if (hour < 12) {
@@ -142,12 +142,11 @@
                     return number;
             }
         },
-        week : {
-            dow : 1, // Monday is the first day of the week.
-            doy : 7  // The week that contains Jan 7th is the first week of the year.
+        week: {
+            dow: 1, // Monday is the first day of the week.
+            doy: 7  // The week that contains Jan 7th is the first week of the year.
         }
     });
 
     return uk;
-
 })));

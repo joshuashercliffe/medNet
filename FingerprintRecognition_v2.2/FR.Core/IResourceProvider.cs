@@ -1,7 +1,7 @@
 /*
- * Created by: Milton García Borroto (milton.garcia@gmail.com) and 
- *             Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)             
- * Created: 
+ * Created by: Milton García Borroto (milton.garcia@gmail.com) and
+ *             Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 

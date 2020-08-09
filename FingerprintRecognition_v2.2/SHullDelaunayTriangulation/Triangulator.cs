@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 /*
@@ -21,10 +20,11 @@ using System.Diagnostics;
 
 6. By copying or compliing the code for S-hull you explicitly indemnify the copyright holder against any liability he may incur as a result of you copying the code.
 
-7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.  
-  
+7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.
+
   contributors: Phil Atkin, Dr Sinclair.
 */
+
 namespace DelaunayTriangulator
 {
     public class SHullTriangulator
@@ -200,7 +200,7 @@ namespace DelaunayTriangulator
 
                         for (int h = 1; h < numh; h++)
                         {
-                            // if segment h is visible delete h  
+                            // if segment h is visible delete h
                             pidx.Add(hull[h].pointsIndex);
                             tridx.Add(hull[h].triadIndex);
                             if (hull.EdgeVisibleFrom(h, ptx))
@@ -239,7 +239,7 @@ namespace DelaunayTriangulator
                         }
                     }
 
-                    // triangle pidx starts at e1 and ends at e2 (inclusive).	
+                    // triangle pidx starts at e1 and ends at e2 (inclusive).
                     if (e2 < numh)
                     {
                         for (int e = e1; e <= e2; e++)
@@ -323,7 +323,7 @@ namespace DelaunayTriangulator
         {
             return ConvexHull(points, false);
         }
-        
+
         /// <summary>
         /// Return the convex hull of the supplied points,
         /// Optionally check for duplicate points
@@ -422,13 +422,13 @@ namespace DelaunayTriangulator
         /// <param name="triadIndexToTest">The index of the triad to test</param>
         /// <param name="triadIndexFlipped">Index of adjacent triangle it was flipped with (if any)</param>
         /// <returns>true iff the triad was flipped with any of its neighbours</returns>
-        bool FlipTriangle(List<Triad> triads, int triadIndexToTest, out int triadIndexFlipped)
+        private bool FlipTriangle(List<Triad> triads, int triadIndexToTest, out int triadIndexFlipped)
         {
             int oppositeVertex = 0, edge1, edge2, edge3 = 0, edge4 = 0;
             triadIndexFlipped = 0;
 
             Triad tri = triads[triadIndexToTest];
-            // test all 3 neighbours of tri 
+            // test all 3 neighbours of tri
 
             if (tri.bc >= 0)
             {
@@ -455,7 +455,6 @@ namespace DelaunayTriangulator
                     }
                 }
             }
-
 
             if (tri.ab >= 0)
             {
@@ -511,7 +510,7 @@ namespace DelaunayTriangulator
 
             return false;
         }
-         
+
         /// <summary>
         /// Flip triangles that do not satisfy the Delaunay condition
         /// </summary>
@@ -529,13 +528,12 @@ namespace DelaunayTriangulator
                     flipped += 2;
                     idsFlipped[t] = true;
                     idsFlipped[t2] = true;
-
                 }
             }
 
             return flipped;
         }
-         
+
         private int FlipTriangles(List<Triad> triads, bool[] idsToTest, bool[] idsFlipped)
         {
             int numt = (int)triads.Count;
@@ -602,6 +600,7 @@ namespace DelaunayTriangulator
         }
 
         #region Debug verification routines: verify that triad adjacency and indeces are set correctly
+
 #if DEBUG
         private void VerifyHullContains(Hull hull, int idA, int idB)
         {
@@ -623,7 +622,6 @@ namespace DelaunayTriangulator
                     return;
                 }
             }
-
         }
 
         private void VerifyTriadContains(Triad tri, int nbourTriad, int idA, int idB)
@@ -672,7 +670,6 @@ namespace DelaunayTriangulator
                     VerifyHullContains(hull, tri.b, tri.c);
                 else
                     VerifyTriadContains(triads[tri.bc], t, tri.b, tri.c);
-
             }
         }
 
@@ -694,7 +691,6 @@ namespace DelaunayTriangulator
 
 #endif
 
-        #endregion
+        #endregion Debug verification routines: verify that triad adjacency and indeces are set correctly
     }
-
 }

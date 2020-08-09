@@ -1,6 +1,6 @@
 ﻿/*
  * Created by: Milton García Borroto (milton.garcia@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
@@ -38,6 +38,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                     case PixelFormat.Format1bppIndexed:
                         pixelFormat = PixelFormat.Format24bppRgb;
                         break;
+
                     default:
                         pixelFormat = srcBitmap.PixelFormat;
                         break;

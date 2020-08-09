@@ -24,6 +24,7 @@
     <script src="../src/fields/jsgrid.field.control.js"></script>
 
     <style>
+
         .hasDatepicker {
             width: 100px;
             text-align: center;
@@ -40,8 +41,7 @@
     <h1>Custom Grid DateField</h1>
     <div id="jsGrid"></div>
 
-    <script>
-        $(function() {
+    <script>$(function() {
 
             var MyDateField = function(config) {
                 jsGrid.Field.call(this, config);
@@ -91,7 +91,6 @@
                 data: db.users
             });
 
-        });
-    </script>
+        });</script>
 </body>
 </html>

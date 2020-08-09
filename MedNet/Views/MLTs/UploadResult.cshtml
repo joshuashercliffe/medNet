@@ -24,7 +24,7 @@
 
 <div class="content">
     <div class="content-header card">
-        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
         <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
@@ -50,23 +50,21 @@
                     <div class="medical-body">
                         <p class="no-bot-margin">
                             <strong>Requisition Form: </strong><a href="GetRequisitionFile?transID=@Model.TestData.transID" target="_blank">
-                                @(Model.TestData.assetData.AttachedFile.Name+'.'+ Model.TestData.assetData.AttachedFile.Extension)
+                                @(Model.TestData.assetData.AttachedFile.Name + '.' + Model.TestData.assetData.AttachedFile.Extension)
                             </a>
                         </p>
                     </div>
                 </div>
-                
-                @Html.ValidationSummary(true)
-            <form class="form-reg no-bot-margin" asp-action="UploadResult" method="post" enctype="multipart/form-data">
-                <div class="form-group" id="test3">
-                    <label>Attach Test Result</label>
-                    @Html.TextBoxFor(n => n.ResultFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = "image/*, .pdf, .zip" })
-                </div>
-                <button type="submit" id="submitButton" class="btn btn-success btn-block">Upload Result</button>
-            </form>
 
+                @Html.ValidationSummary(true)
+                <form class="form-reg no-bot-margin" asp-action="UploadResult" method="post" enctype="multipart/form-data">
+                    <div class="form-group" id="test3">
+                        <label>Attach Test Result</label>
+                        @Html.TextBoxFor(n => n.ResultFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = "image/*, .pdf, .zip" })
+                    </div>
+                    <button type="submit" id="submitButton" class="btn btn-success btn-block">Upload Result</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-

@@ -16,15 +16,15 @@ using System.Collections.Generic;
 
 6. By copying or compliing the code for S-hull you explicitly indemnify the copyright holder against any liability he may incur as a result of you copying the code.
 
-7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.   
-  
+7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.
+
  */
 
 namespace DelaunayTriangulator
 {
-    class Set<T> : IEnumerable<T>
+    internal class Set<T> : IEnumerable<T>
     {
-        SortedList<T, int> list;
+        private SortedList<T, int> list;
 
         public Set()
         {
@@ -45,7 +45,7 @@ namespace DelaunayTriangulator
         public void DeepCopy(Set<T> other)
         {
             list.Clear();
-            foreach(T k in other.list.Keys)
+            foreach (T k in other.list.Keys)
                 Add(k);
         }
 
@@ -59,7 +59,6 @@ namespace DelaunayTriangulator
             list.Clear();
         }
 
-
         #region IEnumerable Members
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -67,6 +66,6 @@ namespace DelaunayTriangulator
             throw new NotImplementedException();
         }
 
-        #endregion
+        #endregion IEnumerable Members
     }
 }

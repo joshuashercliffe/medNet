@@ -257,7 +257,6 @@
         event.stopPropagation();
       },
 
-
       'mousedown.bootstrapSwitch touchstart.bootstrapSwitch': function mousedownBootstrapSwitchTouchstartBootstrapSwitch(event) {
         if (dragStart || _this6.options.disabled || _this6.options.readonly) {
           return;

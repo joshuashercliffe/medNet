@@ -9,7 +9,7 @@ using System.Drawing;
 namespace PatternRecognition.FingerprintRecognition.Core
 {
     /// <summary>
-    ///     Represents a non-generic algorithm for features extraction. 
+    ///     Represents a non-generic algorithm for features extraction.
     /// </summary>
     public interface IFeatureExtractor
     {
@@ -22,7 +22,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
     }
 
     /// <summary>
-    ///     Represents an algorithm for features extraction. 
+    ///     Represents an algorithm for features extraction.
     /// </summary>
     /// <typeparam name="FeatureType">
     ///     The type of the features to be extracted.
@@ -54,7 +54,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         /// <returns>The features extracted from the specified image.</returns>
         public abstract FeatureType ExtractFeatures(Bitmap image);
 
-        #endregion
+        #endregion IFeatureExtractor<FeatureType> Members
 
         #region IFeatureExtractor Members
 
@@ -68,6 +68,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             return ExtractFeatures(image);
         }
 
-        #endregion
+        #endregion IFeatureExtractor Members
     }
 }

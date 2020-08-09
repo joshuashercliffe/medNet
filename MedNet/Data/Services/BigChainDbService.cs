@@ -1,21 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Ipfs.Http;
+using MedNet.Data.Models;
+using MedNet.Data.Models.Models;
+using MongoDB.Driver;
+using Newtonsoft.Json;
+using Nito.AsyncEx;
 using Omnibasis.BigchainCSharp.Api;
 using Omnibasis.BigchainCSharp.Builders;
 using Omnibasis.BigchainCSharp.Constants;
 using Omnibasis.BigchainCSharp.Model;
-using Omnibasis.BigchainCSharp.Util;
-using MongoDB.Driver;
-using MongoDB.Bson;
-using Nito.AsyncEx;
-using NSec.Cryptography;
-using MedNet.Data.Models;
-using MedNet.Data.Models.Models;
-using Newtonsoft.Json;
-using Ipfs.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace MedNet.Data.Services
 {
@@ -58,7 +54,7 @@ namespace MedNet.Data.Services
                 Console.WriteLine(url);
 
                 var conn_conf = new Dictionary<string, object>();
-                conn_conf.Add("baseUrl", "https://"+url);
+                conn_conf.Add("baseUrl", "https://" + url);
                 BlockchainConnection bc_conn = new BlockchainConnection(conn_conf);
                 connections.Add(bc_conn);
             }
@@ -70,11 +66,11 @@ namespace MedNet.Data.Services
             {
                 Console.WriteLine("Failed Multi-Node Setup");
             }
-            var baseURL = builder.BaseUrl.Split("/")[2];;
+            var baseURL = builder.BaseUrl.Split("/")[2]; ;
             Console.WriteLine("Finished connecting to multiple nodes");
             var client = new MongoClient($"mongodb://dbreader:dbreaderpassword@{baseURL}:27017/?authSource=bigchain");
             bigchainDatabase = client.GetDatabase("bigchain");
-            ipfs = new IpfsClient("http://"+baseURL+":5001");
+            ipfs = new IpfsClient("http://" + baseURL + ":5001");
             return;
         }
 
@@ -93,7 +89,7 @@ namespace MedNet.Data.Services
             }
         }
 
-        public AssetsMetadatas<A,M> GetMetaDataAndAssetFromTransactionId<A,M>(string transactionId)
+        public AssetsMetadatas<A, M> GetMetaDataAndAssetFromTransactionId<A, M>(string transactionId)
         {
             var assets = bigchainDatabase.GetCollection<Assets<object>>("assets").AsQueryable().ToList();
 
@@ -123,9 +119,9 @@ namespace MedNet.Data.Services
             return result;
         }
 
-        // This function is similar to 
+        // This function is similar to
 
-        public string SendCreateTransactionToDataBase<A,M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
+        public string SendCreateTransactionToDataBase<A, M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
         {
             var signPrivateKey = EncryptionService.getSignKeyFromPrivate(privateSignKey);
 
@@ -157,7 +153,7 @@ namespace MedNet.Data.Services
             return createTransaction.Data.Id;
         }
 
-        public string SendTransferTransactionToDataBase<M>(string assetID, MetaDataSaved<M> metaData, 
+        public string SendTransferTransactionToDataBase<M>(string assetID, MetaDataSaved<M> metaData,
             string senderPrivateSignKey, string recieverPublicSignKey, string inputTransID)
         {
             var senderSignPrivateKey = EncryptionService.getSignKeyFromPrivate(senderPrivateSignKey);
@@ -192,7 +188,7 @@ namespace MedNet.Data.Services
             && n.data.Data != null && n.data.Data.RequisitionAssetID != null);
             var testResults = assets.Where(n => requisitionAssetIDs.Contains(n.data.Data.RequisitionAssetID));
             var resultDictionary = new Dictionary<string, string>();
-            foreach(var result in testResults)
+            foreach (var result in testResults)
             {
                 resultDictionary[result.data.Data.RequisitionAssetID] = result.data.Data.EncryptedResult;
             }
@@ -203,18 +199,18 @@ namespace MedNet.Data.Services
         {
             var assets = bigchainDatabase.GetCollection<Assets<TestResultAsset>>("assets").AsQueryable().Where(n => n.data != null && n.data.Type == AssetType.TestResult
             && n.data.Data != null && n.data.Data.RequisitionAssetID != null && n.data.Data.RequisitionAssetID == requisitionAssetID);
-            var testResults = assets.Any()? assets.FirstOrDefault(): null;
-            return testResults != null ? testResults.data.Data.EncryptedResult : "" ;
+            var testResults = assets.Any() ? assets.FirstOrDefault() : null;
+            return testResults != null ? testResults.data.Data.EncryptedResult : "";
         }
 
-        public List<AssetsMetadatas<A,M>> GetAllTypeRecordsFromDPublicPPublicKey<A,M>
+        public List<AssetsMetadatas<A, M>> GetAllTypeRecordsFromDPublicPPublicKey<A, M>
             (AssetType type, string doctorSignPublicKey, string patientSignPublicKey)
         {
             // get unspent outputs of the patient, this means get all outputs that he owns
             var rawPublicKey = EncryptionService.getRawBase58PublicKey(patientSignPublicKey);
             var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
             List<string> transactionIDs = new List<string>();
-            foreach(var unspentOutput in unspentOutsList)
+            foreach (var unspentOutput in unspentOutsList)
             {
                 transactionIDs.Add(unspentOutput.TransactionId);
             }
@@ -226,7 +222,7 @@ namespace MedNet.Data.Services
             List<Metadatas<object>> metadataList = new List<Metadatas<object>>();
             foreach (var a in metadataReduced)
             {
-                if (a.metadata.metadata.AccessList != null 
+                if (a.metadata.metadata.AccessList != null
                     && a.metadata.metadata.AccessList.Keys.ToList().Contains(doctorSignPublicKey)
                     && a.metadata.metadata.AccessList.Keys.ToList().Contains(patientSignPublicKey))
                 {
@@ -236,16 +232,17 @@ namespace MedNet.Data.Services
 
             var transaction = (bigchainDatabase.GetCollection<Transactions<string>>("transactions").AsQueryable());
             var transactionsReduced = transaction.Where(x => transactionIDs.Contains(x.id));
-            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id});
+            transactionsReduced = transactionsReduced.Select(r => new Transactions<string> { id = r.id, asset = r.asset, _id = r._id });
             var r = from t1 in metadataList
                     join t2 in transactionsReduced on t1.id equals t2.id
                     join t3 in TypeAssets on 1 equals 1
                     where (t2.id == t3.id || (t2.asset != null && t2.asset.id == t3.id))
-                    select new AssetsMetadatas<A,M>()
+                    select new AssetsMetadatas<A, M>()
                     {
                         id = t3.id,
                         data = t3.data,
-                        metadata = new MetaDataSaved<M> { 
+                        metadata = new MetaDataSaved<M>
+                        {
                             AccessList = new Dictionary<string, string>(t1.metadata.metadata.AccessList),
                             data = JsonConvert.DeserializeObject<M>(JsonConvert.SerializeObject(t1.metadata.metadata.data))
                         },
@@ -254,7 +251,7 @@ namespace MedNet.Data.Services
             return r.ToList();
         }
 
-        public List<AssetsMetadatas<A, M>> GetAllTypeRecordsFromPPublicKey<A,M>
+        public List<AssetsMetadatas<A, M>> GetAllTypeRecordsFromPPublicKey<A, M>
     (AssetType type, string patientSignPublicKey)
         {
             // get unspent outputs of the patient, this means get all outputs that he owns
@@ -311,7 +308,7 @@ namespace MedNet.Data.Services
                 return null;
         }
 
-        public Models.Assets<PatientCredAssetData> GetPatientAssetFromID( string id)
+        public Models.Assets<PatientCredAssetData> GetPatientAssetFromID(string id)
         {
             var assets = bigchainDatabase.GetCollection<Models.Assets<PatientCredAssetData>>("assets").AsQueryable();
             var asset = from a in assets where a.data.Type == AssetType.Patient && a.data.Data.ID == id select a;
@@ -360,7 +357,7 @@ namespace MedNet.Data.Services
             }
             // get the closet phn
             string sugg_phn = "";
-            if(idx > 0)
+            if (idx > 0)
             {
                 sugg_phn = phns[idx];
             }
@@ -374,7 +371,7 @@ namespace MedNet.Data.Services
             // get all assets
             var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets").AsQueryable();
             var patients = assets.Where(a => a.data.Type == assetType).Select(a => a.data.Data.ID);
-            return patients.ToList();    
+            return patients.ToList();
         }
 
         public M GetMetadataFromAssetPublicKey<M>(string assetID, string signPublicKey)
@@ -383,9 +380,9 @@ namespace MedNet.Data.Services
             var unspentOutsList = OutputsApi.getUnspentOutputsAsync(rawPublicKey).GetAwaiter().GetResult();
             var assetTransactions = TransactionsApi<object, object>.getTransactionsByAssetIdAsync(assetID).GetAwaiter().GetResult();
             var neededTransaction = from a in unspentOutsList.AsQueryable()
-                                     join b in assetTransactions.AsQueryable()
-                                     on a.TransactionId equals b.Id
-                                     select b.MetaData.Metadata;
+                                    join b in assetTransactions.AsQueryable()
+                                    on a.TransactionId equals b.Id
+                                    select b.MetaData.Metadata;
             MetaDataSaved<M> result = JsonConvert.DeserializeObject<MetaDataSaved<M>>(neededTransaction.FirstOrDefault().ToString());
             return result.data;
         }
@@ -398,9 +395,10 @@ namespace MedNet.Data.Services
             var neededTransaction = from a in unspentOutsList.AsQueryable()
                                     join b in assetTransactions.AsQueryable()
                                     on a.TransactionId equals b.Id
-                                    select new MetaData<MetaDataSaved<M>> { 
-                                    Id = b.Id,
-                                    Metadata = b.MetaData.Metadata
+                                    select new MetaData<MetaDataSaved<M>>
+                                    {
+                                        Id = b.Id,
+                                        Metadata = b.MetaData.Metadata
                                     };
             var result = neededTransaction.FirstOrDefault();
             return result;
@@ -413,7 +411,7 @@ namespace MedNet.Data.Services
             var assets = bigchainDatabase.GetCollection<Models.Assets<UserCredAssetData>>("assets").AsQueryable();
             var patients = assets.Where(a => userSignPublicKeyList.Contains(a.data.Data.SignPublicKey));
             List<UserInfo> userInfoList = new List<UserInfo>();
-            foreach ( var patient in patients)
+            foreach (var patient in patients)
             {
                 UserInfo user = new UserInfo()
                 {

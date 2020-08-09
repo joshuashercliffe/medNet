@@ -1,18 +1,17 @@
-﻿using System.Diagnostics;
+﻿using MedNet.Data.Models;
+using MedNet.Data.Models.Models;
+using MedNet.Data.Services;
+using MedNet.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MedNet.Models;
-using MedNet.Data.Models.Models;
-using System;
-using MedNet.Data.Services;
-using MedNet.Data.Models;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.AspNetCore.Authentication;
 using System.IO;
+using System.Linq;
 
 namespace MedNet.Controllers
 {
@@ -85,7 +84,6 @@ namespace MedNet.Controllers
         {
             return View();
         }
-
 
         [HttpPost]
         public IActionResult SignUp(mltSignUpViewModel mltSignUpViewModel)
@@ -187,7 +185,7 @@ namespace MedNet.Controllers
 
             // Send request to the Client Computer to authenticate with fingerprint
             int numScans = 1;
-            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer 
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer
 
             // Check if fingerprint data is valid
             if (fpList.Count < numScans)
@@ -217,7 +215,7 @@ namespace MedNet.Controllers
                 return View(requestAccessViewModel);
             }
 
-            // Compare the scanned fingerprint with the one saved in the database 
+            // Compare the scanned fingerprint with the one saved in the database
             if (!FingerprintService.compareFP(fpImg, fpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
@@ -296,6 +294,7 @@ namespace MedNet.Controllers
                 return View(patientOverviewViewModel);
             }
         }
+
         public IActionResult PatientRecords()
         {
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
@@ -317,7 +316,7 @@ namespace MedNet.Controllers
                 var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromDPublicPPublicKey<string, double>
                     (AssetType.TestRequisition, doctorSignPublicKey, patientSignPublicKey);
                 Dictionary<string, string> testResults = null;
-                if(testRequisitionList.Any())
+                if (testRequisitionList.Any())
                 {
                     testResults = _bigChainDbService.GetAssociatedTestResults(testRequisitionList);
                 }
@@ -334,7 +333,7 @@ namespace MedNet.Controllers
                         assetID = testrequisition.id,
                         transID = testrequisition.transID
                     };
-                    if(testResults != null && testResults.Keys.Contains(testrequisition.id))
+                    if (testResults != null && testResults.Keys.Contains(testrequisition.id))
                     {
                         var decryptedResultFile = EncryptionService.getDecryptedAssetData(testResults[testrequisition.id], dataDecryptionKey);
                         newEntry.ResultFile = JsonConvert.DeserializeObject<FileData>(decryptedResultFile);
@@ -405,7 +404,7 @@ namespace MedNet.Controllers
                     };
                     //Encrypt the file using the same key
                     var encryptedFile = EncryptionService.getEncryptedAssetDataKey(JsonConvert.SerializeObject(resultFile), dataDecryptionKey);
-                    
+
                     var asset = new AssetSaved<TestResultAsset>
                     {
                         Data = new TestResultAsset
@@ -423,7 +422,7 @@ namespace MedNet.Controllers
                     _bigChainDbService.SendCreateTransferTransactionToDataBase(asset, metadata, doctorSignPrivateKey, patientSignPublicKey);
                     return RedirectToAction("PatientRecords");
                 }
-                else 
+                else
                 {
                     ModelState.AddModelError("", "Missing test result file.");
                     return View(uploadResultViewModel);
@@ -433,10 +432,10 @@ namespace MedNet.Controllers
             {
                 ModelState.AddModelError("", "You do not have permission to upload test result.");
                 return View(uploadResultViewModel);
-            } 
+            }
         }
 
-            public IActionResult UploadResult(string transID)
+        public IActionResult UploadResult(string transID)
         {
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
             if (HttpContext.Session.GetString(Globals.currentDSPriK) == null || HttpContext.Session.GetString(Globals.currentDAPriK) == null)
@@ -454,7 +453,7 @@ namespace MedNet.Controllers
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
                 var patientInfo = userAsset.data.Data;
 
-                var testRequisition = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string,double>(transID);
+                var testRequisition = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
                 if (testRequisition.metadata.AccessList.Keys.Contains(doctorSignPublicKey))
                 {
                     var hashedKey = testRequisition.metadata.AccessList[doctorSignPublicKey];
@@ -496,7 +495,7 @@ namespace MedNet.Controllers
                 var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
                 //get encrypted file from ipfs
                 string encryptedFileData = _bigChainDbService.GetTextFromIPFS(asset.AttachedFile.Data);
-                string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData,dataDecryptionKey);
+                string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
 
                 byte[] fileBytes = Convert.FromBase64String(fileData);
                 return File(fileBytes, asset.AttachedFile.Type, asset.AttachedFile.Name);
@@ -547,6 +546,5 @@ namespace MedNet.Controllers
                 return Json(phns);
             }
         }
-
     }
 }

@@ -1,5 +1,4 @@
-(function(jsGrid) {
-
+(function (jsGrid) {
     jsGrid.locales.fr = {
         grid: {
             noDataContent: "Pas de données",
@@ -42,6 +41,4 @@
             max: { message: "La valeur du champ est trop grande" }
         }
     };
-
 }(jsGrid, jQuery));
-

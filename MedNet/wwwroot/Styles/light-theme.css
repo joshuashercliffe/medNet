@@ -226,9 +226,9 @@ body {
 }
 
 .medical-body {
-    border-top-style:solid;
-    border-top-width:thin;
-    border-top-color:gainsboro;
+    border-top-style: solid;
+    border-top-width: thin;
+    border-top-color: gainsboro;
     padding-top: 10px;
 }
 
@@ -294,9 +294,9 @@ body {
     color: black;
 }
 
-.btn-edit:hover {
-    color: black;
-}
+    .btn-edit:hover {
+        color: black;
+    }
 
 .mednet-link.active {
     background-color: #4CAF50;
@@ -369,7 +369,7 @@ body {
 
 /*
  * bootstrap-tagsinput v0.8.0
- * 
+ *
  */
 
 .bootstrap-tagsinput {
@@ -480,5 +480,3 @@ body {
         outline: 0;
         background-color: #428bca;
     }
-
-

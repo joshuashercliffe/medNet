@@ -23,14 +23,15 @@
     <script src="../src/fields/jsgrid.field.checkbox.js"></script>
 
     <style>
+
         .external-pager {
             margin: 10px 0;
         }
 
-        .external-pager .jsgrid-pager-current-page {
-            background: #c4e2ff;
-            color: #fff;
-        }
+            .external-pager .jsgrid-pager-current-page {
+                background: #c4e2ff;
+                color: #fff;
+            }
     </style>
 </head>
 <body>
@@ -39,8 +40,7 @@
 
     <div id="jsGrid"></div>
 
-    <script>
-        $(function() {
+    <script>$(function() {
 
             $("#jsGrid").jsGrid({
                 height: "70%",
@@ -66,7 +66,6 @@
                 data: db.clients
             });
 
-        });
-    </script>
+        });</script>
 </body>
 </html>

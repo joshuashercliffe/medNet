@@ -13,7 +13,6 @@
     <a href="Login" class="topnav-rbtn">Log-In</a>
 }
 
-
 <div class="content-full">
     <div class="form-reg col-sm-8 col-md-7 col-lg-6 col-xl-5">
         <div class="card">
@@ -28,10 +27,10 @@
                         <label>Name</label>
                         <div class="form-row">
                             <div class="col">
-                                @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required", @class = "form-control" , pattern="[A-Za-z]+", title="Field may only contain alphabetical characters"})
+                                @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @required = "required", @class = "form-control", pattern = "[A-Za-z]+", title = "Field may only contain alphabetical characters" })
                             </div>
                             <div class="col">
-                                @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required", @class = "form-control", pattern="[A-Za-z]+", title="Field may only contain alphabetical characters"} )
+                                @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @required = "required", @class = "form-control", pattern = "[A-Za-z]+", title = "Field may only contain alphabetical characters" })
                             </div>
                         </div>
                     </div>
@@ -53,7 +52,7 @@
                     <div class="form-group">
                         <label>Keyword</label>
                         @Html.TextBoxFor(n => n.DoctorKeyWord, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @required = "required", @class = "form-control" })
-                    <small class="form-text text-muted">Identification keyphrase used for encryption</small>
+                        <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                     </div>
 
                     <!-- Password -->
@@ -75,8 +74,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section Scripts{
     <!-- Select2 -->
@@ -109,7 +106,8 @@
     <script src="~/theme/dist/js/demo.js"></script>
 
     <!-- Scripts -->
-    <script type="text/javascript">jQuery(function ($) {
+    <script type="text/javascript">
+jQuery(function ($) {
             $("#signup-minc").inputmask("AA99-9999-9999");
         });
 

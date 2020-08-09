@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MedNet.Data.Models
+﻿namespace MedNet.Data.Models
 {
     public class UserInfo
     {

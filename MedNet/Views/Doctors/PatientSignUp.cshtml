@@ -12,7 +12,6 @@
     <a href="PatientLookUp" class="topnav-rbtn">Dr. @ViewBag.DoctorName</a>
 }
 
-
 <body>
     <div class="content-full">
         <div class="row">
@@ -29,10 +28,10 @@
                                 <label for="patientName">Name</label>
                                 <div class="form-row">
                                     <div class="col">
-                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @class = "form-control", @required = "required" , pattern="[A-Za-z]+", title="Field may only contain alphabetical characters" })
+                                        @Html.TextBoxFor(n => n.FirstName, new { placeholder = "First Name", @class = "form-control", @required = "required", pattern = "[A-Za-z]+", title = "Field may only contain alphabetical characters" })
                                     </div>
                                     <div class="col">
-                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @required = "required", pattern="[A-Za-z]+", title="Field may only contain alphabetical characters"  })
+                                        @Html.TextBoxFor(n => n.LastName, new { placeholder = "Last Name", @class = "form-control", @required = "required", pattern = "[A-Za-z]+", title = "Field may only contain alphabetical characters" })
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +58,7 @@
                             <!-- Keyword -->
                             <div class="form-group">
                                 <label>Keyword</label>
-                                @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required", @class = "form-control"  })
+                                @Html.TextBoxFor(n => n.KeyWord, new { placeholder = "Keyword", title = "Identification Keyphrase", @required = "required", @class = "form-control" })
                                 <small id="phoneHelp" class="form-text text-muted">Identification Keyphrase</small>
                             </div>
 
@@ -77,7 +76,6 @@
                             </div>
 
                             <button type="submit" id="submitButton" class="btn btn-success btn-block">Register with Fingerprint</button>
-
                         </form>
                     </div>
                 </div>
@@ -88,36 +86,37 @@
 
 @section Scripts {
     <!-- Select2 -->
-<script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
-<!-- Bootstrap4 Duallistbox -->
-<script src="~/theme/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-<!-- InputMask -->
-<script src="~/theme/plugins/moment/moment.min.js"></script>
-<script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-<!-- date-range-picker -->
-<script src="~/theme/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap color picker -->
-<script src="~/theme/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="~/theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Bootstrap Switch -->
-<script src="~/theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<!-- jQuery -->
-<script src="~/theme/plugins/jquery/jquery.min.js"></script>
-<!-- InputMask -->
-<script src="~/theme/plugins/moment/moment.min.js"></script>
-<script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="~/theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- bs-custom-file-input -->
-<script src="~/theme/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-<!-- AdminLTE App -->
-<script src="~/theme/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="~/theme/dist/js/demo.js"></script>
+    <script src="~/theme/plugins/select2/js/select2.full.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="~/theme/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/theme/plugins/moment/moment.min.js"></script>
+    <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="~/theme/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap color picker -->
+    <script src="~/theme/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/theme/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Bootstrap Switch -->
+    <script src="~/theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <!-- jQuery -->
+    <script src="~/theme/plugins/jquery/jquery.min.js"></script>
+    <!-- InputMask -->
+    <script src="~/theme/plugins/moment/moment.min.js"></script>
+    <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- bs-custom-file-input -->
+    <script src="~/theme/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/theme/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/theme/dist/js/demo.js"></script>
 
-<!-- Scripts -->
-<script type="text/javascript">jQuery(function ($) {
+    <!-- Scripts -->
+    <script type="text/javascript">
+jQuery(function ($) {
             $("#patient-signup-PHN").inputmask("9999-999-999");
         });
 
@@ -147,7 +146,3 @@
         today = yyyy + '-' + mm + '-' + dd;
         document.getElementById("DateOfBirth").setAttribute("max", today);</script>
 }
-
-
-
-

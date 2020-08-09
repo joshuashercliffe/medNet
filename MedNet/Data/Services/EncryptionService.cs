@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NSec.Cryptography;
+using System;
 using System.IO;
-using NSec.Cryptography;
 using System.Security.Cryptography;
 
 namespace MedNet.Data.Services
@@ -82,7 +82,6 @@ namespace MedNet.Data.Services
             //return delimited string with salt | #iterations | hash
             return Convert.ToBase64String(salt) + "|" + iterations + "|" +
                 Convert.ToBase64String(hash);
-
         }
 
         public static bool verifyPassword(string testPassword, string origDelimHash)
@@ -103,7 +102,6 @@ namespace MedNet.Data.Services
 
             //no match return false
             return false;
-
         }
 
         public static string encryptPrivateKeys(string id, string passphrase, string signPrivateKey, string agreePrivateKey)
@@ -145,7 +143,7 @@ namespace MedNet.Data.Services
             return SimpleBase.Base58.Bitcoin.Encode(pubKey.Export(KeyBlobFormat.RawPublicKey));
         }
 
-        public static void getPrivateKeyFromIDKeyword(string id, string passphrase, string hashedKeys,out string signPrivateKey, out string agreePrivateKey)
+        public static void getPrivateKeyFromIDKeyword(string id, string passphrase, string hashedKeys, out string signPrivateKey, out string agreePrivateKey)
         {
             var origHashedParts = hashedKeys.Split('|');
             var keyHash = Convert.FromBase64String(origHashedParts[0]);
@@ -162,9 +160,9 @@ namespace MedNet.Data.Services
                 var dec = aes.CreateDecryptor(aes.Key, aes.IV);
                 using (var msDecrypt = new MemoryStream(keyHash))
                 {
-                    using (var cryptoStream = new CryptoStream(msDecrypt, dec, CryptoStreamMode.Read)) 
+                    using (var cryptoStream = new CryptoStream(msDecrypt, dec, CryptoStreamMode.Read))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(cryptoStream)) 
+                        using (StreamReader srDecrypt = new StreamReader(cryptoStream))
                         {
                             joinedKeys = srDecrypt.ReadToEnd();
                         }
@@ -212,7 +210,7 @@ namespace MedNet.Data.Services
                     encrypted = msEncrypt.ToArray();
                 }
                 result = Convert.ToBase64String(encrypted);
-                result = result + "|"  + Convert.ToBase64String(aes.IV);
+                result = result + "|" + Convert.ToBase64String(aes.IV);
             }
             return result;
         }
@@ -278,10 +276,10 @@ namespace MedNet.Data.Services
             parameters.ExportPolicy = KeyExportPolicies.AllowPlaintextExport;
             Key senderKey = getAgreeKeyFromPrivate(senderAgreePrivateKey);
             PublicKey recieverKey = getAgreePublicKeyFromString(recieverAgreePublicKey);
-            var secret = algorithm.Agree(senderKey,recieverKey);
+            var secret = algorithm.Agree(senderKey, recieverKey);
             var derivedKey = KeyDerivationAlgorithm.HkdfSha256.DeriveKey(secret, null, null, AeadAlgorithm.Aes256Gcm, parameters);
             var nonce = new Nonce(0, 12);
-            var encryptedByteData = AeadAlgorithm.Aes256Gcm.Encrypt(derivedKey,nonce,null,byteData);
+            var encryptedByteData = AeadAlgorithm.Aes256Gcm.Encrypt(derivedKey, nonce, null, byteData);
             var encryptedData = Convert.ToBase64String(encryptedByteData);
             return encryptedData + "|" + getAgreePublicKeyStringFromPrivate(senderAgreePrivateKey);
         }
@@ -333,7 +331,7 @@ namespace MedNet.Data.Services
                     encrypted = msEncrypt.ToArray();
                 }
                 result = Convert.ToBase64String(encrypted);
-                result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV); 
+                result = result + "|" + Convert.ToBase64String(salt) + "|" + Convert.ToBase64String(aes.IV);
             }
             return result;
         }

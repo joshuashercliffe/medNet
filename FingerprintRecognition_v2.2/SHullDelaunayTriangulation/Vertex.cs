@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 /*
   copyright s-hull.org 2011
@@ -20,19 +18,22 @@ using System.Text;
 
 6. By copying or compliing the code for S-hull you explicitly indemnify the copyright holder against any liability he may incur as a result of you copying the code.
 
-7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.  
-  
+7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.
+
   contributors: Phil Atkin, Dr Sinclair.
 */
+
 namespace DelaunayTriangulator
 {
     public class Vertex
     {
         public float x, y;
 
-        protected Vertex() { }
+        protected Vertex()
+        {
+        }
 
-        public Vertex(float x, float y) 
+        public Vertex(float x, float y)
         {
             this.x = x; this.y = y;
         }
@@ -54,5 +55,4 @@ namespace DelaunayTriangulator
             return string.Format("({0},{1})", x, y);
         }
     }
-
 }

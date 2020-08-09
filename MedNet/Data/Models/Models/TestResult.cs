@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Asn1.Mozilla;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace MedNet.Data.Models.Models
 {

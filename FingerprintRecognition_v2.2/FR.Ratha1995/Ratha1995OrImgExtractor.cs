@@ -1,13 +1,13 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Drawing;
 using ImageProcessingTools;
 using PatternRecognition.FingerprintRecognition.Core;
+using System;
+using System.Drawing;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 {
@@ -22,7 +22,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
     ///         We apply a 3x3 median filter to improve the computed <see cref="OrientationImage"/>.
     ///     </para>
     ///     <para>
-    ///         In order to better deal with diverse fingerprint databases, we modified the algorithm proposed by Ratha et al. [1] to detect foreground. 
+    ///         In order to better deal with diverse fingerprint databases, we modified the algorithm proposed by Ratha et al. [1] to detect foreground.
     ///     </para>
     ///     <para>
     ///         Take into account that this algorithm is created to work with fingerprint images at 500 dpi. Proper modifications have to be made for different image resolutions.
@@ -34,7 +34,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
     ///         <list type="number">
     ///             <item>
     ///                Ratha N.K., Chen S.Y. and Jain A.K., "Adaptive flow orientation-based feature extraction in fingerprint images," Pattern Recognition, vol. 28, no. 11, pp. 1657–1672, 1995.
-    ///             </item>             
+    ///             </item>
     ///         </list>
     ///     </para>
     /// </remarks>
@@ -239,7 +239,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 
         private byte bSize = 16;
 
-        #endregion
-
+        #endregion private
     }
 }

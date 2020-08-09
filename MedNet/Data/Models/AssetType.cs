@@ -1,6 +1,6 @@
 ﻿namespace MedNet.Data.Models
 {
-    public enum AssetType: int
+    public enum AssetType : int
     {
         Doctor = 0,
         Patient = 1,

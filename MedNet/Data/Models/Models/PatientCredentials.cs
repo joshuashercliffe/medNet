@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MedNet.Data.Models.Models
 {
@@ -38,8 +36,10 @@ namespace MedNet.Data.Models.Models
         public string Allergies { get; set; }
         public string MedHist { get; set; }
         public string Meds { get; set; }
+
         // Emergency contact info
         public string emerFirstName { get; set; }
+
         public string emerLastName { get; set; }
         public string emerPhone { get; set; }
         public string emerAddress { get; set; }
@@ -48,6 +48,6 @@ namespace MedNet.Data.Models.Models
         public string emerPostal { get; set; }
         public string Relationship { get; set; }
 
-        public string hashedPassword { get; set;}
+        public string hashedPassword { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  *             Milton García Borroto (milton.garcia@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Collections.Generic;
 using PatternRecognition.FingerprintRecognition.Core;
 using PatternRecognition.FingerprintRecognition.FeatureRepresentation;
+using System;
+using System.Collections.Generic;
 
 namespace PatternRecognition.FingerprintRecognition.Matchers
 {
@@ -116,7 +116,7 @@ namespace PatternRecognition.FingerprintRecognition.Matchers
             }
         }
 
-        #endregion
+        #endregion public
 
         #region private
 
@@ -254,6 +254,6 @@ namespace PatternRecognition.FingerprintRecognition.Matchers
 
         private int mtiaCountThr = 2;
 
-        #endregion
+        #endregion private
     }
 }

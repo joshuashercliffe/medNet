@@ -1,16 +1,16 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  *             Milton García Borroto (milton.garcia@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using PatternRecognition.FingerprintRecognition.Core;
 using PatternRecognition.FingerprintRecognition.FeatureRepresentation;
 using PatternRecognition.FingerprintRecognition.Matchers;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 {

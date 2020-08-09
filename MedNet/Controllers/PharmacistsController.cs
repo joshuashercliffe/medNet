@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MedNet.Models;
+﻿using MedNet.Data.Models;
 using MedNet.Data.Models.Models;
-using System;
 using MedNet.Data.Services;
-using MedNet.Data.Models;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using System.Drawing;
+using MedNet.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace MedNet.Controllers
 {
@@ -78,7 +78,6 @@ namespace MedNet.Controllers
                 return View(indexViewModel);
             }
         }
-
 
         public IActionResult SignUp()
         {
@@ -283,7 +282,7 @@ namespace MedNet.Controllers
 
             // Send request to the Client Computer to authenticate with fingerprint
             int numScans = 1;
-            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer 
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer
 
             // Check if fingerprint data is valid
             if (fpList.Count < numScans)
@@ -313,7 +312,7 @@ namespace MedNet.Controllers
                 return View(requestAccessViewModel);
             }
 
-            // Compare the scanned fingerprint with the one saved in the database 
+            // Compare the scanned fingerprint with the one saved in the database
             if (!FingerprintService.compareFP(fpImg, fpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
@@ -373,7 +372,7 @@ namespace MedNet.Controllers
 
             // Send request to the Client Computer to authenticate with fingerprint
             int numScans = 1;
-            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer 
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer
 
             // Check if fingerprint data is valid
             if (fpList.Count < numScans)
@@ -403,7 +402,7 @@ namespace MedNet.Controllers
                 return View(fillPrescriptionViewModel);
             }
 
-            // Compare the scanned fingerprint with the one saved in the database 
+            // Compare the scanned fingerprint with the one saved in the database
             if (!FingerprintService.compareFP(fpImg, fpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
@@ -420,7 +419,7 @@ namespace MedNet.Controllers
                 return View(fillPrescriptionViewModel);
             }
 
-            if(fillPrescriptionViewModel.PrescriptionData.Metadata.RefillRemaining < fillPrescriptionViewModel.QtyFilled)
+            if (fillPrescriptionViewModel.PrescriptionData.Metadata.RefillRemaining < fillPrescriptionViewModel.QtyFilled)
             {
                 ModelState.AddModelError("", "Connot issue more than remaining refills.");
             }
@@ -430,8 +429,8 @@ namespace MedNet.Controllers
             newMetadata.data.LastIssueDate = DateTime.Now;
             newMetadata.data.RefillRemaining = fillPrescriptionViewModel.PrescriptionData.Metadata.RefillRemaining - fillPrescriptionViewModel.QtyFilled;
 
-            _bigChainDbService.SendTransferTransactionToDataBase<PrescriptionMetadata>(fillPrescriptionViewModel.PrescriptionData.assetID, 
-                newMetadata,patientSignPrivateKey,patientSignPublicKey,fillPrescriptionViewModel.PrescriptionData.transID);
+            _bigChainDbService.SendTransferTransactionToDataBase<PrescriptionMetadata>(fillPrescriptionViewModel.PrescriptionData.assetID,
+                newMetadata, patientSignPrivateKey, patientSignPublicKey, fillPrescriptionViewModel.PrescriptionData.transID);
             return RedirectToAction("PatientRecords");
         }
 

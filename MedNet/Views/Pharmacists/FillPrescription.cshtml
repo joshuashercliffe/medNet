@@ -24,7 +24,7 @@
 
 <div class="content">
     <div class="content-header card">
-        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
         <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
@@ -78,7 +78,7 @@
                         <p class="no-bot-margin"><strong>Substitutions Allowed: </strong>@Model.PrescriptionData.assetData.Substitution.ToString()</p>
                     </div>
                 </div>
-                
+
                 @Html.ValidationSummary(true)
                 <form class="form-reg no-bot-margin" asp-action="FillPrescription" method="post">
                     <div class="form-group">
@@ -95,9 +95,7 @@
                     </div>
                     <button type="submit" id="submitButton" class="btn btn-success btn-block">Authorize with Fingerprint</button>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
-

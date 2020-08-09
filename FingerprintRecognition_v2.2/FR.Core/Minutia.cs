@@ -27,7 +27,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         ///     Represents a ridge bifurcation.
         /// </summary>
         Bifurcation,
-    } ;
+    };
 
     /// <summary>
     ///     Represents a minutia.
@@ -197,7 +197,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         ///     True if the <see cref="QueryMtia"/> objects of the specified pairs have equal values and the <see cref="TemplateMtia"/> objects have equal values.
         /// </returns>
         public static bool operator ==(MinutiaPair mp1, MinutiaPair mp2)
-        {            
+        {
             if (!ReferenceEquals(null, mp1))
                 return mp1.Equals(mp2);
             if (ReferenceEquals(null, mp1) && ReferenceEquals(null, mp2))
@@ -223,7 +223,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         }
 
         /// <summary>
-        ///     Determines wheter the specified <see cref="MinutiaPair"/> and the current object have the same minutiae. 
+        ///     Determines wheter the specified <see cref="MinutiaPair"/> and the current object have the same minutiae.
         /// </summary>
         /// <param name="obj">
         ///     The <see cref="MinutiaPair"/> to compare with the current object.
@@ -238,7 +238,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         }
 
         /// <summary>
-        ///     Determines wheter the specified object and the current <see cref="MinutiaPair"/> have the same minutiae. 
+        ///     Determines wheter the specified object and the current <see cref="MinutiaPair"/> have the same minutiae.
         /// </summary>
         /// <param name="obj">
         ///     The object to compare with the current <see cref="MinutiaPair"/>.

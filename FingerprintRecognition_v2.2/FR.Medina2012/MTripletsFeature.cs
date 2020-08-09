@@ -1,14 +1,14 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Collections.Generic;
 using PatternRecognition.FingerprintRecognition.Core;
 using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.Matchers;
+using System;
+using System.Collections.Generic;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
 {
@@ -84,7 +84,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
 
         public List<Minutia> Minutiae { get; private set; }
 
-        #endregion
+        #endregion public
 
         #region private
 
@@ -123,7 +123,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
             }
         }
 
-        #endregion
+        #endregion private
 
         #region Generating hashes
 
@@ -185,7 +185,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
             return hash;
         }
 
-        #endregion
-
+        #endregion Generating hashes
     }
 }

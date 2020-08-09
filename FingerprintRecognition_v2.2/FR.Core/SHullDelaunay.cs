@@ -1,11 +1,11 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System.Collections.Generic;
 using DelaunayTriangulator;
+using System.Collections.Generic;
 
 namespace PatternRecognition.FingerprintRecognition.Core
 {
@@ -16,7 +16,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
             List<Vertex> points = new List<Vertex>();
             foreach (var minutia in minutiae)
                 points.Add(new Vertex(minutia.X, minutia.Y));
-            
+
             List<Triad> triangles = triangulator.Triangulation(points, true);
 
             List<Minutia[]> mTriplets = new List<Minutia[]>(minutiae.Count);

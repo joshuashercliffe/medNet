@@ -111,7 +111,7 @@ const CardWidget = (($) => {
 
       this.collapse()
     }
-    
+
     maximize() {
       this._parent.find(this._settings.maximizeTrigger + ' .' + this._settings.maximizeIcon)
         .addClass(this._settings.minimizeIcon)

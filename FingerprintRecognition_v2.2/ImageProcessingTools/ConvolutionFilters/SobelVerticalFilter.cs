@@ -1,6 +1,6 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
@@ -20,7 +20,7 @@ namespace ImageProcessingTools
         ///</summary>
         public SobelVerticalFilter()
         {
-            pixels = new int[3,3] {
+            pixels = new int[3, 3] {
                                    {1,0,-1},
                                    {2,0,-2},
                                    {1,0,-1}
@@ -42,6 +42,6 @@ namespace ImageProcessingTools
         /// </summary>
         public override int Factor { get { return 1; } }
 
-        #endregion
+        #endregion IConvolutionFilter Members
     }
 }

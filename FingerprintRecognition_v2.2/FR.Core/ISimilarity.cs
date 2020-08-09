@@ -17,7 +17,7 @@ namespace PatternRecognition.Core
     /// <typeparam name="T">
     ///     The type of the objects that can be compared.
     /// </typeparam>
-    public interface ISimilarity <T>
+    public interface ISimilarity<T>
     {
         /// <summary>
         ///     Compute the similarity between two objects.

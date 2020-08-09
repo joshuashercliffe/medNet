@@ -1,14 +1,14 @@
 ﻿/*
  * Created by: Octavio Loyola González (octavioloyola@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
+using ImageProcessingTools;
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using ImageProcessingTools;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 {
@@ -29,7 +29,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
     ///         <list type="number">
     ///             <item>
     ///                Ratha N.K., Chen S.Y. and Jain A.K., "Adaptive flow orientation-based feature extraction in fingerprint images," Pattern Recognition, vol. 28, no. 11, pp. 1657–1672, 1995.
-    ///             </item>             
+    ///             </item>
     ///         </list>
     ///     </para>
     /// </remarks>
@@ -59,7 +59,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                 for (int col = 0; col < orientationImage.Width; col++)
                     if (!orientationImage.IsNullBlock(row, col))
                     {
-
                         int x, y;
                         orientationImage.GetPixelCoordFromBlock(row, col, out x, out y);
 
@@ -81,7 +80,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                                                                    matrix[yi + 1, xi - 1] == 255 ? 0 : 1,
                                                                    matrix[yi + 1, xi] == 255 ? 0 : 1,
                                                                    matrix[yi + 1, xi + 1] == 255 ? 0 : 1,
-
                                                                };
 
                                         int cn = 0;
@@ -93,7 +91,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                                             cn += Math.Abs(values[i] - values[idx + 1]);
                                         }
                                         cn = (int)(cn * 0.5);
-
 
                                         double angleminu;
                                         // end minutiae
@@ -144,7 +141,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                         )
                         )
                         noInTheBorder.Add(minutiaes[i]);
-
             }
 
             MtiaEuclideanDistance miEuclideanDistance = new MtiaEuclideanDistance();
@@ -193,7 +189,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                             if (RemoveSpikeOnMinutiae(matrix, mA, mB))
                                 toErase[i] = true;
                     }
-
                 }
             }
 
@@ -203,7 +198,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                     result.Add(noInTheBorder[i]);
 
             return result;
-
         }
 
         private double GetMinutiaeAngle(ImageMatrix matrix, int x, int y, MinutiaType type)
@@ -367,6 +361,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 
         private Ratha1995SkeImgExtractor skeImgExtractor = new Ratha1995SkeImgExtractor();
 
-        #endregion
+        #endregion private
     }
 }

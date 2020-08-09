@@ -33,10 +33,10 @@ namespace PatternRecognition.FingerprintRecognition.Core
     }
 
     /// <summary>
-    ///     Represents a minutia matching algorithm. 
+    ///     Represents a minutia matching algorithm.
     /// </summary>
     /// <remarks>
-    ///     A minutia matching algorithm compares fingerprints based on minutia features. 
+    ///     A minutia matching algorithm compares fingerprints based on minutia features.
     /// </remarks>
     public interface IMinutiaMatcher : IMatcher
     {
@@ -110,7 +110,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         /// </returns>
         public abstract double Match(FeatureType query, FeatureType template);
 
-        #endregion
+        #endregion IMatcher<FeatureType> Members
 
         #region IMatcher Members
 
@@ -144,9 +144,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             //}
         }
 
-        #endregion
+        #endregion IMatcher Members
     }
-
-
-
 }

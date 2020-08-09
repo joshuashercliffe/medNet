@@ -1,16 +1,16 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+using PatternRecognition.FingerprintRecognition.Core;
 using PatternRecognition.FingerprintRecognition.FeatureDisplay;
 using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.FeatureRepresentation;
-using PatternRecognition.FingerprintRecognition.Core;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace PRFramework.FingerprintRecognition.FeatureDisplay
 {
@@ -18,7 +18,7 @@ namespace PRFramework.FingerprintRecognition.FeatureDisplay
     {
         public override void Show(List<Minutia> features, Graphics g)
         {
-            var mtpFeatureExtractor = new MTripletsExtractor(){NeighborsCount = 2};
+            var mtpFeatureExtractor = new MTripletsExtractor() { NeighborsCount = 2 };
             MtripletsFeature mtriplets = mtpFeatureExtractor.ExtractFeatures(features);
 
             foreach (MTriplet mt in mtriplets.MTriplets)
@@ -38,6 +38,5 @@ namespace PRFramework.FingerprintRecognition.FeatureDisplay
             var mtiaDisplay = new MinutiaeDisplay();
             mtiaDisplay.Show(mtriplets.Minutiae, g);
         }
-
     }
 }

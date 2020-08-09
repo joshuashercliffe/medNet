@@ -1,13 +1,11 @@
 /*
  * Created by: Milton Garcia Borroto (milton.garcia@gmail.com)
  *             Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-
 using System.ComponentModel;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.Core
 {

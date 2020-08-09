@@ -1,13 +1,12 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.Core
 {
@@ -78,6 +77,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                     case PixelFormat.Format1bppIndexed:
                         pixelFormat = PixelFormat.Format24bppRgb;
                         break;
+
                     default:
                         pixelFormat = srcBitmap.PixelFormat;
                         break;

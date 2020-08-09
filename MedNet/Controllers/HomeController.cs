@@ -1,19 +1,13 @@
-﻿using System.Diagnostics;
+﻿using MedNet.Data.Models;
+using MedNet.Data.Services;
+using MedNet.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MedNet.Models;
-using MedNet.Data.Models.Models;
 using System;
-using MedNet.Data.Services;
-using MedNet.Data.Models;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
+using System.Diagnostics;
 using System.Drawing;
-using Org.BouncyCastle.Asn1;
-using System.Text;
-using MongoDB.Driver;
 using System.Net.Sockets;
 
 namespace MedNet.Controllers
@@ -46,9 +40,9 @@ namespace MedNet.Controllers
         public IActionResult TriggerFingerprint()
         {
             // DEBUG:JW
-            // Description: Using for DEBUG. URL: https://lifeblocks.site/home/testfingerprintbutton 
+            // Description: Using for DEBUG. URL: https://lifeblocks.site/home/testfingerprintbutton
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
-            
+
             // Retrieve the Public IP of the Client Computer using the browser
             var ip = HttpContext.Connection.RemoteIpAddress;
             string ipAddress = ip.ToString();

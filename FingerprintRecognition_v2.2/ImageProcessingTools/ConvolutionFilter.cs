@@ -1,6 +1,6 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
@@ -106,9 +106,8 @@ namespace ImageProcessingTools
         /// </summary>
         protected ConvolutionFilter()
         {
-
         }
 
-        #endregion
+        #endregion protected
     }
 }

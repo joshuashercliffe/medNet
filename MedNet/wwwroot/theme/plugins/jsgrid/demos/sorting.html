@@ -23,6 +23,7 @@
     <script src="../src/fields/jsgrid.field.checkbox.js"></script>
 
     <style>
+
         .sort-panel {
             padding: 10px;
             margin: 10px 0;
@@ -35,7 +36,8 @@
 <body>
     <h1>Sorting</h1>
     <div class="sort-panel">
-        <label>Sorting Field:
+        <label>
+            Sorting Field:
             <select id="sortingField">
                 <option>Name</option>
                 <option>Age</option>
@@ -49,8 +51,7 @@
 
     <div id="jsGrid"></div>
 
-    <script>
-        $(function() {
+    <script>$(function() {
 
             $("#jsGrid").jsGrid({
                 height: "70%",
@@ -72,7 +73,6 @@
                 $("#jsGrid").jsGrid("sort", field);
             });
 
-        });
-    </script>
+        });</script>
 </body>
 </html>

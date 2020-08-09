@@ -1,13 +1,13 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  *             Milton García Borroto (milton.garcia@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Collections.Generic;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
 {
@@ -169,7 +169,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
             return maxSimil;
         }
 
-        #endregion
+        #endregion Public
 
         #region private methods
 
@@ -293,7 +293,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
             return new[] { list.Values[0], list.Values[1], list.Values[2] };
         }
 
-        #endregion
+        #endregion private methods
 
         #region private fields
 
@@ -337,6 +337,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureRepresentation
         [NonSerialized]
         private static double dThr = 12;
 
-        #endregion
+        #endregion private fields
     }
 }

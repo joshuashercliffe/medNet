@@ -1,12 +1,12 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Drawing;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 {
@@ -64,7 +64,7 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
         /// <returns>It returns a string formed by the name of the property <see cref="OrientationImageExtractor"/> concatenated with ".ori".</returns>
         public string GetSignature()
         {
-            return string.Format("{0}.ori", OrientationImageExtractor.GetType().Name);   
+            return string.Format("{0}.ori", OrientationImageExtractor.GetType().Name);
         }
 
         /// <summary>
@@ -90,6 +90,6 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 
         private readonly FingerprintImageProvider imageProvider = new FingerprintImageProvider();
 
-        #endregion
+        #endregion private
     }
 }

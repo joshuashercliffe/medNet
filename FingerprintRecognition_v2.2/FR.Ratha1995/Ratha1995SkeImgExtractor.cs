@@ -1,13 +1,13 @@
 ﻿/*
  * Created by: Octavio Loyola González (octavioloyola@gmail.com) and Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
-using System.Drawing;
 using ImageProcessingTools;
 using PatternRecognition.FingerprintRecognition.Core;
+using System;
+using System.Drawing;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 {
@@ -28,7 +28,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
     ///         <list type="number">
     ///             <item>
     ///                Ratha N.K., Chen S.Y. and Jain A.K., "Adaptive flow orientation-based feature extraction in fingerprint images," Pattern Recognition, vol. 28, no. 11, pp. 1657–1672, 1995.
-    ///             </item>             
+    ///             </item>
     ///         </list>
     ///     </para>
     /// </remarks>
@@ -50,7 +50,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
             byte[] img = new byte[skeletonImage.Width * skeletonImage.Height];
             for (int i = 0; i < skeletonImage.Height; i++)
                 for (int j = 0; j < skeletonImage.Width; j++)
-                    img[skeletonImage.Width * i + j] = (byte) skeletonImage[i, j];
+                    img[skeletonImage.Width * i + j] = (byte)skeletonImage[i, j];
 
             return new SkeletonImage(img, skeletonImage.Width, skeletonImage.Height);
         }
@@ -76,10 +76,10 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
             return matrix;
         }
 
-        #endregion
-        
+        #endregion public
+
         #region private
-        
+
         private ImageMatrix GetBinaryImage(ImageMatrix matrix, OrientationImage orientationImage)
         {
             int[] filter = new int[] { 1, 2, 5, 7, 5, 2, 1 };
@@ -101,7 +101,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                             for (int yi = y - maxLength; yi < y + maxLength; yi++)
                             {
                                 int[] projection = GetProjection(orientationImage, row, col, xi, yi, matrix);
-                               
+
                                 int[] smoothed = new int[orientationImage.WindowSize + 1];
                                 const int n = 7;
                                 for (int j = 0; j < projection.Length; j++)
@@ -153,7 +153,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
         {
             double angle = oi.AngleInRadians(row, col);
             double orthogonalAngle = oi.AngleInRadians(row, col) + Math.PI / 2;
-            
+
             int maxLength = oi.WindowSize / 2;
             int[] projection = new int[2 * maxLength + 1];
             int[] outlayerCount = new int[2 * maxLength + 1];
@@ -213,17 +213,17 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                                 for (int yi = y - maxLength; yi < y + maxLength; yi++)
                                     if (xi > 0 && xi < matrix.Width - 1 && yi > 0 && yi < matrix.Height - 1)
                                     {
-                                        int tl = matrix[yi - 1, xi - 1]; 
-                                        int tc = matrix[yi - 1, xi]; 
-                                        int tr = matrix[yi - 1, xi + 1]; 
+                                        int tl = matrix[yi - 1, xi - 1];
+                                        int tc = matrix[yi - 1, xi];
+                                        int tr = matrix[yi - 1, xi + 1];
 
-                                        int le = matrix[yi, xi - 1]; 
-                                        int ce = matrix[yi, xi]; 
-                                        int ri = matrix[yi, xi + 1]; 
+                                        int le = matrix[yi, xi - 1];
+                                        int ce = matrix[yi, xi];
+                                        int ri = matrix[yi, xi + 1];
 
-                                        int bl = matrix[yi + 1, xi - 1]; 
+                                        int bl = matrix[yi + 1, xi - 1];
                                         int bc = matrix[yi + 1, xi];
-                                        int br = matrix[yi + 1, xi + 1]; 
+                                        int br = matrix[yi + 1, xi + 1];
 
                                         if (IsVL(tl, tc, tr, le, ce, ri, bl, bc, br) ||
                                             IsVR(tl, tc, tr, le, ce, ri, bl, bc, br) ||
@@ -277,16 +277,16 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
                                     if (xj > 0 && xj < matrix.Width - 1 && yj > 0 && yj < matrix.Height - 1)
                                     {
                                         int tl = matrix[yj - 1, xj - 1];
-                                        int tc = matrix[yj - 1, xj]; 
-                                        int tr = matrix[yj - 1, xj + 1]; 
+                                        int tc = matrix[yj - 1, xj];
+                                        int tr = matrix[yj - 1, xj + 1];
 
-                                        int le = matrix[yj, xj - 1]; 
-                                        int ce = matrix[yj, xj]; 
-                                        int ri = matrix[yj, xj + 1]; 
+                                        int le = matrix[yj, xj - 1];
+                                        int ce = matrix[yj, xj];
+                                        int ri = matrix[yj, xj + 1];
 
-                                        int bl = matrix[yj + 1, xj - 1]; 
-                                        int bc = matrix[yj + 1, xj]; 
-                                        int br = matrix[yj + 1, xj + 1]; 
+                                        int bl = matrix[yj + 1, xj - 1];
+                                        int bc = matrix[yj + 1, xj];
+                                        int br = matrix[yj + 1, xj + 1];
 
                                         if (CouldBeSpike(tl, tc, tr, le, ce, ri, bl, bc, br))
                                             for (int i = 0; i < sin.Length && !spikeFound; i++)
@@ -347,7 +347,7 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
 
                                         int bl = matrix[yi + 1, xi - 1];
                                         int bc = matrix[yi + 1, xi];
-                                        int br = matrix[yi + 1, xi + 1]; 
+                                        int br = matrix[yi + 1, xi + 1];
 
                                         if (IsCorner(tl, tc, tr, le, ce, ri, bl, bc, br))
                                         {
@@ -836,6 +836,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureExtractors
             return false;
         }
 
-        #endregion
+        #endregion private
     }
 }

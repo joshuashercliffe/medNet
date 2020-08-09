@@ -75,7 +75,6 @@ var RenderAccessList = function () {
 }
 
 $(function () {
-
     //render Access List table
     RenderAccessList();
 
@@ -84,7 +83,6 @@ $(function () {
 
     //grantAccessBtn click event
     $("#grantAccessBtn").click(function (e) {
-
         var dataToPost = {
             UserType: $("#selectUserType").val(),
             UserID: $("#userIDInput").val()
@@ -124,7 +122,6 @@ $(function () {
 
     //revolkeAccessBtn click event
     $("#revokeAccessBtn").click(function (e) {
-
         var dataToPost = {
             UserType: $("#selectUserType").val(),
             UserID: $("#userIDInput").val()

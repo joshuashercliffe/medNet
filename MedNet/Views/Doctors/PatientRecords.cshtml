@@ -18,8 +18,6 @@
         <!-- UPDATE HREF TO RECORDS PAGE -->
         <a href="PatientRecords" class="active">View Records</a>
         <a href="AddNewPatientRecord">Add New Record</a>
-
-
     </div>
     <div class="sidebar-footer">
         <a href="PatientLookUp">Close</a>
@@ -28,7 +26,7 @@
 
 <div class="content">
     <div class="content-header card">
-        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
         <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">
@@ -56,7 +54,6 @@
                                             <h3>
                                                 @doctorNote.assetData.DateOfRecord.ToString("MMMM dd, yyyy")
                                             </h3>
-
                                         </div>
                                         <div class="col-sm-4 right">
                                             <p>Doctor: @doctorNote.assetData.DoctorName</p>
@@ -73,7 +70,6 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin"><strong>Description: </strong>@doctorNote.assetData.Description</p>
@@ -124,7 +120,6 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     @if (prescription.Metadata.LastIssueDate != default)
@@ -209,7 +204,6 @@
                                             </button>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="collapse medical-body" id="@html_id">
                                     <p class="no-bot-margin">
@@ -274,5 +268,3 @@
         }
     </script>
 }
-
-

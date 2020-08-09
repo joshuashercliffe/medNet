@@ -39,7 +39,6 @@ const SiteSearch = (($) => {
    */
 
   class SiteSearch {
-
     constructor(_element, _options) {
       this.element = _element
       this.options = $.extend({}, Default, _options)

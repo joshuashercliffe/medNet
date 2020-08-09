@@ -1,11 +1,11 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System.Drawing;
 using PatternRecognition.FingerprintRecognition.Core;
+using System.Drawing;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureDisplay
 {

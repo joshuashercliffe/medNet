@@ -1,5 +1,4 @@
-(function(jsGrid) {
-
+(function (jsGrid) {
     jsGrid.locales.pl = {
         grid: {
             noDataContent: "Nie znaleziono",
@@ -58,5 +57,4 @@
             }
         }
     };
-
 }(jsGrid, jQuery));

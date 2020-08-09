@@ -1,6 +1,4 @@
-﻿
-using MedNet.Data.Models;
-using MedNet.Data.Models.Models;
+﻿using MedNet.Data.Models.Models;
 
 namespace MedNet.Models
 {
@@ -12,6 +10,6 @@ namespace MedNet.Models
 
         public string PatientKeyword { get; set; }
 
-        public PrescriptionFullData PrescriptionData {get; set;}
+        public PrescriptionFullData PrescriptionData { get; set; }
     }
 }

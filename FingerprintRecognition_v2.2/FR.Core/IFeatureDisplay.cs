@@ -10,7 +10,7 @@ using System.Drawing;
 namespace PatternRecognition.FingerprintRecognition.Core
 {
     /// <summary>
-    ///     Represents a non-generic object that can paint fingerprint features. 
+    ///     Represents a non-generic object that can paint fingerprint features.
     /// </summary>
     public interface IFeatureDisplay
     {
@@ -55,7 +55,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         /// <param name="g">The <see cref="Graphics"/> object used to paint the features.</param>
         public abstract void Show(FeatureType features, Graphics g);
 
-        #endregion
+        #endregion IFeatureDisplay<FeatureType> Members
 
         #region IFeatureDisplay Members
 
@@ -77,6 +77,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             Show((FeatureType)features, g);
         }
 
-        #endregion
+        #endregion IFeatureDisplay Members
     }
 }

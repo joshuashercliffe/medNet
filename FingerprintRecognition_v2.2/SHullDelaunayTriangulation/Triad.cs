@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 
 /*
@@ -21,10 +19,11 @@ using System.Diagnostics;
 
 6. By copying or compliing the code for S-hull you explicitly indemnify the copyright holder against any liability he may incur as a result of you copying the code.
 
-7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.  
-  
+7. If you meet any of the contributors to the code you used from s-hull.org in a pub or a bar, and you think the source code they contributed to is worth it, you can buy them a beer. If your principles run against beer a bacon-double-cheeseburger would do just as nicely or you could email david@s-hull.org and arrange to make a donation of 10 of your local currancy units to support s-hull.org.
+
   contributors: Phil Atkin, Dr Sinclair.
 */
+
 namespace DelaunayTriangulator
 {
     public class Triad
@@ -35,9 +34,9 @@ namespace DelaunayTriangulator
         // Position and radius squared of circumcircle
         public float circumcircleR2, circumcircleX, circumcircleY;
 
-        public Triad(int x, int y, int z) 
+        public Triad(int x, int y, int z)
         {
-            a = x; b = y; c = z; ab = -1; bc = -1; ac = -1; 
+            a = x; b = y; c = z; ab = -1; bc = -1; ac = -1;
             circumcircleR2 = -1; x = 0; y = 0;
         }
 
@@ -97,7 +96,7 @@ namespace DelaunayTriangulator
             double balength = xba * xba + yba * yba;
             double calength = xca * xca + yca * yca;
 
-            // Calculate the denominator of the formulae. 
+            // Calculate the denominator of the formulae.
             double D = xba * yca - yba * xca;
             if (D == 0)
             {

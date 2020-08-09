@@ -4,10 +4,10 @@
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.FeatureDisplay
 {
@@ -52,7 +52,6 @@ namespace PatternRecognition.FingerprintRecognition.FeatureDisplay
             g.DrawLine(pen, lastMtia.X, lastMtia.Y, Convert.ToInt32(lastMtia.X + lineLength * Math.Cos(lastMtia.Angle)), Convert.ToInt32(lastMtia.Y + lineLength * Math.Sin(lastMtia.Angle)));
         }
 
-        #endregion
-
+        #endregion IFeatureDisplay<List<Minutia>> Members
     }
 }

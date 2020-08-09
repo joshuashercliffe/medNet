@@ -1,6 +1,6 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (migue.cu@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (migue.cu@gmail.com)
  */
 
@@ -132,6 +132,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             return bytes;
         }
 
-        #endregion
+        #endregion private
     }
 }

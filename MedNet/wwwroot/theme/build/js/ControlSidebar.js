@@ -179,7 +179,7 @@ const ControlSidebar = (($) => {
           $(Selector.CONTROL_SIDEBAR).css('top', heights.header);
           $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window - (heights.header + heights.footer))
         } else if (positions.bottom <= heights.footer) {
-          if (footerFixed === false) {  
+          if (footerFixed === false) {
             $(Selector.CONTROL_SIDEBAR).css('bottom', heights.footer - positions.bottom);
             $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window - (heights.footer - positions.bottom))
           } else {
@@ -226,20 +226,19 @@ const ControlSidebar = (($) => {
         }
 
         $(Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', sidebarHeight)
-        
+
         if (typeof $.fn.overlayScrollbars !== 'undefined') {
           $(Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).overlayScrollbars({
             className       : this._config.scrollbarTheme,
             sizeAutoCapable : true,
             scrollbars : {
-              autoHide: this._config.scrollbarAutoHide, 
+              autoHide: this._config.scrollbarAutoHide,
               clickScrolling : true
             }
           })
         }
       }
     }
-
 
     // Static
 
@@ -289,4 +288,3 @@ const ControlSidebar = (($) => {
 })(jQuery)
 
 export default ControlSidebar
-  

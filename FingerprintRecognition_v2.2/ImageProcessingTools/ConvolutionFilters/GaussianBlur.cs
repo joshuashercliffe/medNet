@@ -1,7 +1,7 @@
 ﻿/*
  * Created by: Octavio Loyola González (octavioloyola@gmail.com)
- * Created: 
- * Comments by: 
+ * Created:
+ * Comments by:
  */
 
 namespace ImageProcessingTools
@@ -18,6 +18,7 @@ namespace ImageProcessingTools
                                    {0,1,2,1,0}
                                };
         }
+
         /// <summary>
         ///     Gets the value 5 which is the height of the filter.
         /// </summary>

@@ -1,13 +1,13 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 {
@@ -91,6 +91,6 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 
         private readonly FingerprintImageProvider imageProvider = new FingerprintImageProvider();
 
-        #endregion
+        #endregion private
     }
 }

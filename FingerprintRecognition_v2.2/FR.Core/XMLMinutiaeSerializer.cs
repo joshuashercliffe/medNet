@@ -13,7 +13,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
             foreach (var mtia in minutiae)
             {
                 XmlNode nodeMtia = xml.CreateElement("Minutia");
-                
+
                 XmlAttribute attX = xml.CreateAttribute("X");
                 attX.Value = mtia.X.ToString();
                 nodeMtia.Attributes.Append(attX);

@@ -1,13 +1,13 @@
 /*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
 using PatternRecognition.FingerprintRecognition.Core;
 using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.FeatureRepresentation;
+using System;
 
 namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 {
@@ -38,7 +38,7 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
             }
         }
 
-        #endregion
+        #endregion public
 
         /// <summary>
         ///     Extracts <see cref="MtripletsFeature"/> from the specified fingerprint and <see cref="ResourceRepository"/>.
@@ -93,6 +93,5 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
         }
 
         private readonly MTripletsExtractor mTripletsCalculator = new MTripletsExtractor();
-
     }
 }

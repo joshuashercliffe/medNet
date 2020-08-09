@@ -10,7 +10,6 @@
     <a href="PatientLookUp" class="topnav-rbtn">@ViewBag.DoctorName</a>
 }
 
-
 <div class="sidebar">
     <div class="sidebar-body">
         <a href="PatientOverview" class="active">Overview</a>
@@ -25,7 +24,7 @@
 
 <div class="content">
     <div class="content-header card">
-        <h1>@(Model.PatientMetadata.FirstName+" "+Model.PatientMetadata.LastName)</h1>
+        <h1>@(Model.PatientMetadata.FirstName + " " + Model.PatientMetadata.LastName)</h1>
         <p class="no-bot-margin"><strong>PHN: </strong>@Model.PatientAsset.ID</p>
     </div>
     <div class="content-body">

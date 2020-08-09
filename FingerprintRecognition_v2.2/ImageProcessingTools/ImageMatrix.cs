@@ -1,10 +1,9 @@
 ﻿/*
  * Created by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
- * Created: 
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -145,12 +144,12 @@ namespace ImageProcessingTools
             return bmp;
         }
 
-        #endregion
+        #endregion public
 
         #region private
 
         private int[,] pixels;
 
-        #endregion
+        #endregion private
     }
 }

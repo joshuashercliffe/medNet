@@ -27,8 +27,7 @@ browser, but needs to redraw with canvas text when exporting as an image.
 
 */
 
-(function($) {
-
+(function ($) {
 	var options = {
 		canvas: true
 	};
@@ -40,7 +39,6 @@ browser, but needs to redraw with canvas text when exporting as an image.
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 	function init(plot, classes) {
-
 		var Canvas = classes.Canvas;
 
 		// We only want to replace the functions once; the second time around
@@ -49,14 +47,13 @@ browser, but needs to redraw with canvas text when exporting as an image.
 
 		if (render == null) {
 			getTextInfo = Canvas.prototype.getTextInfo,
-			addText = Canvas.prototype.addText,
-			render = Canvas.prototype.render;
+				addText = Canvas.prototype.addText,
+				render = Canvas.prototype.render;
 		}
 
 		// Finishes rendering the canvas, including overlaid text
 
-		Canvas.prototype.render = function() {
-
+		Canvas.prototype.render = function () {
 			if (!plot.getOptions().canvas) {
 				return render.call(this);
 			}
@@ -78,7 +75,6 @@ browser, but needs to redraw with canvas text when exporting as an image.
 								updateStyles = true;
 							for (var key in styleCache) {
 								if (hasOwnProperty.call(styleCache, key)) {
-
 									var info = styleCache[key],
 										positions = info.positions,
 										lines = info.lines;
@@ -144,8 +140,7 @@ browser, but needs to redraw with canvas text when exporting as an image.
 		//     y: Y coordinate at which to draw the text.
 		// }
 
-		Canvas.prototype.getTextInfo = function(layer, text, font, angle, width) {
-
+		Canvas.prototype.getTextInfo = function (layer, text, font, angle, width) {
 			if (!plot.getOptions().canvas) {
 				return getTextInfo.call(this, layer, text, font, angle, width);
 			}
@@ -181,14 +176,12 @@ browser, but needs to redraw with canvas text when exporting as an image.
 			info = styleCache[text];
 
 			if (info == null) {
-
 				var context = this.context;
 
 				// If the font was provided as CSS, create a div with those
 				// classes and examine it to generate a canvas font spec.
 
 				if (typeof font !== "object") {
-
 					var element = $("<div>&nbsp;</div>")
 						.css("position", "absolute")
 						.addClass(typeof font === "string" ? font : null)
@@ -241,7 +234,6 @@ browser, but needs to redraw with canvas text when exporting as an image.
 				var lines = (text + "").replace(/<br ?\/?>|\r\n|\r/g, "\n").split("\n");
 
 				for (var i = 0; i < lines.length; ++i) {
-
 					var lineText = lines[i],
 						measured = context.measureText(lineText);
 
@@ -263,8 +255,7 @@ browser, but needs to redraw with canvas text when exporting as an image.
 
 		// Adds a text string to the canvas text overlay.
 
-		Canvas.prototype.addText = function(layer, x, y, text, font, angle, width, halign, valign) {
-
+		Canvas.prototype.addText = function (layer, x, y, text, font, angle, width, halign, valign) {
 			if (!plot.getOptions().canvas) {
 				return addText.call(this, layer, x, y, text, font, angle, width, halign, valign);
 			}
@@ -341,5 +332,4 @@ browser, but needs to redraw with canvas text when exporting as an image.
 		name: "canvas",
 		version: "1.0"
 	});
-
 })(jQuery);

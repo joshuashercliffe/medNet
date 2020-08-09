@@ -14,16 +14,19 @@ namespace MedNet.Data.Services
         public const string currentPPHN = "currentPatientPHN";
         public const string currentUserName = "currentUserName";
         public const string currentUserID = "currentUserID";
+
         public static readonly string[] nodes = { "anode.lifeblocks.site", "bnode.lifeblocks.site",
                 "cnode.lifeblocks.site", "dnode.lifeblocks.site", "enode.lifeblocks.site"};
-        public static readonly string[] relationships = { "","Parent", "Partner", "Relative", "Friend", "Other"};
+
+        public static readonly string[] relationships = { "", "Parent", "Partner", "Relative", "Friend", "Other" };
         public static readonly string[] provincesShort = { "", "AB", "BC", "MB", "NB", "NL", "NT", "NS", "NU", "ON", "PE", "QC", "SK", "YT" };
     }
 
-    public  class JaroWinkler
+    public class JaroWinkler
     {
         // code from: https://dotnetfiddle.net/ueCRwp
         private const double DEFAULT_THRESHOLD = 0.7;
+
         private const int THREE = 3;
         private const double JW_COEF = 0.1;
 

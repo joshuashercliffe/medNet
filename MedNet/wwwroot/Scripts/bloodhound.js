@@ -4,7 +4,6 @@
  * Copyright 2013-2020 Twitter, Inc. and other contributors; Licensed MIT
  */
 
-
 (function(root, factory) {
     if (typeof define === "function" && define.amd) {
         define([ "jquery" ], function(a0) {

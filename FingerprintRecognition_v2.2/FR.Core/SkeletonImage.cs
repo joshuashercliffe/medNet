@@ -1,8 +1,8 @@
 ﻿/*
- * Created by: Andrés Eduardo Gutiérrez Rodríguez (andres@bioplantas.cu), 
+ * Created by: Andrés Eduardo Gutiérrez Rodríguez (andres@bioplantas.cu),
  *             Milton García Borroto (milton.garcia@gmail.com) and
- *             Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)             
- * Created: 
+ *             Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
+ * Created:
  * Comments by: Miguel Angel Medina Pérez (miguel.medina.perez@gmail.com)
  */
 
@@ -154,7 +154,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
         /// </summary>
         public int Height { get; private set; }
 
-        #endregion
+        #endregion public
 
         #region private
 
@@ -248,6 +248,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             return pixels;
         }
 
-        #endregion
+        #endregion private
     }
 }

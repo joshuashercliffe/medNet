@@ -28,7 +28,6 @@ const Dropdown = (($) => {
   const Default = {
   }
 
-
   /**
    * Class Definition
    * ====================================================
@@ -52,7 +51,6 @@ const Dropdown = (($) => {
       this._element.parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
         $('.dropdown-submenu .show').removeClass("show").hide();
       });
-
     }
 
     // Static

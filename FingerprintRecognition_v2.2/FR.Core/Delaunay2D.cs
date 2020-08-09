@@ -62,7 +62,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
             return edges.ToArray();
         }
 
-        #endregion
+        #endregion Triangulate
 
         #region Private types
 
@@ -107,7 +107,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                     destination.C = this.C;
                 }
 
-                #endregion
+                #endregion ToIntegerTriangle
             }
 
             private struct EdgeEntry
@@ -124,7 +124,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 internal int entryIndex;
             }
 
-            #endregion
+            #endregion Structures
 
             #region Points fields
 
@@ -133,7 +133,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
             private PointF[] points;
             private int[] pointsIndices;
 
-            #endregion
+            #endregion Points fields
 
             #region Triangles Fields
 
@@ -148,7 +148,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
 
             private int firstFreeTriangle;
 
-            #endregion
+            #endregion Triangles Fields
 
             #region Edges Fields
 
@@ -158,7 +158,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
             private int edgesGeneration;
             private int edgesCount;
 
-            #endregion
+            #endregion Edges Fields
 
             #region Initialize
 
@@ -256,7 +256,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 return true;
             }
 
-            #endregion
+            #endregion Initialize
 
             #region Process
 
@@ -370,7 +370,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 }
             }
 
-            #endregion
+            #endregion Process
 
             #region CopyTo, AddTo, ToArray
 
@@ -388,7 +388,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 return result;
             }
 
-            #endregion
+            #endregion CopyTo, AddTo, ToArray
 
             #region Edges table
 
@@ -470,7 +470,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 ++this.edgesCount;
             }
 
-            #endregion
+            #endregion Edges table
 
             #region Triangles lists
 
@@ -586,7 +586,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                     this.firstNonCompletedTriangle = triangle.nextNonCompleted;
             }
 
-            #endregion
+            #endregion Triangles lists
 
             #region Static functions
 
@@ -629,7 +629,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
 
                 // Sort indices by Y (firstly), X (secondly) and insertion order (thirdly)
 
-                Array.Sort(result, delegate(int a, int b)
+                Array.Sort(result, delegate (int a, int b)
                 {
                     PointF va = points[a];
                     PointF vb = points[b];
@@ -654,10 +654,10 @@ namespace PatternRecognition.FingerprintRecognition.Core
                 return result;
             }
 
-            #endregion
+            #endregion Static functions
         }
 
-        #endregion
+        #endregion Private types
     }
 
     internal static class SPMath
@@ -665,10 +665,10 @@ namespace PatternRecognition.FingerprintRecognition.Core
         #region Prime numbers
 
         internal static readonly int[] primes = {
-            3, 7, 11, 17, 23, 29, 37, 47, 59, 71, 89, 107, 131, 163, 197, 239, 293, 353, 431, 521, 631, 761, 919, 
-            1103, 1327, 1597, 1931, 2333, 2801, 3371, 4049, 4861, 5839, 7013, 8419, 10103, 12143, 14591, 
+            3, 7, 11, 17, 23, 29, 37, 47, 59, 71, 89, 107, 131, 163, 197, 239, 293, 353, 431, 521, 631, 761, 919,
+            1103, 1327, 1597, 1931, 2333, 2801, 3371, 4049, 4861, 5839, 7013, 8419, 10103, 12143, 14591,
             17519, 21023, 25229, 30293, 36353, 43627, 52361, 62851, 75431, 90523, 108631, 130363, 156437,
-            187751, 225307, 270371, 324449, 389357, 467237, 560689, 672827, 807403, 968897, 1162687, 1395263, 
+            187751, 225307, 270371, 324449, 389357, 467237, 560689, 672827, 807403, 968897, 1162687, 1395263,
             1674319, 2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369};
 
         internal static int GetPrime(int min)
@@ -683,7 +683,7 @@ namespace PatternRecognition.FingerprintRecognition.Core
                     return prime;
             }
 
-            //outside of our predefined table. 
+            //outside of our predefined table.
             //compute the hard way.
             for (int i = (min | 1); i < Int32.MaxValue; i += 2)
             {
@@ -704,6 +704,6 @@ namespace PatternRecognition.FingerprintRecognition.Core
             return min;
         }
 
-        #endregion
+        #endregion Prime numbers
     }
 }

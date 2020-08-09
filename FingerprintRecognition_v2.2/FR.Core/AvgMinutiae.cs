@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.Core
 {
@@ -22,11 +21,11 @@ namespace PatternRecognition.FingerprintRecognition.Core
 
             int n = mtiaCollection.Count;
             return new Minutia()
-                       {
-                           Angle = Angle.ComputeAngle(sumAngleX / n, sumAngleY / n),
-                           X = Convert.ToInt16(Math.Round(sumX / n)),
-                           Y = Convert.ToInt16(Math.Round(sumY / n))
-                       };
+            {
+                Angle = Angle.ComputeAngle(sumAngleX / n, sumAngleY / n),
+                X = Convert.ToInt16(Math.Round(sumX / n)),
+                Y = Convert.ToInt16(Math.Round(sumY / n))
+            };
         }
 
         public static MinutiaPair Compute(List<MinutiaPair> pairs)

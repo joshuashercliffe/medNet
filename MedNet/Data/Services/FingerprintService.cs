@@ -1,12 +1,10 @@
-﻿using Org.BouncyCastle.Asn1.Esf;
-using PatternRecognition.FingerprintRecognition.FeatureExtractors;
+﻿using PatternRecognition.FingerprintRecognition.FeatureExtractors;
 using PatternRecognition.FingerprintRecognition.Matchers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 
@@ -16,7 +14,7 @@ namespace MedNet.Data.Services
     {
         // Description: This class performs the available functions: authenticateFP and compareFP
 
-        // Class variables 
+        // Class variables
         private static Int32 PORT = 15326; // Actual port
 
         private static string START = "MEDNETFP:START"; // Special MedNetFP Key
@@ -45,17 +43,20 @@ namespace MedNet.Data.Services
             tcpDisconnect(tcpClient);
             return fpList;
         }
+
         public static Image byteToImg(byte[] fpData)
         {
             MemoryStream ms = new MemoryStream(fpData);
             Image img = Image.FromStream(ms);
             return img;
         }
+
         public static byte[] imgToByte(Image img)
         {
             ImageConverter conv = new ImageConverter();
             return (byte[])conv.ConvertTo(img, typeof(byte[]));
         }
+
         public static void saveFP(List<Image> fpList)
         {
             // Description: saves the fingerprints as images
@@ -68,6 +69,7 @@ namespace MedNet.Data.Services
             }
             return;
         }
+
         public static bool compareFP(Image inFp, List<Image> dbFp)
         {
             // Description: compares the scanned fingerprint to all of the ones in the database
@@ -84,21 +86,21 @@ namespace MedNet.Data.Services
             // Build matcher
             M3gl matcher = new M3gl();
 
-            // Compare scanned image to all the ones in the database 
+            // Compare scanned image to all the ones in the database
             int numFp = dbFp.Count;
-            for(int i = 0; i < numFp; i++)
+            for (int i = 0; i < numFp; i++)
             {
                 // Convert dbFp to Bitmap image object
                 // DEBUG: save to file
                 //int j = i + 1;
                 //dbFp[i].Save("dbFP" + j.ToString() + ".bmp");
 
-                // Extract features of dbBmp 
+                // Extract features of dbBmp
                 var dbFeat = featExtract.ExtractFeatures(new Bitmap(dbFp[i]));
 
-                // Run similarity check 
+                // Run similarity check
                 var match = matcher.Match(inFeat, dbFeat);
-                if(match >= matchTol)
+                if (match >= matchTol)
                 {
                     // Fingerprints have above 0.5 similarity
                     isMatch = true;
@@ -109,12 +111,13 @@ namespace MedNet.Data.Services
 
             return isMatch;
         }
+
         private static bool tcpConnect(string ipAddr, bool debug, out TcpClient client)
         {
             ///Description: Create and validate connection to TCP client and stream
             // initialize variables
             bool result = false;
-            client = new TcpClient();             
+            client = new TcpClient();
             if (debug) { ipAddr = "localhost"; }
             byte[] rxData = new byte[0];
             try
@@ -136,10 +139,10 @@ namespace MedNet.Data.Services
                     int numBytesRd = stream.Read(rdBuf);
                     byte[] bytesRd = new byte[numBytesRd];
                     Array.Copy(rdBuf, bytesRd, numBytesRd);
-                    if(numBytesRd > 0) 
-                    { 
+                    if (numBytesRd > 0)
+                    {
                         rxData = rxData.Concat(bytesRd).ToArray();
-                        if(Encoding.ASCII.GetString(rxData) == VALID)
+                        if (Encoding.ASCII.GetString(rxData) == VALID)
                         {
                             result = true;
                         }
@@ -159,6 +162,7 @@ namespace MedNet.Data.Services
 
             return result;
         }
+
         private static List<Image> scanMultiFP(string ipAddr, int numScans, TcpClient client, bool debug)
         {
             ///Description: Scan fingerprints
@@ -182,7 +186,7 @@ namespace MedNet.Data.Services
                 // Wait for valid response
                 byte[] rdBuf = new byte[client.ReceiveBufferSize];
 
-                if(stream.CanRead)
+                if (stream.CanRead)
                 {
                     do
                     {
@@ -192,7 +196,7 @@ namespace MedNet.Data.Services
                             byte[] bytesRd = new byte[numBytesRd];
                             Array.Copy(rdBuf, bytesRd, numBytesRd);
                             string test = Encoding.ASCII.GetString(bytesRd);
-                            if(Encoding.ASCII.GetString(bytesRd).Contains(STOP))
+                            if (Encoding.ASCII.GetString(bytesRd).Contains(STOP))
                             {
                                 int newLen = numBytesRd - STOP.Length;
                                 bytesRd = new byte[newLen];
@@ -201,9 +205,8 @@ namespace MedNet.Data.Services
                             }
                             rxData = rxData.Concat(bytesRd).ToArray();
                             totalBytesRd += numBytesRd;
-                            
                         }
-                    } while (readMore); 
+                    } while (readMore);
                 }
             }
             catch (ArgumentException e) { Console.WriteLine("ArgumentNullException: {0}", e); }
@@ -231,6 +234,7 @@ namespace MedNet.Data.Services
 
             return fpList;
         }
+
         private static void tcpDisconnect(TcpClient client)
         {
             ///Description: Close the TCP connection to the Client Computer

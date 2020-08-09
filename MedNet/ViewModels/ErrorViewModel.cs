@@ -1,5 +1,3 @@
-using System;
-
 namespace MedNet.Models
 {
     public class ErrorViewModel

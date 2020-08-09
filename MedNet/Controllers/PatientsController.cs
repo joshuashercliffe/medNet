@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MedNet.Models;
+﻿using MedNet.Data.Models;
 using MedNet.Data.Models.Models;
-using System;
 using MedNet.Data.Services;
-using MedNet.Data.Models;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication;
+using MedNet.Models;
 using MedNet.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MedNet.Controllers
 {
@@ -20,6 +20,7 @@ namespace MedNet.Controllers
         private readonly ILogger<PatientsController> _logger;
         private BigChainDbService _bigChainDbService;
         private Random _random;
+
         public IActionResult Index()
         {
             return View();
@@ -37,6 +38,7 @@ namespace MedNet.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Login(PatientLoginViewModel indexViewModel)
         {
@@ -44,7 +46,7 @@ namespace MedNet.Controllers
             if (!ModelState.IsValid)
                 return View(indexViewModel);
             string signPrivateKey = null, agreePrivateKey = null;
-            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID( indexViewModel.PatientPHN);
+            Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(indexViewModel.PatientPHN);
             if (userAsset == null)
             {
                 ModelState.AddModelError("", "We could not find a matching user");
@@ -102,6 +104,7 @@ namespace MedNet.Controllers
                 return View(patientOverviewViewModel);
             }
         }
+
         public IActionResult EditProfile()
         {
             ViewBag.UserName = HttpContext.Session.GetString(Globals.currentUserName);
@@ -120,16 +123,16 @@ namespace MedNet.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditProfile(PatientCredMetadata patientCredMetadata) 
+        public IActionResult EditProfile(PatientCredMetadata patientCredMetadata)
         {
-            
             Assets<PatientCredAssetData> userAsset = _bigChainDbService.GetPatientAssetFromID(HttpContext.Session.GetString(Globals.currentUserID));
             var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
             var patientSignPrivateKey = HttpContext.Session.GetString(Globals.currentPSPriK);
             var transaction = _bigChainDbService.GetMetadataIDFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
             var transID = transaction.Id ?? userAsset.id;
             patientCredMetadata.hashedPassword = transaction.Metadata.data.hashedPassword;
-            var newMetadata = new MetaDataSaved<PatientCredMetadata> { 
+            var newMetadata = new MetaDataSaved<PatientCredMetadata>
+            {
                 data = patientCredMetadata
             };
             _bigChainDbService.SendTransferTransactionToDataBase(userAsset.id, newMetadata,
@@ -158,9 +161,9 @@ namespace MedNet.Controllers
 
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
 
-                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,double>
+                var doctorNotesList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string, double>
                     (AssetType.DoctorNote, patientSignPublicKey);
-                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string,PrescriptionMetadata>
+                var prescriptionsList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string, PrescriptionMetadata>
                     (AssetType.Prescription, patientSignPublicKey);
                 var testRequisitionList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string, double>
                     (AssetType.TestRequisition, patientSignPublicKey);
@@ -317,7 +320,7 @@ namespace MedNet.Controllers
         public JsonResult GrantAccessToUser(EditAccessViewModel editAccessViewModel)
         {
             if (editAccessViewModel.UserType == null || editAccessViewModel.UserType == "")
-                return Json(new { message = "Please select a user type."});
+                return Json(new { message = "Please select a user type." });
             // Searches for a patient with the specified PHN
             AssetType type = editAccessViewModel.UserType == "Doctor" ? AssetType.Doctor :
                 editAccessViewModel.UserType == "Pharmacist" ? AssetType.Pharmacist : AssetType.MLT;
@@ -334,9 +337,9 @@ namespace MedNet.Controllers
             string doctorAgreePublicKey = userAsset.data.Data.AgreePublicKey;
             string userName = userAsset.data.Data.FirstName + " " + userAsset.data.Data.LastName;
 
-            if(editAccessViewModel.TransID != null && editAccessViewModel.TransID != "")
+            if (editAccessViewModel.TransID != null && editAccessViewModel.TransID != "")
             {
-                var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string,object>(editAccessViewModel.TransID);
+                var result = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, object>(editAccessViewModel.TransID);
                 MetaDataSaved<object> metadata = result.metadata;
                 if (!metadata.AccessList.Keys.Contains(doctorSignPublicKey))
                 {
@@ -348,7 +351,7 @@ namespace MedNet.Controllers
                         patientSignPrivateKey, patientSignPublicKey, result.transID);
                     return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was added to the record."), newtransid = newTransID });
                 }
-                else 
+                else
                 {
                     return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") is already added to the record.") });
                 }
@@ -356,12 +359,12 @@ namespace MedNet.Controllers
 
             // Choose the types of records we want to get
             List<AssetType> typeList = new List<AssetType>();
-            if(type == AssetType.Doctor)
-                typeList.AddRange( new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription, AssetType.TestRequisition});
-            else if(type == AssetType.Pharmacist)
+            if (type == AssetType.Doctor)
+                typeList.AddRange(new List<AssetType> { AssetType.DoctorNote, AssetType.Prescription, AssetType.TestRequisition });
+            else if (type == AssetType.Pharmacist)
                 typeList.AddRange(new List<AssetType> { AssetType.Prescription });
             else
-                typeList.AddRange(new List<AssetType> { AssetType.TestRequisition});
+                typeList.AddRange(new List<AssetType> { AssetType.TestRequisition });
 
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList.ToArray(), patientSignPublicKey);
@@ -381,7 +384,7 @@ namespace MedNet.Controllers
                 }
             }
 
-            return Json(new { message = (userName + " ("+ editAccessViewModel.UserID +") was added to " +counter.ToString()+ " records.")});
+            return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was added to " + counter.ToString() + " records.") });
         }
 
         [HttpPost]
@@ -416,7 +419,7 @@ namespace MedNet.Controllers
                 }
                 else
                 {
-                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was already removed from the record.")});
+                    return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was already removed from the record.") });
                 }
             }
 
@@ -447,7 +450,7 @@ namespace MedNet.Controllers
             return Json(new { message = (userName + " (" + editAccessViewModel.UserID + ") was removed from " + counter.ToString() + " records.") });
         }
 
-        public JsonResult GetAllTypeIDs(string type) 
+        public JsonResult GetAllTypeIDs(string type)
         {
             if (HttpContext.Session.GetString(Globals.currentPSPubK) == null || HttpContext.Session.GetString(Globals.currentPAPubK) == null)
                 return Json("{}");

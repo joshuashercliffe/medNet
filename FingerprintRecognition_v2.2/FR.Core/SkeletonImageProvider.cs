@@ -4,9 +4,9 @@
  * Comments by: Miguel Angel Medina Pérez (migue.cu@gmail.com)
  */
 
+using PatternRecognition.FingerprintRecognition.Core;
 using System;
 using System.Drawing;
-using PatternRecognition.FingerprintRecognition.Core;
 
 namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 {
@@ -90,6 +90,6 @@ namespace PatternRecognition.FingerprintRecognition.ResourceProviders
 
         private readonly FingerprintImageProvider imageProvider = new FingerprintImageProvider();
 
-        #endregion
+        #endregion private
     }
 }
