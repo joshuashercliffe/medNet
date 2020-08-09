@@ -15,13 +15,14 @@ using NSec.Cryptography;
 using MedNet.Data.Models;
 using MedNet.Data.Models.Models;
 using Newtonsoft.Json;
-using BigchainDB.Objects;
+using Ipfs.Http;
 
 namespace MedNet.Data.Services
 {
     public class BigChainDbService
     {
         private static IMongoDatabase bigchainDatabase;
+        private IpfsClient ipfs;
 
         public BigChainDbService(string url)
         {
@@ -73,7 +74,23 @@ namespace MedNet.Data.Services
             Console.WriteLine("Finished connecting to multiple nodes");
             var client = new MongoClient($"mongodb://dbreader:dbreaderpassword@{baseURL}:27017/?authSource=bigchain");
             bigchainDatabase = client.GetDatabase("bigchain");
+            ipfs = new IpfsClient("http://"+baseURL+":5001");
             return;
+        }
+
+        public string UploadTextToIPFS(string fileText)
+        {
+            var fsn = ipfs.FileSystem.AddTextAsync(fileText).GetAwaiter().GetResult();
+            return fsn.Id;
+        }
+
+        public string GetTextFromIPFS(string cid)
+        {
+            using (var data = ipfs.PostDownloadAsync("cat", default, cid).GetAwaiter().GetResult())
+            using (var text = new StreamReader(data))
+            {
+                return text.ReadToEndAsync().GetAwaiter().GetResult();
+            }
         }
 
         public AssetsMetadatas<A,M> GetMetaDataAndAssetFromTransactionId<A,M>(string transactionId)

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ipfs.Engine;
 
 namespace MedNet
 {
@@ -20,9 +19,6 @@ namespace MedNet
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            const string passphrase = "this is not a secure pass phrase";
-            Globals.ipfs = new IpfsEngine(passphrase.ToCharArray());
-            Globals.ipfs.Start();
         }
 
         public IConfiguration Configuration { get; }

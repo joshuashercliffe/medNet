@@ -395,10 +395,10 @@ namespace MedNet.Controllers
                     }
                     //encrypt file data and save to ipfs
                     var encryptFileData = EncryptionService.getEncryptedAssetDataKey(base64FileString, dataDecryptionKey);
-                    var fsn = Globals.ipfs.FileSystem.AddTextAsync(encryptFileData).GetAwaiter().GetResult();
+                    var cid = _bigChainDbService.UploadTextToIPFS(encryptFileData);
                     var resultFile = new FileData()
                     {
-                        Data = fsn.Id,
+                        Data = cid,
                         Type = file.ContentType,
                         Extension = file.ContentType.Split('/').Last(),
                         Name = file.FileName
@@ -495,7 +495,7 @@ namespace MedNet.Controllers
                 var data = EncryptionService.getDecryptedAssetData(result.data.Data, dataDecryptionKey);
                 var asset = JsonConvert.DeserializeObject<TestRequisitionAsset>(data);
                 //get encrypted file from ipfs
-                string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.AttachedFile.Data).GetAwaiter().GetResult();
+                string encryptedFileData = _bigChainDbService.GetTextFromIPFS(asset.AttachedFile.Data);
                 string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData,dataDecryptionKey);
 
                 byte[] fileBytes = Convert.FromBase64String(fileData);
@@ -520,7 +520,7 @@ namespace MedNet.Controllers
                     var data = EncryptionService.getDecryptedAssetData(encryptedFile, dataDecryptionKey);
                     var asset = JsonConvert.DeserializeObject<FileData>(data);
                     //get encrypted file from ipfs
-                    string encryptedFileData = Globals.ipfs.FileSystem.ReadAllTextAsync(asset.Data).GetAwaiter().GetResult();
+                    string encryptedFileData = _bigChainDbService.GetTextFromIPFS(asset.Data);
                     string fileData = EncryptionService.getDecryptedAssetData(encryptedFileData, dataDecryptionKey);
 
                     byte[] fileBytes = Convert.FromBase64String(fileData);
