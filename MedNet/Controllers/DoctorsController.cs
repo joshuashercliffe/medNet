@@ -639,7 +639,7 @@ namespace MedNet.Controllers
                 return View(patientSignUpViewModel);
             }
 
-/*            // Register fingerprint information 
+            // Register fingerprint information 
             int numScans = 5;
             List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans);
             List<byte[]> fpdb = new List<byte[]>();
@@ -648,19 +648,19 @@ namespace MedNet.Controllers
             {
                 ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
                 return View(patientSignUpViewModel);
-            }*/
+            }
 
             // Parse the input data for user registration 
             var passphrase = patientSignUpViewModel.KeyWord;
             var password = patientSignUpViewModel.Password;
 
-/*            // Encrypt fingerprint data
+            // Encrypt fingerprint data
             List<string> encrList = new List<string>();
             foreach (byte[] fp in fpdb)
             {
                 string encrStr = EncryptionService.encryptFingerprintData(patientSignUpViewModel.PHN, passphrase, fp);
                 encrList.Add(encrStr);
-            }*/
+            }
 
             // Create a user for the Blockchain 
             EncryptionService.getNewBlockchainUser(out signPrivateKey, out signPublicKey, out agreePrivateKey, out agreePublicKey);
@@ -673,8 +673,8 @@ namespace MedNet.Controllers
                 PrivateKeys = EncryptionService.encryptPrivateKeys(patientSignUpViewModel.PHN, passphrase, signPrivateKey, agreePrivateKey),
                 DateOfRecord = DateTime.Now,
                 SignPublicKey = signPublicKey,
-                AgreePublicKey = agreePublicKey/*,
-                FingerprintData = encrList,*/
+                AgreePublicKey = agreePublicKey,
+                FingerprintData = encrList,
             };
 
             // Encrypt the user's password in the metadata
