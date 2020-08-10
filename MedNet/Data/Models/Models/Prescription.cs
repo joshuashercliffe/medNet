@@ -12,8 +12,6 @@ namespace MedNet.Data.Models.Models
 
         public double Concentration { get; set; }
 
-        //public DateTime StartDate { get; set; }
-
         public DateTime EndDate { get; set; }
 
         public double Refill { get; set; }
