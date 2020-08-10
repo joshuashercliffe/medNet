@@ -70,7 +70,6 @@
                         <h2>Allergies</h2>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list of patient's allergies-->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Allergies != null)
                             {
                                 string[] allergyArray = Model.PatientMetadata.Allergies.Split(',');
@@ -89,7 +88,6 @@
                         <h2>Daily Medications</h2>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in patient's daily medications-->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Meds != null)
                             {
                                 string[] medArray = Model.PatientMetadata.Meds.Split(',');
@@ -111,7 +109,6 @@
                         <h2>Medical History</h2>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in patient's medical history-->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.MedHist != null)
                             {
                                 string[] medHistArray = Model.PatientMetadata.MedHist.Split(',');
