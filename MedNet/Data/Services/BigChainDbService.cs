@@ -119,7 +119,6 @@ namespace MedNet.Data.Services
             return result;
         }
 
-        // This function is similar to
 
         public string SendCreateTransactionToDataBase<A, M>(AssetSaved<A> asset, MetaDataSaved<M> metaData, string privateSignKey)
         {

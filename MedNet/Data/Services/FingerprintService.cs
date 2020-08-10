@@ -13,8 +13,6 @@ namespace MedNet.Data.Services
     public static class FingerprintService
     {
         // Description: This class performs the available functions: authenticateFP and compareFP
-
-        // Class variables
         private static Int32 PORT = 15326; // Actual port
 
         private static string START = "MEDNETFP:START"; // Special MedNetFP Key
@@ -26,7 +24,7 @@ namespace MedNet.Data.Services
         public static List<Image> authenticateFP(string ipAddr, int numScans)
         {
             // Description: Carries out fingerprint authentication
-            bool debug = false; // JW: DEBUGFP
+            bool debug = false; 
             bool isConnected = tcpConnect(ipAddr, debug, out TcpClient tcpClient);
             int numScansLeft = numScans;
             List<Image> fpList = new List<Image>();
@@ -37,8 +35,7 @@ namespace MedNet.Data.Services
                 {
                     fpList.Add(img);
                 }
-                //numScansLeft -= fpList.Count;
-                numScansLeft = 0; // Can make this more robust
+                numScansLeft = 0; 
             }
             tcpDisconnect(tcpClient);
             return fpList;
@@ -76,9 +73,6 @@ namespace MedNet.Data.Services
             bool isMatch = false;
             double matchTol = 0.5;
 
-            // DEBUG: save to file
-            //inFp.Save("inFP.jpeg");
-
             // Build feature extractor, and extract features of each fingerprint image
             MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
             var inFeat = featExtract.ExtractFeatures(new Bitmap(inFp));
@@ -92,8 +86,6 @@ namespace MedNet.Data.Services
             {
                 // Convert dbFp to Bitmap image object
                 // DEBUG: save to file
-                //int j = i + 1;
-                //dbFp[i].Save("dbFP" + j.ToString() + ".bmp");
 
                 // Extract features of dbBmp
                 var dbFeat = featExtract.ExtractFeatures(new Bitmap(dbFp[i]));
