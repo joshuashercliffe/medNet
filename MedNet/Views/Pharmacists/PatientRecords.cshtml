@@ -14,7 +14,6 @@
     <div class="sidebar-body">
         <a href="PatientOverview">Overview</a>
         <a href="RequestAccess">Request Full Access</a>
-        <!-- UPDATE HREF TO RECORDS PAGE -->
         <a href="PatientRecords" class="active">View Prescriptions</a>
     </div>
     <div class="sidebar-footer">
@@ -115,7 +114,6 @@
                     }
                 </div>
 
-                <!-- TO DO: Fill in for TEST RESULTS, display file as a viewable/downloadable link-->
                 <div id="previous" class="tabcontent">
                     @if (Model != null && Model.Prescriptions != null && Model.Prescriptions.Any())
                     {
