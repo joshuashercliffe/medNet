@@ -111,7 +111,12 @@
         });
 
         var check = function () {
-            if (document.getElementById('password').value == document.getElementById('retype-password').value) {
+            if ((document.getElementById('password').value == '' || document.getElementById('password').value == null)
+                && (document.getElementById('retype-password').value == '' || document.getElementById('retype-password').value == null)) {
+                document.getElementById('message').innerHTML = '';
+                document.getElementById('submitButton').disabled = true;
+            }
+            else if (document.getElementById('password').value == document.getElementById('retype-password').value) {
                 document.getElementById('message').style.color = 'green';
                 document.getElementById('message').innerHTML = 'Passwords Match.';
                 document.getElementById('submitButton').disabled = false;

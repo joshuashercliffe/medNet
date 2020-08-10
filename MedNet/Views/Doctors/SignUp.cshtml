@@ -64,7 +64,7 @@
                     <!-- Retype Password -->
                     <div class="form-group">
                         <label>Retype Password</label>
-                        <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' />
+                        <input type="password" id="retype-password" name="retype-password" class="form-control" placeholder="Retype Password" onkeyup='check();' required="required"/>
                         <span id='message'></span>
                     </div>
 
@@ -112,7 +112,12 @@ jQuery(function ($) {
         });
 
         var check = function () {
-            if (document.getElementById('password').value == document.getElementById('retype-password').value) {
+            if ((document.getElementById('password').value == '' || document.getElementById('password').value == null)
+                && (document.getElementById('retype-password').value == '' || document.getElementById('retype-password').value == null)) {
+                document.getElementById('message').innerHTML = '';
+                document.getElementById('submitButton').disabled = true;
+            }
+            else if (document.getElementById('password').value == document.getElementById('retype-password').value) {
                 document.getElementById('message').style.color = 'green';
                 document.getElementById('message').innerHTML = 'Passwords Match.';
                 document.getElementById('submitButton').disabled = false;

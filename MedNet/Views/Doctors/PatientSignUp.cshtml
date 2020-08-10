@@ -75,7 +75,7 @@
                                 <span id='message'></span>
                             </div>
 
-                            <button type="submit" id="submitButton" class="btn btn-success btn-block">Register with Fingerprint</button>
+                            <button type="submit" id="submitButton" class="btn btn-success btn-block" disabled>Register with Fingerprint</button>
                         </form>
                     </div>
                 </div>
@@ -121,7 +121,12 @@ jQuery(function ($) {
         });
 
         var check = function () {
-            if (document.getElementById('password').value == document.getElementById('retype-password').value) {
+            if ((document.getElementById('password').value == '' || document.getElementById('password').value == null)
+                && (document.getElementById('retype-password').value == '' || document.getElementById('retype-password').value == null)) {
+                document.getElementById('message').innerHTML = '';
+                document.getElementById('submitButton').disabled = true;
+            }
+            else if (document.getElementById('password').value == document.getElementById('retype-password').value) {
                 document.getElementById('message').style.color = 'green';
                 document.getElementById('message').innerHTML = 'Passwords Match.';
                 document.getElementById('submitButton').disabled = false;

@@ -27,7 +27,7 @@
                         <!-- CSMLS ID -->
                         <div class="form-group">
                             <label>CSMLS ID</label>
-                            @Html.TextBoxFor(n => n.CSMLSID, new { id = "index-csmlsid", type = "text", placeholder = "####-###", title = "7-digit Canadian Society for Medical Labroratory Science ID", @class = "form-control" })
+                            @Html.TextBoxFor(n => n.CSMLSID, new { id = "index-csmlsid", type = "text", placeholder = "####-###", title = "7-digit Canadian Society for Medical Labroratory Science ID", @class = "form-control", required = "required" })
                             @Html.ValidationMessageFor(n => n.CSMLSID)
                             <small class="form-text text-muted">7-digit Canadian Society for Medical Labroratory Science ID</small>
                         </div>
@@ -35,14 +35,14 @@
                         <!-- Keyword -->
                         <div class="form-group">
                             <label>Keyword</label>
-                            @Html.TextBoxFor(n => n.MLTKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
+                            @Html.TextBoxFor(n => n.MLTKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control", required = "required" })
                             <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                         </div>
 
                         <!-- Password -->
                         <div class="form-group">
                             <label>Password</label>
-                            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
+                            @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control", required = "required" })
                             @Html.ValidationMessageFor(n => n.password)
                         </div>
 

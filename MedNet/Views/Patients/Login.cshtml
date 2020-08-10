@@ -25,7 +25,7 @@
                     <!-- Personal Health Number -->
                     <div class="form-group">
                         <label>Personal Health Number</label>
-                        @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Number", @class = "form-control" })
+                        @Html.TextBoxFor(n => n.PatientPHN, new { id = "patient-login-PHN", type = "text", placeholder = "####-###-###", title = "10-digit Personal Health Number", @class = "form-control", required = "required" })
                         <small class="form-text text-muted">10-digit Personal Health Number</small>
                         @Html.ValidationMessageFor(n => n.PatientPHN)
                     </div>
@@ -33,14 +33,14 @@
                     <!-- Keyword -->
                     <div class="form-group">
                         <label>Keyword</label>
-                        @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control" })
+                        @Html.TextBoxFor(n => n.PatientKeyword, new { placeholder = "Keyword", title = "Identification keyphrase used for encryption", @class = "form-control", required = "required" })
                         <small class="form-text text-muted">Identification keyphrase used for encryption</small>
                     </div>
 
                     <!-- Password -->
                     <div class="form-group">
                         <label>Password</label>
-                        @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control" })
+                        @Html.TextBoxFor(n => n.password, new { type = "password", placeholder = "Password", @class = "form-control", required = "required" })
                         @Html.ValidationMessageFor(n => n.password)
                     </div>
 

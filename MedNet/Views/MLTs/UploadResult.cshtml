@@ -59,7 +59,7 @@
                 <form class="form-reg no-bot-margin" asp-action="UploadResult" method="post" enctype="multipart/form-data">
                     <div class="form-group" id="test3">
                         <label>Attach Test Result</label>
-                        @Html.TextBoxFor(n => n.ResultFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = "image/*, .pdf, .zip" })
+                        @Html.TextBoxFor(n => n.ResultFile, new { type = "file", @class = "form-control", style = "border-style: none;", accept = "image/*, .pdf, .zip",required="required" })
                     </div>
                     <button type="submit" id="submitButton" class="btn btn-success btn-block">Upload Result</button>
                 </form>
