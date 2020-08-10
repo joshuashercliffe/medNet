@@ -451,6 +451,7 @@ namespace MedNet.Controllers
                 var patientSignPublicKey = HttpContext.Session.GetString(Globals.currentPSPubK);
                 PatientCredMetadata userMetadata = _bigChainDbService.GetMetadataFromAssetPublicKey<PatientCredMetadata>(userAsset.id, patientSignPublicKey);
                 var patientInfo = userAsset.data.Data;
+                patientInfo.FingerprintData = null;
 
                 var testRequisition = _bigChainDbService.GetMetaDataAndAssetFromTransactionId<string, double>(transID);
                 if (testRequisition.metadata.AccessList.Keys.Contains(doctorSignPublicKey))
