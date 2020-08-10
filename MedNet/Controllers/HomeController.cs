@@ -39,7 +39,6 @@ namespace MedNet.Controllers
 
         public IActionResult TriggerFingerprint()
         {
-            // DEBUG:JW
             // Description: Using for DEBUG. URL: https://lifeblocks.site/home/testfingerprintbutton
             ViewBag.DoctorName = HttpContext.Session.GetString(Globals.currentUserName);
 
@@ -53,7 +52,6 @@ namespace MedNet.Controllers
             List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", 3);
 
             // Do fingerprint fetch from windows service here
-            //List<Image> fpList = FingerprintService.scanMultiFP(ipAddress, 3, out _);
             Image fpImg = null;
             for (int i = 0; i < fpList.Count; i++)
             {
@@ -62,11 +60,9 @@ namespace MedNet.Controllers
                 fpImg.Save(i.ToString() + ".bmp");
             }
 
-            //bool compare = FingerprintService.compareFP(fpImg, fpList);
             // Write the Public IP of the client computer on the window
             var model = new TestFingerprintButton()
             {
-                //message = "The Public IP address of the client is: " + ipAddress
                 message = status
             };
 
