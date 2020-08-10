@@ -54,24 +54,11 @@ namespace MedNet.Data.Services
             return (byte[])conv.ConvertTo(img, typeof(byte[]));
         }
 
-        public static void saveFP(List<Image> fpList)
-        {
-            // Description: saves the fingerprints as images
-            int numFp = fpList.Count;
-            for (int i = 0; i < numFp; i++)
-            {
-                // Save to file
-                int j = i + 1;
-                fpList[i].Save("FP" + j.ToString() + ".bmp");
-            }
-            return;
-        }
-
         public static bool compareFP(Image inFp, List<Image> dbFp)
         {
             // Description: compares the scanned fingerprint to all of the ones in the database
             bool isMatch = false;
-            double matchTol = 0.5;
+            double matchTol = 0.4;
 
             // Build feature extractor, and extract features of each fingerprint image
             MTripletsExtractor featExtract = new MTripletsExtractor() { MtiaExtractor = new Ratha1995MinutiaeExtractor() };
@@ -82,6 +69,7 @@ namespace MedNet.Data.Services
 
             // Compare scanned image to all the ones in the database
             int numFp = dbFp.Count;
+            //inFp.Save("in.bmp"); testing
             for (int i = 0; i < numFp; i++)
             {
                 // Convert dbFp to Bitmap image object
@@ -92,6 +80,7 @@ namespace MedNet.Data.Services
 
                 // Run similarity check
                 var match = matcher.Match(inFeat, dbFeat);
+                //dbFp[i].Save("dbFP-"+i.ToString()+".bmp"); testing
                 if (match >= matchTol)
                 {
                     // Fingerprints have above 0.5 similarity

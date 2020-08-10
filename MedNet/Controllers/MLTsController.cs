@@ -183,18 +183,6 @@ namespace MedNet.Controllers
                 return View(requestAccessViewModel);
             }
 
-            // Send request to the Client Computer to authenticate with fingerprint
-            int numScans = 1;
-            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer
-
-            // Check if fingerprint data is valid
-            if (fpList.Count < numScans)
-            {
-                ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
-                return View(requestAccessViewModel);
-            }
-            Image fpImg = fpList[0];
-
             // Decrypt the patient's fingerprint data stored in the Blockchain
             byte[] dbFpData = null;
             string patientSignPrivateKey, patientAgreePrivateKey;
@@ -215,15 +203,27 @@ namespace MedNet.Controllers
                 return View(requestAccessViewModel);
             }
 
+            // Send request to the Client Computer to authenticate with fingerprint
+            int numScans = 1;
+            List<Image> fpList = FingerprintService.authenticateFP("24.84.225.22", numScans); // DEBUG: Jacob's Computer
+
+            // Check if fingerprint data is valid
+            if (fpList.Count < numScans)
+            {
+                ModelState.AddModelError("", "Something went wrong with the fingerprint scan, try again.");
+                return View(requestAccessViewModel);
+            }
+            Image fpImg = fpList[0];
+
             // Compare the scanned fingerprint with the one saved in the database
-            if (!FingerprintService.compareFP(fpImg, fpList))
+            if (!FingerprintService.compareFP(fpImg, dbfpList))
             {
                 ModelState.AddModelError("", "The fingerprint did not match, try again.");
                 return View(requestAccessViewModel);
             }
 
             // Choose the types of records we want to get
-            AssetType[] typeList = { AssetType.TestRequisition };
+            AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription };
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList, patientSignPublicKey);
             foreach (var record in recordList)
@@ -239,9 +239,8 @@ namespace MedNet.Controllers
                         patientSignPrivateKey, patientSignPublicKey, record.transID);
                 }
             }
-            return RedirectToAction("PatientOverview");
+            return RedirectToAction("PatientRecords");
         }
-
         [HttpPost]
         public IActionResult PatientLookUp(PatientLookupViewModel patientLookupViewModel)
         {
