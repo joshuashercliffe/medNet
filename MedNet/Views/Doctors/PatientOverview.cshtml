@@ -15,7 +15,6 @@
     <div class="sidebar-body">
         <a href="PatientOverview" class="active">Overview</a>
         <a href="RequestAccess">Request Full Access</a>
-        <!-- UPDATE HREF TO RECORDS PAGE -->
         <a href="PatientRecords">View Records</a>
         <a href="AddNewPatientRecord">Add New Record</a>
     </div>
@@ -75,7 +74,6 @@
                         <h3>Allergies</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Allergies != null)
                             {
                                 string[] allergyArray = Model.PatientMetadata.Allergies.Split(',');
@@ -94,7 +92,6 @@
                         <h3>Daily Medications</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.Meds != null)
                             {
                                 string[] medArray = Model.PatientMetadata.Meds.Split(',');
@@ -116,7 +113,6 @@
                         <h3>Medical History</h3>
                     </div>
                     <div class="card-body">
-                        <!-- TODO: dynamically fill in list: name, phone, relationship to patient -->
                         @{ if (Model != null && Model.PatientMetadata != null && Model.PatientMetadata.MedHist != null)
                             {
                                 string[] medHistArray = Model.PatientMetadata.MedHist.Split(',');

@@ -75,12 +75,6 @@
                             @Html.TextBoxFor(n => n.Prescription.PrescribingDate, new { type = "date", id = "PrescribingDate", @class = "form-control" })
                         </div>
 
-                        <!-- NOT SURE IF WE NEED THIS FIELD -->
-                        @*<div class="form-group" id="prescription2">
-                                <label>Superscription (Rx Label)</label>
-                                @Html.TextBoxFor(n => n.Prescription.Superscription, new { @class = "form-control" })
-                            </div>*@
-
                         <div class="form-row form-group" id="prescription3">
                             <div class="col-sm-8">
                                 <label>Drug Name</label>
@@ -98,27 +92,6 @@
                                     })
                             </div>
                         </div>
-
-                        @*<div class="form-row form-group" id="prescription4">
-                                <div class="col-sm-6">
-                                    <label>Start Date</label>
-                                    @Html.TextBoxFor(n => n.Prescription.StartDate, new
-                                       {
-                                           type = "date",
-                                           id = "PrescribingStartDate",
-                                           @class = "form-control"
-                                       })
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Valid Until</label>
-                                    @Html.TextBoxFor(n => n.Prescription.EndDate, new
-                                        {
-                                            type = "date",
-                                            id = "PrescribingEndDate",
-                                            @class = "form-control"
-                                        })
-                                </div>
-                            </div>*@
 
                         <div class="form-group" id="prescription4">
                             <label>Valid Until</label>
