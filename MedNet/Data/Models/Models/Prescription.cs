@@ -10,7 +10,7 @@ namespace MedNet.Data.Models.Models
 
         public string DrugName { get; set; }
 
-        public double Concentration { get; set; }
+        public string Dosage { get; set; }
 
         public DateTime EndDate { get; set; }
 
