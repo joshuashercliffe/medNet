@@ -650,7 +650,7 @@ namespace MedNet.Controllers
             }
 
             // Choose the types of records we want to get
-            AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription };
+            AssetType[] typeList = { AssetType.DoctorNote, AssetType.Prescription, AssetType.TestRequisition };
             var recordList = _bigChainDbService.GetAllTypeRecordsFromPPublicKey<string>
                 (typeList, patientSignPublicKey);
             foreach (var record in recordList)
