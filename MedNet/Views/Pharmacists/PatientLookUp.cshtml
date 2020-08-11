@@ -49,7 +49,6 @@
     <!-- InputMask -->
     <script src="~/theme/plugins/moment/moment.min.js"></script>
     <script src="~/theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-    <script src="~/Scripts/bloodhound.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <script type="text/javascript">
         jQuery(function ($) {
@@ -58,29 +57,22 @@
 
     <script>
         $(document).ready(function () {
-            // Constructs the suggestion engine
-            var patientIDs = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.ngram,
-                queryTokenizer: Bloodhound.tokenizers.ngram,
-                matchAnyQueryToken: true,
-                // The url points to a json file that contains an array of country names
-                prefetch: 'getAllPatientIDs'
-            });
-
             // Initializing the typeahead with remote dataset without highlighting
-            $('.typeahead').typeahead({
-                items: 4,
-                fitToElement: true,
-                source: patientIDs.ttAdapter(),
-                matcher: function (item) {
-                    var it = this.displayText(item).toLowerCase();
-                    var query = this.query.toLowerCase();
-                    it = it.replace(/-/g, '');
-                    query = query.replace(/-/g, '');
-                    query = query.replace(/_/g, '');
-                    return ~it.indexOf(query)
-                }
-            });
+            $.get("GetAllPatientIDs" + $(this).val(), function (data) {
+                $('.typeahead').typeahead({
+                    items: 4,
+                    fitToElement: true,
+                    source: data,
+                    matcher: function (item) {
+                        var it = this.displayText(item).toLowerCase();
+                        var query = this.query.toLowerCase();
+                        it = it.replace(/-/g, '');
+                        query = query.replace(/-/g, '');
+                        query = query.replace(/_/g, '');
+                        return ~it.indexOf(query)
+                    }
+                });
+            }, 'json');
         });
     </script>
 }

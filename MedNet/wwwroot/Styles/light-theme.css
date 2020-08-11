@@ -175,15 +175,13 @@ body {
     }
 
 .footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+    min-width: 100%;
     text-align: center;
-    height: 2.5rem;
     padding: 5px;
     background-color: #333;
     color: white;
+    position:relative;
+    z-index:1;
 }
 
     .footer p {
@@ -254,25 +252,6 @@ body {
 .topnav-rbtn {
     float: right;
 }
-
-.footer {
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    height: 30px;
-    padding: 5px;
-    position: absolute;
-}
-
-    .footer p {
-        color: gainsboro;
-        font-size: 12px;
-    }
-
-    .footer a {
-        color: #7B7D7D;
-    }
 
 .mednet-logo {
     height: 53px;
